@@ -1,0 +1,43 @@
+Array
+(
+    [mapiversion] => 1.0
+    [md5content] => a57a0e34911f25c6370e0d5ba9e31cd5
+    [result] => Array
+        (
+            [operation] => capture
+            [status] => ok
+            [date] => 2014-04-04
+            [time] => 09:23:31 UTC+0000
+            [origAmount] => 34.78
+            [origCurrency] => EUR
+            [idForMerchant] => Array
+                (
+                )
+
+            [emailClient] => pub@prestashop.com
+            [merchantDatas] => Array
+                (
+                    [_aKey_cart_id] => 8
+                    [_aKey_customer_id] => 1
+                    [_aKey_secure_key] => f678706ab084cc41d58cf88de4498362
+                )
+
+            [transid] => 533E7A0AEFA73
+            [is3ds] => No
+            [paymentMethod] => MASTERCARD
+            [customerCountry] => FR
+            [returnCode] => Array
+                (
+                )
+
+            [returnDescriptionShort] => Array
+                (
+                )
+
+            [returnDescriptionLong] => Array
+                (
+                )
+
+        )
+
+)

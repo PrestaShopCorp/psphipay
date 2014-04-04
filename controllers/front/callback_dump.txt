@@ -1,0 +1,6 @@
+Array
+(
+    [xml] => <?xml version="1.0" encoding="UTF-8"?>
+<mapi><mapiversion>1.0</mapiversion><md5content>a57a0e34911f25c6370e0d5ba9e31cd5</md5content><result><operation>capture</operation><status>ok</status><date>2014-04-04</date><time>09:23:31 UTC+0000</time><origAmount>34.78</origAmount><origCurrency>EUR</origCurrency><idForMerchant/><emailClient>pub@prestashop.com</emailClient><merchantDatas>  <_aKey_cart_id>8</_aKey_cart_id>  <_aKey_customer_id>1</_aKey_customer_id>  <_aKey_secure_key>f678706ab084cc41d58cf88de4498362</_aKey_secure_key></merchantDatas><transid>533E7A0AEFA73</transid><is3ds>No</is3ds><paymentMethod>MASTERCARD</paymentMethod><customerCountry>FR</customerCountry><returnCode/><returnDescriptionShort/><returnDescriptionLong/></result></mapi>
+
+)
