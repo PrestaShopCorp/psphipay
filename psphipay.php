@@ -74,6 +74,7 @@ class PSPHipay extends PaymentModule
 			$this->setCurrencies() &&
 			$this->registerHook('header') &&
 			$this->registerHook('payment') &&
+			$this->registerHook('paymentReturn') &&
 			$this->registerHook('backOfficeHeader');
 	}
 	
@@ -287,6 +288,25 @@ class PSPHipay extends PaymentModule
 		));
 
 		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
+	}
+
+	public function hookPaymentReturn($params)
+	{
+		if ($this->active == false)
+			return;
+
+		$order = $params['objOrder'];
+		
+		if ($order->getCurrentOrderState()->id != Configuration::get('PS_OS_ERROR'))
+			$this->smarty->assign('status', 'ok');
+		
+		$this->smarty->assign(array(
+			'id_order' => $order->id,
+			'reference' => $order->reference,
+			'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
+		));
+		
+		return $this->display(__FILE__, 'views/templates/front/confirmation.tpl');
 	}
 
 	public function hookHeader()

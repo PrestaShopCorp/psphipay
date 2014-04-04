@@ -42,9 +42,11 @@ class PSPHipayRedirectModuleFrontController extends ModuleFrontController
 	protected function generatePayment()
 	{
 		require_once(dirname(__FILE__).'/../../classes/webservice/HipayPayment.php');
-/* 		d(Context::getContext()->cart); */
+
 		$payment = new HipayPayment();
-		$payment->generate();
+		
+		if ($payment->generate() == false)
+			$this->displayError('An error occurred while getting transaction informations');
 	}
 
 	protected function displayError($message)

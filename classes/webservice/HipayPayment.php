@@ -44,19 +44,26 @@ class HipayPayment extends HipayWS
 		$locale = new HipayLocale();
 		$free_data = $this->getFreeData();
 
-		$accept_url = Context::getContext()->link->getModuleLink('psphipay', 'validation', array('process' => 'accept'), true);
-		$callback_url = Context::getContext()->link->getModuleLink('psphipay', 'validation', array('process' => 'callback'), true);
+		$cart_id = Context::getContext()->cart->id;
+		$secure_key = Context::getContext()->customer->secure_key;
+
+		$accept_url = Context::getContext()->link->getModuleLink('psphipay', 'confirmation', array('cart_id' => $cart_id, 'secure_key' => $secure_key), true);
+		$callback_url = Context::getContext()->link->getModuleLink('psphipay', 'validation', array(), true);
 		$cancel_url = Context::getContext()->link->getPageLink('order', null, null, array('step' => '3'), true);
-		$decline_url = Context::getContext()->link->getModuleLink('psphipay', 'validation', array('process' => 'decline'), true);
+		$decline_url = Context::getContext()->link->getModuleLink('psphipay', 'confirmation', array('cart_id' => $cart_id, 'secure_key' => $secure_key), true);
 		$logo_url = Context::getContext()->link->getMediaLink(_PS_IMG_.Configuration::get('PS_LOGO'));
 
+		/* 
+		 * @TODO
+		 * Set the merchant details according to the currency
+		 */
 		$params = array(
 			'amount' => Context::getContext()->cart->getOrderTotal(),
 			'categoryId' => $this->getCategory(),
 			'currency' => Context::getContext()->currency->iso_code,
 			'customerEmail' => Context::getContext()->customer->email,
 			'customerIpAddress' => Tools::getRemoteAddr(),
-			'description' => 'Order on your shop',
+			'description' => Configuration::get('PS_SHOP_NAME'),
 			'executionDate' => date('Y-m-d\TH:i:s'),
 			'locale' => $locale->getLocale(),
 			'manualCapture' => (int)false,
@@ -76,8 +83,7 @@ class HipayPayment extends HipayWS
 
 		if ($results->generateResult->code === 0)
 			return Tools::redirect($results->generateResult->redirectUrl);
-
-		die(Tools::displayError('Error occurred while getting transaction informations.'));
+		return false;
 	}
 
 	protected function getFreeData()
