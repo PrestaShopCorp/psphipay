@@ -81,7 +81,7 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 	
 	protected function decline()
 	{
-		return $this->displayError('An error occurred while processing payment.');
+		return $this->displayError('An error occurred while processing payment');
 	}
 
 	protected function displayError($message)

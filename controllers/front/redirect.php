@@ -34,7 +34,7 @@ class PSPHipayRedirectModuleFrontController extends ModuleFrontController
 		$customer = $this->context->customer;
 
 		if ($this->module->isSupportedCurrency($currency->iso_code) == false)
-			return $this->displayError('The currency is not valid.');
+			return $this->displayError('The currency is not supported');
 
 		$this->generatePayment();
 	}

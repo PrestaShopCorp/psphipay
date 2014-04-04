@@ -60,7 +60,7 @@ class PSPHipay extends PaymentModule
 		$this->description = $this->l('Secure payement with Visa, Mastercard and European solutions.');
 
 		// Compliancy
-		$this->limited_countries = array('AT', 'BE', 'CH', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IT', 'IR', 'LI', 'LU', 'LV', 'MC', 'MT', 'NL', 'PT', 'SE', 'SI', 'SK');
+		$this->limited_countries = array('AT', 'BE', 'CH', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IR', 'IT', 'LI', 'LU', 'LV', 'MC', 'MT', 'NL', 'PT', 'SE', 'SI', 'SK');
 		$this->limited_currencies = array('CHF', 'EUR', 'GBP', 'SEK');
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
@@ -68,6 +68,14 @@ class PSPHipay extends PaymentModule
 	
 	public function install()
 	{
+		$iso_code = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
+		
+		if (in_array($iso_code, $this->limited_countries) == false)
+		{
+			$this->_errors[] = $this->l('This module cannot work in your country');
+			return false;
+		}
+		
 		Configuration::updateValue('PSP_HIPAY_LIVE_MODE', false);
 
 		return parent::install() &&
@@ -281,6 +289,12 @@ class PSPHipay extends PaymentModule
 	
 	public function hookPayment($params)
 	{
+		$currency_id = $params['cart']->id_currency;
+		$currency = new Currency((int)$currency_id);
+		
+		if (in_array($currency->iso_code, $this->limited_currencies) == false)
+			return false;
+		
 		$this->smarty->assign(array(
 			'domain' => Tools::getShopDomainSSL(true),
 			'module_dir' => $this->_path,

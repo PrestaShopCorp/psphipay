@@ -15,7 +15,7 @@
 					<td>{$sub_account->userAccountId}</td>
 					<td>{$sub_account->websites->item->websiteEmail}</td>
 					<td>{$sub_account->currency_label} ({$sub_account->currency})</td>
-					<td>{$sub_account->balance|number_format:2:',':''} {$sub_account->currency}.</td>
+					<td>{$sub_account->balance|number_format:2:',':''} {$sub_account->currency}</td>
 				</tr>
 			{/foreach}
 		</tbody>

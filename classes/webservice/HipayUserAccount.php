@@ -291,6 +291,7 @@ class HipayUserAccount extends HipayWS
 		Configuration::updateValue('PSP_HIPAY_WEBSITE_NAME', self::$account_infos->websites->item->websiteName);
 		Configuration::updateValue('PSP_HIPAY_WEBSITE_URL', self::$account_infos->websites->item->websiteURL);
 
+		$this->associateMerchantGroup();
 		$this->saveUserSubAccountInfos();
 
 		return true;

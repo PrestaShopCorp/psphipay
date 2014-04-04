@@ -41,6 +41,9 @@ class HipayPayment extends HipayWS
 	/* SOAP method: codes */
 	public function generate()
 	{
+		if (($email = Configuration::get('PSP_HIPAY_USER_EMAIL')) == false)
+			die(Tools::displayError('An error occurred while generating the payment URL.'));
+			
 		$locale = new HipayLocale();
 		$free_data = $this->getFreeData();
 
@@ -64,10 +67,12 @@ class HipayPayment extends HipayWS
 			'customerEmail' => Context::getContext()->customer->email,
 			'customerIpAddress' => Tools::getRemoteAddr(),
 			'description' => Configuration::get('PS_SHOP_NAME'),
+			'emailCallback' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
 			'executionDate' => date('Y-m-d\TH:i:s'),
 			'locale' => $locale->getLocale(),
 			'manualCapture' => (int)false,
 			'rating' => 'ALL',
+			'wsSubAccountLogin' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
 
 			// URLs
 			'urlAccept' => $accept_url,
@@ -78,6 +83,8 @@ class HipayPayment extends HipayWS
 
 			'freeData' => $free_data,
 		);
+		
+/* 		d($params); */
 		
 		$results = $this->doQuery('generate', $params);
 
