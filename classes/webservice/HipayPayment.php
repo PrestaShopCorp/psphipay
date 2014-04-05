@@ -39,10 +39,18 @@ class HipayPayment extends HipayWS
 	protected $client_url = '/soap/payment-v2';
 
 	/* SOAP method: codes */
-	public function generate()
+	public function generate(&$results)
 	{
-		if (($email = Configuration::get('PSP_HIPAY_USER_EMAIL')) == false)
-			die(Tools::displayError('An error occurred while generating the payment URL.'));
+		if (Configuration::get('PSP_HIPAY_USER_EMAIL') == false)
+			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
+		
+		$currency_id = Context::getContext()->cart->id_currency;
+		$currency = new Currency($currency_id);
+		$user = new HipayUserAccount();
+		$wesbite_id = $user->getWebsiteIdByIsoCode($currency->iso_code);
+		
+		if ($wesbite_id == false)
+			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
 			
 		$locale = new HipayLocale();
 		$free_data = $this->getFreeData();
@@ -61,6 +69,7 @@ class HipayPayment extends HipayWS
 		 * Set the merchant details according to the currency
 		 */
 		$params = array(
+			'websiteId' => (int)$wesbite_id,
 			'amount' => Context::getContext()->cart->getOrderTotal(),
 			'categoryId' => $this->getCategory(),
 			'currency' => Context::getContext()->currency->iso_code,
@@ -83,9 +92,7 @@ class HipayPayment extends HipayWS
 
 			'freeData' => $free_data,
 		);
-		
-/* 		d($params); */
-		
+
 		$results = $this->doQuery('generate', $params);
 
 		if ($results->generateResult->code === 0)

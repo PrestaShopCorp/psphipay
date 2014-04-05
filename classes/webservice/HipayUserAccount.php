@@ -45,11 +45,15 @@ class HipayUserAccount extends HipayWS
 	/* Sub accounts */
 	public static $accounts_currencies = array();
 
-	public function __construct($email)
+	public function __construct($email = false)
 	{
 		parent::__construct();
 
-		self::$email = $email;
+		if ($email == false)
+			self::$email = Configuration::get('PSP_HIPAY_USER_EMAIL') ;
+		else
+			self::$email = $email;
+		
 		self::$psp = new PSPHipay();
 
 		self::$accounts_currencies = array(
@@ -99,6 +103,20 @@ class HipayUserAccount extends HipayWS
 		}
 
 		return self::$account_infos;
+	}
+	
+	public function getWebsiteIdByIsoCode($iso_code)
+	{
+		$this->getAccountInfos();
+		
+		if ($iso_code == self::$account_infos->currency)
+			return self::$account_infos->websites->item->websiteId;
+		
+		foreach (self::$account_infos->subAccounts->item as $sub_account)
+			if ($iso_code == $sub_account->currency)
+				return $sub_account->websites->item->websiteId;
+		
+		return false;
 	}
 
 	public function getBalances($email = false)

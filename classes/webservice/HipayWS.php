@@ -124,11 +124,10 @@ abstract class HipayWS
 	{
 		try
 		{
-			$params = array_merge($params, array(
-					'websiteId' => $this->getWsId(),
-					'wsLogin' => $this->getWsLogin(),
-					'wsPassword' => $this->getWsPassword()
-				)
+			$params = $params + array(
+				'websiteId' => $this->getWsId(),
+				'wsLogin' => $this->getWsLogin(),
+				'wsPassword' => $this->getWsPassword()
 			);
 			
 			return $this->client->__call($function, array(array('parameters' => $params)));

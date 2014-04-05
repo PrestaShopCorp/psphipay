@@ -35,7 +35,7 @@
 <h3>{l s='Your order on %s has not been accepted.' sprintf=$shop_name mod='psphipay'}</h3>
 <p>
 	<br />- {l s='Reference' mod='psphipay'} <span class="reference"> <strong>{$reference}</strong></span>
-	<br />{l s='Please, try to order again.' mod='psphipay'}
+	<br /><br />{l s='Please, try to order again.' mod='psphipay'}
 	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='psphipay'} <a href="{$link->getPageLink('contact', true)|escape:'html'}">{l s='expert customer support team.' mod='psphipay'}</a>
 </p>
 {/if}
