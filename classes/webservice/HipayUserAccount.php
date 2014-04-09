@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -50,10 +50,10 @@ class HipayUserAccount extends HipayWS
 		parent::__construct();
 
 		if ($email == false)
-			self::$email = Configuration::get('PSP_HIPAY_USER_EMAIL') ;
+			self::$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
 		else
 			self::$email = $email;
-		
+
 		self::$psp = new PSPHipay();
 
 		self::$accounts_currencies = array(
@@ -97,53 +97,53 @@ class HipayUserAccount extends HipayWS
 		{
 			$params = array('accountLogin' => self::$email);
 			$result = $this->doQuery('getAccountInfos', $params);
-			
+
 			if ($result->getAccountInfosResult->code === 0)
 				self::$account_infos = $result->getAccountInfosResult;
 		}
 
 		return self::$account_infos;
 	}
-	
+
 	public function getWebsiteIdByIsoCode($iso_code)
 	{
 		$this->getAccountInfos();
-		
+
 		if ($iso_code == self::$account_infos->currency)
 			return self::$account_infos->websites->item->websiteId;
-		
+
 		foreach (self::$account_infos->subAccounts->item as $sub_account)
 			if ($iso_code == $sub_account->currency)
 				return $sub_account->websites->item->websiteId;
-		
+
 		return false;
 	}
-	
+
 	public function getWebsiteEmailByIsoCode($iso_code)
 	{
 		$this->getAccountInfos();
-		
+
 		if ($iso_code == self::$account_infos->currency)
 			return self::$account_infos->websites->item->websiteEmail;
-		
+
 		foreach (self::$account_infos->subAccounts->item as $sub_account)
 			if ($iso_code == $sub_account->currency)
 				return $sub_account->websites->item->websiteEmail;
-		
+
 		return false;
 	}
-	
+
 	public function getWebsiteAccountIdByIsoCode($iso_code)
 	{
 		$this->getAccountInfos();
-		
+
 		if ($iso_code == self::$account_infos->currency)
 			return self::$account_infos->userAccountId;
-		
+
 		foreach (self::$account_infos->subAccounts->item as $sub_account)
 			if ($iso_code == $sub_account->currency)
 				return $sub_account->userAccountId;
-		
+
 		return false;
 	}
 
@@ -151,13 +151,13 @@ class HipayUserAccount extends HipayWS
 	{
 		if (self::$account_infos == false)
 			$this->getAccountInfos();
-		
+
 		if ($email == false)
 			$email = self::$email;
 
 		$params = array('wsSubAccountLogin' => $email);
 		$result = $this->doQuery('getBalance', $params);
-		
+
 		if ($result->getBalanceResult->code === 0)
 			return $result->getBalanceResult;
 
@@ -172,12 +172,8 @@ class HipayUserAccount extends HipayWS
 		$balances = $this->getBalances();
 
 		foreach ($balances->balances->item as &$balance)
-		{
 			if ($balance->userAccountType == 'main')
-			{
 				return $balance;
-			}
-		}
 
 		return false;
 	}
@@ -192,13 +188,10 @@ class HipayUserAccount extends HipayWS
 			foreach ($sub_accounts as &$item)
 			{
 				$item->currency_label = self::$accounts_currencies[$item->currency];
+
 				foreach ($balances->balances->item as $balance)
-				{
 					if ($item->userAccountId == $balance->userAccountId)
-					{
 						$item = (object)array_merge((array)$item, (array)$balance);
-					}
-				}
 			}
 
 			return $sub_accounts;
@@ -209,7 +202,6 @@ class HipayUserAccount extends HipayWS
 
 	public function createUserAccount()
 	{
-		$employee = $this->context->employee;
 		$currency = Currency::getDefaultCurrency();
 
 		$business = new HipayBusiness();
@@ -260,7 +252,7 @@ class HipayUserAccount extends HipayWS
 		);
 
 		$result = $this->doQuery('associateMerchantGroup', $params);
-		
+
 		if ($result->associateMerchantGroupResult->code === 0)
 			return true;
 
@@ -269,12 +261,14 @@ class HipayUserAccount extends HipayWS
 
 	public function createSubAccounts()
 	{
-		foreach (self::$accounts_currencies as $iso => $currency)
+		$iso_codes = array_keys(self::$accounts_currencies);
+
+		foreach ($iso_codes as $iso_code)
 		{
-			$sub_account_exists = $this->currencyAccountExists($iso);
+			$sub_account_exists = $this->currencyAccountExists($iso_code);
 
 			if ($sub_account_exists === false)
-				$this->createSubAccount($iso);
+				$this->createSubAccount($iso_code);
 		}
 	}
 
@@ -290,7 +284,7 @@ class HipayUserAccount extends HipayWS
 		);
 
 		$result = $this->doQuery('createSubAccount', $params);
-		
+
 		if ($result->createSubaccountResult->code === 0)
 			return true;
 
@@ -322,7 +316,7 @@ class HipayUserAccount extends HipayWS
 
 		if ($this->getAccountInfos('refresh') !== false)
 			return $this->saveUserAccountInfos();
-		
+
 		return false;
 	}
 

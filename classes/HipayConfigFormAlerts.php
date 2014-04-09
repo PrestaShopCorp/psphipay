@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class HipayConfigFormAlerts
 {
-	private static $_instance = false;
+	private static $instance = false;
 
 	/* Configuration form errors array */
 	protected static $errors = array();
@@ -40,13 +40,13 @@ class HipayConfigFormAlerts
 
 	public static function getInstance()
 	{
-		if (self::$_instance === false)
+		if (self::$instance === false)
 		{
-			self::$_instance = new self();
+			self::$instance = new self();
 			self::$psp = new PSPHipay();
 		}
 
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/* Messages */

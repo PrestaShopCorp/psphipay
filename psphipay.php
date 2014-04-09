@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -44,13 +44,13 @@ class PSPHipay extends PaymentModule
 	{
 		$this->name = 'psphipay';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.0';
+		$this->version = '1.0';
 		$this->module_key = '';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
 		$this->author = 'PrestaShop';
-		
+
 		$this->bootstrap = true;
 		$this->display = 'view';
 
@@ -65,17 +65,23 @@ class PSPHipay extends PaymentModule
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 	}
-	
+
 	public function install()
 	{
+		if (extension_loaded('soap') == false)
+		{
+			$this->_errors[] = $this->l('You have to enable the SOAP extension on your server to install this module');
+			return false;
+		}
+
 		$iso_code = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
-		
+
 		if (in_array($iso_code, $this->limited_countries) == false)
 		{
 			$this->_errors[] = $this->l('This module cannot work in your country');
 			return false;
 		}
-		
+
 		Configuration::updateValue('PSP_HIPAY_LIVE_MODE', false);
 
 		return parent::install() &&
@@ -85,11 +91,10 @@ class PSPHipay extends PaymentModule
 			$this->registerHook('paymentReturn') &&
 			$this->registerHook('backOfficeHeader');
 	}
-	
+
 	public function hookBackOfficeHeader()
 	{
 		$this->context->controller->addCSS($this->_path.'css/configure.css');
-		$this->context->controller->addJS($this->_path.'js/configure.js');
 
 		return '<script type="text/javascript">
 			var admin_psphipay_ajax_url = "'.$this->context->link->getAdminLink('AdminPSPHipay').'";
@@ -98,10 +103,7 @@ class PSPHipay extends PaymentModule
 
 	protected function setCurrencies()
 	{
-		if (!$shops)
-			$shops = Shop::getShops(true, null, true);
-
-		$currencies = implode(', ', $this->limited_currencies);
+		$shops = Shop::getShops(true, null, true);
 
 		foreach ($shops as $shop)
 		{
@@ -112,7 +114,7 @@ class PSPHipay extends PaymentModule
 		}
 		return true;
 	}
-	
+
 	public function getContent()
 	{
 		HipayConfigFormAlerts::getInstance();
@@ -129,13 +131,13 @@ class PSPHipay extends PaymentModule
 				'module_local_dir' => $this->local_path
 			)
 		);
-		
+
 		$this->config_form = new HipayConfigForm();
-		
+
 		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 		return $output.$this->renderForm().'<hr />';
 	}
-	
+
 	protected function renderForm()
 	{
 		$helper = new HelperForm();
@@ -145,11 +147,11 @@ class PSPHipay extends PaymentModule
 		$helper->module = $this;
 		$helper->default_form_language = $this->context->language->id;
 		$helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
-	 
+
 		$helper->identifier = $this->identifier;
 		$helper->submit_action = 'submitPSPHipay';
 		$helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
-		   .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
+			.'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 
 		$helper->tpl_vars = array(
@@ -164,7 +166,7 @@ class PSPHipay extends PaymentModule
 	protected function _postProcess()
 	{
 		$disconnect = Tools::getValue('submitOptionsmodule', false);
-		
+
 		if ($disconnect == true)
 			return $this->disconnect();
 
@@ -280,21 +282,19 @@ class PSPHipay extends PaymentModule
 			((Tools::isSubmit('install_user_firstname') == false) &&
 			(Tools::isSubmit('install_user_lastname') == false) &&
 			(Tools::isSubmit('install_user_shop_name') == false)))
-		{
 			return false;
-		}
 
 		return $valid;
 	}
-	
+
 	public function hookPayment($params)
 	{
 		$currency_id = $params['cart']->id_currency;
 		$currency = new Currency((int)$currency_id);
-		
+
 		if (in_array($currency->iso_code, $this->limited_currencies) == false)
 			return false;
-		
+
 		$this->smarty->assign(array(
 			'domain' => Tools::getShopDomainSSL(true),
 			'module_dir' => $this->_path,
@@ -310,16 +310,16 @@ class PSPHipay extends PaymentModule
 			return;
 
 		$order = $params['objOrder'];
-		
+
 		if ($order->getCurrentOrderState()->id != Configuration::get('PS_OS_ERROR'))
 			$this->smarty->assign('status', 'ok');
-		
+
 		$this->smarty->assign(array(
 			'id_order' => $order->id,
 			'reference' => $order->reference,
 			'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
 		));
-		
+
 		return $this->display(__FILE__, 'views/templates/front/confirmation.tpl');
 	}
 
@@ -330,7 +330,7 @@ class PSPHipay extends PaymentModule
 
 	protected function getPaymentButton()
 	{
-		$iso_code = strtoupper($this->context->country->iso_code);
+		$iso_code = Tools::strtoupper($this->context->country->iso_code);
 
 		if (file_exists(dirname(__FILE__).'/img/payment_buttons/'.$iso_code.'.png'))
 			return $this->_path.'/img/payment_buttons/'.$iso_code.'.png';
@@ -339,6 +339,6 @@ class PSPHipay extends PaymentModule
 
 	public function isSupportedCurrency($iso_code)
 	{
-		return (bool)in_array(strtoupper($iso_code), $this->limited_currencies);
+		return (bool)in_array(Tools::strtoupper($iso_code), $this->limited_currencies);
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -158,7 +158,7 @@ class HipayConfigForm
 		);
 
 		$sub_accounts = unserialize(Configuration::get('PSP_HIPAY_USER_SUBACCOUNTS'));
-		
+
 		if (count($sub_accounts) == 0)
 			$form['form']['input'][] = $this->generateInputFree('settings_no_sub_accounts', false, array('col' => 9, 'offset' => 3));
 		else
@@ -197,26 +197,26 @@ class HipayConfigForm
 			$settings_form_fields = $this->getSettingsFormFields();
 		else
 			$settings_form_fields = array();
-			
+
 		if (((bool)Configuration::get('PSP_HIPAY_LIVE_MODE')) == true)
 			$domain = 'https://www.hipay.com';
 		else
 			$domain = 'https://test-www.hipaywallet.com';
-		
+
 		return array_merge($install_form_fields, $settings_form_fields, array(
 				/* Form Split */
 				'input_split' => '<hr />',
 
 				/* Install */
-	 			'install_desc' => '<h4 class="form-control-static">'.$this->psp->l('Account details').'</h4>',
+				'install_desc' => '<h4 class="form-control-static">'.$this->psp->l('Account details').'</h4>',
 				'install_locale' => $locales_ws->getLocales(),
 
 				/* Settings */
-	 			'settings_main_account_desc' => '<h4 class="form-control-static">'.$this->psp->l('Main account').'</h4>',
+				'settings_main_account_desc' => '<h4 class="form-control-static">'.$this->psp->l('Main account').'</h4>',
 				'settings_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_EMAIL').'</strong></p>',
 				'settings_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_NAME').'</strong></p>',
 				'settings_account_number' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</strong></p>',
-	 			'settings_sub_accounts_desc' => '<h4 class="form-control-static">'.$this->psp->l('Sub-accounts').'</h4>',
+				'settings_sub_accounts_desc' => '<h4 class="form-control-static">'.$this->psp->l('Sub-accounts').'</h4>',
 
 				/* Customer area */
 				'customer_area_description' => '<h4 class="form-control-static" style="margin-bottom: 0">'.$this->psp->l('You want to contact the Hipay customers\' service?').'</h4>',
@@ -234,7 +234,7 @@ class HipayConfigForm
 	public function getInstallFormFields()
 	{
 		$disconnect = Tools::getValue('submitOptionsmodule', false);
-		
+
 		if ($disconnect == true)
 		{
 			return array(

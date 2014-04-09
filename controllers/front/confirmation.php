@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -31,14 +31,14 @@ class PSPHipayConfirmationModuleFrontController extends ModuleFrontController
 	{
 		if ((Tools::isSubmit('cart_id') == false) || (Tools::isSubmit('secure_key') == false))
 			return false;
-		
+
 		$cart_id = Tools::getValue('cart_id');
 		$secure_key = Tools::getValue('secure_key');
-		
+
 		$cart = new Cart((int)$cart_id);
 		$customer = new Customer((int)$cart->id_customer);
 		$order_id = Order::getOrderByCartId((int)$cart->id);
-		
+
 		if (($order_id) && ($secure_key == $customer->secure_key))
 			Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$order_id.'&key='.$customer->secure_key);
 		else

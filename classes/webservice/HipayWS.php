@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -49,7 +49,7 @@ abstract class HipayWS
 	public function init()
 	{
 		$live_mode = (bool)Configuration::get('PSP_HIPAY_LIVE_MODE');
-		
+
 		if ($live_mode === true)
 		{
 			$this->ws_id = '19853';
@@ -104,20 +104,20 @@ abstract class HipayWS
 	{
 		try
 		{
-			$ws_options = array( 
-				'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP, 
-				'cache_wsdl' => WSDL_CACHE_NONE, 
-				'soap_version' => SOAP_1_1, 
-				'encoding' => 'UTF-8' 
+			$ws_options = array(
+				'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP,
+				'cache_wsdl' => WSDL_CACHE_NONE,
+				'soap_version' => SOAP_1_1,
+				'encoding' => 'UTF-8'
 			);
-			
+
 			return new SoapClient($this->getWsClientURL(), $ws_options);
 		}
 		catch (SoapFault $exception)
 		{
-			d($exception->getMessage());
+			die((string)$exception->getMessage());
 		}
-		
+
 	}
 
 	public function doQuery($function, $params = array())
@@ -129,12 +129,12 @@ abstract class HipayWS
 				'wsLogin' => $this->getWsLogin(),
 				'wsPassword' => $this->getWsPassword()
 			);
-			
+
 			return $this->client->__call($function, array(array('parameters' => $params)));
 		}
 		catch (Exception $exception)
 		{
-			d($exception->getMessage());
+			die((string)$exception->getMessage());
 		}
 	}
 }

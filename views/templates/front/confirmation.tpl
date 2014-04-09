@@ -17,26 +17,26 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
 {if (isset($status) == true) && ($status == 'ok')}
 <h3>{l s='Your order on %s is complete.' sprintf=$shop_name mod='psphipay'}</h3>
 <p>
-	<br />- {l s='Amount' mod='psphipay'} : <span class="price"><strong>{$total}</strong></span>
-	<br />- {l s='Reference' mod='psphipay'} : <span class="reference"><strong>{$reference}</strong></span>
+	<br />- {l s='Amount' mod='psphipay'} : <span class="price"><strong>{$total|floatval}</strong></span>
+	<br />- {l s='Reference' mod='psphipay'} : <span class="reference"><strong>{$reference|escape:'html':'UTF-8'}</strong></span>
 	<br /><br />{l s='An email has been sent with this information.' mod='psphipay'}
-	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='psphipay'} <a href="{$link->getPageLink('contact', true)|escape:'html'}">{l s='expert customer support team.' mod='psphipay'}</a>
+	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='psphipay'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='psphipay'}</a>
 </p>
 {else}
 <h3>{l s='Your order on %s has not been accepted.' sprintf=$shop_name mod='psphipay'}</h3>
 <p>
-	<br />- {l s='Reference' mod='psphipay'} <span class="reference"> <strong>{$reference}</strong></span>
+	<br />- {l s='Reference' mod='psphipay'} <span class="reference"> <strong>{$reference|escape:'html':'UTF-8'}</strong></span>
 	<br /><br />{l s='Please, try to order again.' mod='psphipay'}
-	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='psphipay'} <a href="{$link->getPageLink('contact', true)|escape:'html'}">{l s='expert customer support team.' mod='psphipay'}</a>
+	<br /><br />{l s='If you have questions, comments or concerns, please contact our' mod='psphipay'} <a href="{$link->getPageLink('contact', true)|escape:'html':'UTF-8'}">{l s='expert customer support team.' mod='psphipay'}</a>
 </p>
 {/if}
 <hr />

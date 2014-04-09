@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * 2007-2014 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -43,18 +43,18 @@ class HipayPayment extends HipayWS
 	{
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL') == false)
 			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
-		
+
 		$currency_id = Context::getContext()->cart->id_currency;
 		$currency = new Currency($currency_id);
 		$user = new HipayUserAccount();
-		
+
 		$website_id = $user->getWebsiteIdByIsoCode($currency->iso_code);
 		$wesbite_email = $user->getWebsiteEmailByIsoCode($currency->iso_code);
 		$wesbite_account_id = $user->getWebsiteAccountIdByIsoCode($currency->iso_code);
 
 		if ($website_id == false)
 			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
-			
+
 		$locale = new HipayLocale();
 		$free_data = $this->getFreeData();
 
@@ -67,10 +67,6 @@ class HipayPayment extends HipayWS
 		$decline_url = Context::getContext()->link->getModuleLink('psphipay', 'confirmation', array('cart_id' => $cart_id, 'secure_key' => $secure_key), true);
 		$logo_url = Context::getContext()->link->getMediaLink(_PS_IMG_.Configuration::get('PS_LOGO'));
 
-		/* 
-		 * @TODO
-		 * Set the merchant details according to the currency
-		 */
 		$params = array(
 			'websiteId' => (int)$website_id,
 			'amount' => Context::getContext()->cart->getOrderTotal(),
@@ -96,7 +92,7 @@ class HipayPayment extends HipayWS
 
 			'freeData' => $free_data,
 		);
-		
+
 		$results = $this->doQuery('generate', $params);
 
 		if ($results->generateResult->code === 0)
@@ -113,8 +109,6 @@ class HipayPayment extends HipayWS
 				array('key' => 'secure_key', 'value' => Context::getContext()->customer->secure_key),
 			),
 		);
-		
-		return $this->buildXMLData($data, 'freeData');
 	}
 
 	protected function getCategory()
@@ -128,8 +122,8 @@ class HipayPayment extends HipayWS
 			$url = $this->categories_test_domain.$this->categories_url.$website_id;
 
 		$categories_xml = Tools::file_get_contents($url);
-		$categories = json_decode(json_encode((array)simplexml_load_string($categories_xml)), 1);
-		
+		$categories = Tools::jsonDecode(Tools::jsonEncode((array)simplexml_load_string($categories_xml)), 1);
+
 		if (isset($categories['result']['status']) && ($categories['result']['status'] == 'error'))
 			die(Tools::displayError('Error occurred while getting categories list.'));
 
