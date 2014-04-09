@@ -118,6 +118,34 @@ class HipayUserAccount extends HipayWS
 		
 		return false;
 	}
+	
+	public function getWebsiteEmailByIsoCode($iso_code)
+	{
+		$this->getAccountInfos();
+		
+		if ($iso_code == self::$account_infos->currency)
+			return self::$account_infos->websites->item->websiteEmail;
+		
+		foreach (self::$account_infos->subAccounts->item as $sub_account)
+			if ($iso_code == $sub_account->currency)
+				return $sub_account->websites->item->websiteEmail;
+		
+		return false;
+	}
+	
+	public function getWebsiteAccountIdByIsoCode($iso_code)
+	{
+		$this->getAccountInfos();
+		
+		if ($iso_code == self::$account_infos->currency)
+			return self::$account_infos->userAccountId;
+		
+		foreach (self::$account_infos->subAccounts->item as $sub_account)
+			if ($iso_code == $sub_account->currency)
+				return $sub_account->userAccountId;
+		
+		return false;
+	}
 
 	public function getBalances($email = false)
 	{

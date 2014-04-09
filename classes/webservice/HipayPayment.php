@@ -47,9 +47,12 @@ class HipayPayment extends HipayWS
 		$currency_id = Context::getContext()->cart->id_currency;
 		$currency = new Currency($currency_id);
 		$user = new HipayUserAccount();
-		$wesbite_id = $user->getWebsiteIdByIsoCode($currency->iso_code);
 		
-		if ($wesbite_id == false)
+		$website_id = $user->getWebsiteIdByIsoCode($currency->iso_code);
+		$wesbite_email = $user->getWebsiteEmailByIsoCode($currency->iso_code);
+		$wesbite_account_id = $user->getWebsiteAccountIdByIsoCode($currency->iso_code);
+
+		if ($website_id == false)
 			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
 			
 		$locale = new HipayLocale();
@@ -69,7 +72,7 @@ class HipayPayment extends HipayWS
 		 * Set the merchant details according to the currency
 		 */
 		$params = array(
-			'websiteId' => (int)$wesbite_id,
+			'websiteId' => (int)$website_id,
 			'amount' => Context::getContext()->cart->getOrderTotal(),
 			'categoryId' => $this->getCategory(),
 			'currency' => Context::getContext()->currency->iso_code,
@@ -81,7 +84,8 @@ class HipayPayment extends HipayWS
 			'locale' => $locale->getLocale(),
 			'manualCapture' => (int)false,
 			'rating' => 'ALL',
-			'wsSubAccountLogin' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
+			'wsSubAccountId' => $wesbite_account_id,
+			'wsSubAccountLogin' => $wesbite_email,
 
 			// URLs
 			'urlAccept' => $accept_url,
@@ -92,7 +96,7 @@ class HipayPayment extends HipayWS
 
 			'freeData' => $free_data,
 		);
-
+		
 		$results = $this->doQuery('generate', $params);
 
 		if ($results->generateResult->code === 0)
