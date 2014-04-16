@@ -40,7 +40,7 @@
 					<td>{$sub_account->userAccountId|intval}</td>
 					<td>{$sub_account->websites->item->websiteEmail|escape:'htmlall':'UTF-8'}</td>
 					<td>{$sub_account->currency_label|escape:'htmlall':'UTF-8'} ({$sub_account->currency|escape:'htmlall':'UTF-8'})</td>
-					<td>{$sub_account->balance|number_format:2:',':''|floatval} {$sub_account->currency|escape:'htmlall':'UTF-8'}</td>
+					<td>{$sub_account->balance|number_format:2:',':''} {$sub_account->currency|escape:'htmlall':'UTF-8'}</td>
 				</tr>
 			{/foreach}
 		</tbody>

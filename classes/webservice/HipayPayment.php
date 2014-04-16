@@ -94,7 +94,7 @@ class HipayPayment extends HipayWS
 		);
 
 		$results = $this->doQuery('generate', $params);
-
+		
 		if ($results->generateResult->code === 0)
 			return Tools::redirect($results->generateResult->redirectUrl);
 		return false;
@@ -107,6 +107,7 @@ class HipayPayment extends HipayWS
 				array('key' => 'cart_id', 'value' => Context::getContext()->cart->id),
 				array('key' => 'customer_id', 'value' => Context::getContext()->customer->id),
 				array('key' => 'secure_key', 'value' => Context::getContext()->customer->secure_key),
+				array('key' => 'token', 'value' => Tools::encrypt(Context::getContext()->cart->id)),
 			),
 		);
 	}

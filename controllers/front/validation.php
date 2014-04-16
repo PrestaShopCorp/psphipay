@@ -76,8 +76,9 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
 		$valid_order = ($order['result']['status'] == 'ok');
 		$valid_secure_key = (Context::getContext()->customer->secure_key == $order['result']['merchantDatas']['_aKey_secure_key']);
+		$valid_token = (Tools::encrypt($order['result']['merchantDatas']['_aKey_cart_id']) == $order['result']['merchantDatas']['_aKey_token']);
 
-		return $valid_secure_key && $valid_order;
+		return $valid_secure_key && $valid_token && $valid_order;
 	}
 
 	protected function decline()
