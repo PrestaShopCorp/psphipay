@@ -42,7 +42,7 @@ class HipayPayment extends HipayWS
 	public function generate(&$results)
 	{
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL') == false)
-			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
+			die(Tools::displayError('An error occurred while redirecting to the payment processor'));
 
 		$currency_id = Context::getContext()->cart->id_currency;
 		$currency = new Currency($currency_id);
@@ -53,7 +53,7 @@ class HipayPayment extends HipayWS
 		$wesbite_account_id = $user->getWebsiteAccountIdByIsoCode($currency->iso_code);
 
 		if ($website_id == false)
-			die(Tools::displayError('An error occurred while redirecting to the payment processor.'));
+			die(Tools::displayError('An error occurred while redirecting to the payment processor'));
 
 		$locale = new HipayLocale();
 		$free_data = $this->getFreeData();
@@ -92,7 +92,7 @@ class HipayPayment extends HipayWS
 
 			'freeData' => $free_data,
 		);
-
+		
 		$results = $this->doQuery('generate', $params);
 		
 		if ($results->generateResult->code === 0)

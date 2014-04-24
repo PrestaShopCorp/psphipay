@@ -47,7 +47,7 @@ class HipayLocale extends HipayWS
 			if ($results->codesResult->code === 0)
 				self::$locales = (array)$results->codesResult->locales->item;
 		}
-
+		
 		return self::$locales;
 	}
 
@@ -65,7 +65,7 @@ class HipayLocale extends HipayWS
 			if (strpos($locale->code, $country_iso_code) !== false)
 				return $locale->code;
 
-		return false;
+		return 'en_GB';
 	}
 
 	public function getCurrentLocaleCode()
