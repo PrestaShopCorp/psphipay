@@ -317,10 +317,11 @@ class PSPHipay extends PaymentModule
 		$this->smarty->assign(array(
 			'id_order' => $order->id,
 			'reference' => $order->reference,
+			'params' => $params,
 			'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
 		));
 
-		return $this->display(__FILE__, 'views/templates/front/confirmation.tpl');
+		return $this->display(__FILE__, 'views/templates/hook/confirmation.tpl');
 	}
 
 	public function hookHeader()

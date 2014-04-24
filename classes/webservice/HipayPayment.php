@@ -129,7 +129,7 @@ class HipayPayment extends HipayWS
 			die(Tools::displayError('Error occurred while getting categories list.'));
 
 		if (isset($categories['categoriesList']['category']))
-			return array_keys($categories['categoriesList']['category'])[0];
+			return array_shift(array_keys($categories['categoriesList']['category']));
 		return 0;
 	}
 

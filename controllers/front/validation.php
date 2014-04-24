@@ -55,7 +55,6 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 			}
 			else
 			{
-				file_put_contents(dirname(__FILE__).'/result.txt', print_r($order, true));
 				$payment_status = Configuration::get('PS_OS_ERROR');
 
 				$error_code = $order['result']['returnCode'];
