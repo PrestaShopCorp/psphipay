@@ -98,7 +98,7 @@ class HipayConfigForm
 		);
 
 		$this->getAdditionnalInfos($form);
-		$disconnect = Tools::getValue('submitOptionsmodule', false);
+		$disconnect = (Tools::getValue('submitOptionsmodule', false) == 'disconnect');
 
 		/* If module is configured & connected */
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
@@ -110,6 +110,11 @@ class HipayConfigForm
 					'icon' => 'process-icon-power',
 					'value' => 'disconnect',
 					'js' => 'javascript:return confirm(\''.$this->psp->l('Are you sure?').'\')'
+				)),
+				$this->generateSubmitButton('Refresh settings', array(
+					'icon' => 'process-icon-refresh',
+					'value' => 'refresh',
+					'class' => 'pull-left'
 				))
 			);
 

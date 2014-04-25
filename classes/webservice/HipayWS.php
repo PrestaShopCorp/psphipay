@@ -29,7 +29,6 @@ if (!defined('_PS_VERSION_'))
 
 abstract class HipayWS
 {
-
 	protected $client = false;
 	protected $client_url = false;
 
@@ -123,6 +122,17 @@ abstract class HipayWS
 
 	public function doQuery($function, $params = array())
 	{
+		$cache_classes = array('HipayBusiness', 'HipayTopic', 'HipayUserAccount');
+		$need_cache = in_array(get_class($this), $cache_classes) == true;
+		
+		if ($need_cache == true)
+		{
+			$cache_key = get_class($this).$function;
+			
+			if (Cache::getInstance()->exists($cache_key) == true)
+				return Cache::getInstance()->get($cache_key);
+		}
+		
 		try
 		{
 			$params = $params + array(
@@ -130,8 +140,13 @@ abstract class HipayWS
 				'wsLogin' => $this->getWsLogin(),
 				'wsPassword' => $this->getWsPassword()
 			);
-
-			return $this->client->__call($function, array(array('parameters' => $params)));
+			
+			$result = $this->client->__call($function, array(array('parameters' => $params)));
+			
+			if ($need_cache == true)
+				Cache::getInstance()->set($cache_key, $result, 3600);
+			
+			return $result;
 		}
 		catch (Exception $exception)
 		{

@@ -135,9 +135,7 @@ class PSPHipay extends PaymentModule
 				'module_local_dir' => $this->local_path
 			)
 		);
-
-		$this->config_form = new HipayConfigForm();
-
+		
 		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 		return $output.$this->renderForm().'<hr />';
 	}
@@ -158,6 +156,8 @@ class PSPHipay extends PaymentModule
 			.'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 
+		$this->config_form = new HipayConfigForm();
+		
 		$helper->tpl_vars = array(
 			'fields_value' => $this->config_form->getFormsFieldsValues(),
 			'id_language' => $this->context->language->id,
@@ -169,10 +169,13 @@ class PSPHipay extends PaymentModule
 
 	protected function _postProcess()
 	{
-		$disconnect = Tools::getValue('submitOptionsmodule', false);
+		$disconnect = (Tools::getValue('submitOptionsmodule', false) == 'disconnect');
+		$refresh = (Tools::getValue('submitOptionsmodule', false) == 'refresh');
 
 		if ($disconnect == true)
 			return $this->disconnect();
+		elseif ($refresh == true)
+			return $this->refresh();
 
 		$email = Tools::getValue('install_user_email');
 		$user = new HipayUserAccount($email);
@@ -201,6 +204,14 @@ class PSPHipay extends PaymentModule
 			return false;
 		}
 	}
+	
+	protected function refresh()
+	{
+		$cache_classes = array('HipayBusiness', 'HipayTopic', 'HipayUserAccount');
+		
+		foreach ($cache_classes as $class)
+			Cache::getInstance()->delete($class.'*');
+	}
 
 	protected function clearAccountData()
 	{
@@ -225,6 +236,7 @@ class PSPHipay extends PaymentModule
 
 	protected function disconnect($silent = false)
 	{
+		$this->refresh();
 		$this->clearAccountData();
 
 		if ($silent === false)
