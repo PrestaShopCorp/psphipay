@@ -58,6 +58,7 @@ class HipayConfigForm
 	protected function getInstallForm()
 	{
 		$params = array(
+			'required' => true,
 			'class' => 'fixed-width-xxl',
 			'desc' => $this->psp->l('Please, enter your email address in the field bellow'),
 		);

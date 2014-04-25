@@ -94,10 +94,14 @@ class PSPHipay extends PaymentModule
 
 	public function hookBackOfficeHeader()
 	{
+		if (Tools::getValue('module_name') != 'psphipay')
+			return false;
+		
+		$this->context->controller->addJS($this->_path.'js/configure.js');
 		$this->context->controller->addCSS($this->_path.'css/configure.css');
-
+		
 		return '<script type="text/javascript">
-			var admin_psphipay_ajax_url = "'.$this->context->link->getAdminLink('AdminPSPHipay').'";
+			var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
 		</script>';
 	}
 
