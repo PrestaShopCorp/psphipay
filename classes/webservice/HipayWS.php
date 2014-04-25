@@ -107,6 +107,7 @@ abstract class HipayWS
 			$ws_options = array(
 				'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP,
 				'cache_wsdl' => WSDL_CACHE_NONE,
+				'connection_timeout' => 20,
 				'soap_version' => SOAP_1_1,
 				'encoding' => 'UTF-8'
 			);
@@ -115,7 +116,7 @@ abstract class HipayWS
 		}
 		catch (SoapFault $exception)
 		{
-			die((string)$exception->getMessage());
+			return false;
 		}
 
 	}
@@ -134,7 +135,7 @@ abstract class HipayWS
 		}
 		catch (Exception $exception)
 		{
-			die((string)$exception->getMessage());
+			return false;
 		}
 	}
 }
