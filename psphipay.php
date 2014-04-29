@@ -31,6 +31,7 @@ require_once(dirname(__FILE__).'/classes/HipayConfigForm.php');
 require_once(dirname(__FILE__).'/classes/HipayConfigFormAlerts.php');
 
 require_once(dirname(__FILE__).'/classes/webservice/HipayBusiness.php');
+require_once(dirname(__FILE__).'/classes/webservice/HipayEnvelope.php');
 require_once(dirname(__FILE__).'/classes/webservice/HipayLocale.php');
 require_once(dirname(__FILE__).'/classes/webservice/HipayTopic.php');
 require_once(dirname(__FILE__).'/classes/webservice/HipayUserAccount.php');
@@ -122,8 +123,10 @@ class PSPHipay extends PaymentModule
 	public function getContent()
 	{
 		HipayConfigFormAlerts::getInstance();
-
-		if (Tools::isSubmit('submitPSPHipay'))
+		
+		if (Tools::isSubmit('submitDateRange'))
+			$this->_postProcessDateRanges();
+		elseif (Tools::isSubmit('submitPSPHipay'))
 			$this->_postProcess();
 
 		$this->context->smarty->assign(
@@ -157,8 +160,19 @@ class PSPHipay extends PaymentModule
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 
 		$this->config_form = new HipayConfigForm();
-		
+		$calendar_helper = new HelperCalendar();
+
+		$employee = $this->context->employee;
+		$default_date_from = isset($employee->psp_hipay_date_from) ? $employee->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
+		$default_date_to = isset($employee->psp_hipay_date_to) ? $employee->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
+
+		$calendar_helper->setDateFrom(Tools::getValue('date_from', $default_date_from));
+		$calendar_helper->setDateTo(Tools::getValue('date_to', $default_date_to));
+
 		$helper->tpl_vars = array(
+			'date_from' => Tools::getValue('date_from', $default_date_from),
+			'date_to' => Tools::getValue('date_to', $default_date_to),
+			'transactions_dates_range' => $calendar_helper->generate(),
 			'fields_value' => $this->config_form->getFormsFieldsValues(),
 			'id_language' => $this->context->language->id,
 			'languages' => $this->context->controller->getLanguages(),
@@ -203,6 +217,13 @@ class PSPHipay extends PaymentModule
 			HipayConfigFormAlerts::registerFormError('The email address you entered is not valid!');
 			return false;
 		}
+	}
+	
+	protected function _postProcessDateRanges()
+	{
+		$employee = $this->context->employee;
+		$employee->psp_hipay_date_from = date('Y-m-dT', strtotime(Tools::getValue('date_from'))).'00:00:00';
+		$employee->psp_hipay_date_to = date('Y-m-dT', strtotime(Tools::getValue('date_to'))).'23:59:59';
 	}
 	
 	protected function refresh()

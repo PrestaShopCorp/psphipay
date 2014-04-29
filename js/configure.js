@@ -17,4 +17,7 @@ $(document).ready(function() {
 			container_message.show();
 		}
 	});
+	
+	$('#datepicker').removeClass('hide');
+	$('#datepicker-cancel').hide();
 });

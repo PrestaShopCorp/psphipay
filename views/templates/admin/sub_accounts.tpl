@@ -35,7 +35,6 @@
 		</thead>
 		<tbody>
 			{foreach from=$sub_accounts item='sub_account'}
-
 				<tr>
 					<td>{$sub_account->userAccountId|intval}</td>
 					<td>{$sub_account->websites->item->websiteEmail|escape:'htmlall':'UTF-8'}</td>

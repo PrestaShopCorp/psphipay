@@ -48,6 +48,7 @@ class HipayConfigForm
 			return array(
 				$this->getInstallForm(),
 				$this->getSettingsForm(),
+				$this->getTransactionsForm(),
 				$this->getCustomersForm(),
 			);
 		}
@@ -168,9 +169,31 @@ class HipayConfigForm
 		if (count($sub_accounts) == 0)
 			$form['form']['input'][] = $this->generateInputFree('settings_no_sub_accounts', false, array('col' => 9, 'offset' => 3));
 		else
-			$form['form']['input'][] = $this->generateInputFree('settings_sub_accounts_list', false, array('col' => 5, 'offset' => 0));
+			$form['form']['input'][] = $this->generateInputFree('settings_sub_accounts_list', false, array('col' => 8, 'offset' => 0));
 
 		return $form;
+	}
+
+	protected function getTransactionsForm()
+	{
+		return array(
+			'form' => array(
+				'legend' => $this->generateLegend('Transactions', 'icon-money'),
+				'input' => array(
+					$this->generateInputFree('transactions_account_statement', 'Account statement'),
+					$this->generateInputFree('transactions_currency', 'Currency'),
+					$this->generateInputFree('transactions_current_date', 'Date'),
+					$this->generateFormSplit(),
+					$this->generateInputFree('transactions_operations_statement_desc', false, array('col' => 12, 'offset' => 0)),
+					array(
+						'type' => 'psp_calendar',
+						'name' => 'transactions_dates_range',
+						'label' => 'Date',
+					),
+					$this->generateInputFree('transactions_details', 'Transactions', array('col' => 9, 'offset' => 0)),
+				),
+			),
+		);
 	}
 
 	protected function getCustomersForm()
@@ -203,13 +226,15 @@ class HipayConfigForm
 			$settings_form_fields = $this->getSettingsFormFields();
 		else
 			$settings_form_fields = array();
+		
+		$transactions_form_fields = $this->getTransactionsFormFields();
 
 		if (((bool)Configuration::get('PSP_HIPAY_LIVE_MODE')) == true)
 			$domain = 'https://www.hipay.com';
 		else
 			$domain = 'https://test-www.hipaywallet.com';
 
-		return array_merge($install_form_fields, $settings_form_fields, array(
+		return array_merge($install_form_fields, $settings_form_fields, $transactions_form_fields, array(
 				/* Form Split */
 				'input_split' => '<hr />',
 
@@ -287,6 +312,26 @@ class HipayConfigForm
 				'settings_no_sub_accounts' => '<p class="form-control-static">'.$this->psp->l('Nos sub-accounts found.').'</p>',
 			);
 		}
+	}
+	
+	public function getTransactionsFormFields()
+	{
+		$envelope = new HipayEnvelope();
+		
+		Context::getContext()->smarty->assign(array(
+			'transactions' => $envelope->getTransactions(),
+		));
+		
+		$template_path = _PS_MODULE_DIR_.$this->psp->name.'/views/templates/admin/transactions.tpl';
+		
+		return array(
+			'transactions_account_statement' => '<p class="form-control-static">N&deg;'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</p>',
+			'transactions_currency' => '<p class="form-control-static">'.Configuration::get('PSP_HIPAY_CURRENCY').'</p>',
+			'transactions_current_date' => '<p class="form-control-static">'.date('Y-m-d H:i:s').'</p>',
+			'transactions_operations_statement_desc' => '<h4 class="form-control-static">'.$this->psp->l('Operations statement').'</h4>',
+			'transactions_dates_range' => null,
+			'transactions_details' => Context::getContext()->smarty->fetch($template_path),
+		);
 	}
 
 	/* Form items */

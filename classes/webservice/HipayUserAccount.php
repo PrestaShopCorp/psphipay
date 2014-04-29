@@ -97,7 +97,7 @@ class HipayUserAccount extends HipayWS
 		{
 			$params = array('accountLogin' => self::$email);
 			$result = $this->doQuery('getAccountInfos', $params);
-
+			
 			if ($result->getAccountInfosResult->code === 0)
 				self::$account_infos = $result->getAccountInfosResult;
 		}

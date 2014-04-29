@@ -7,3 +7,16 @@
 	padding: 5px 10px;
 	background-color: #f2dede;
 }
+
+/* Form controls */
+.form-control-static {
+	padding-top: 6px !important;
+}
+
+.form-date-actions {
+	border: none !important;
+}
+
+#date-compare {
+	display: none !important;
+}

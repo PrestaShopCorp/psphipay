@@ -100,7 +100,26 @@
 								{block name="field"}
 									<div class="col-lg-{if isset($input.col)}{$input.col|intval}{else}9{/if} {if isset($input.offset)}col-lg-offset-{$input.offset|intval}{elseif !isset($input.label)}col-lg-offset-3{/if}">
 									{block name="input"}
-									{if $input.type == 'text' || $input.type == 'tags'}
+									{if $input.type == 'psp_calendar'}
+										<button class="btn btn-default" data-toggle="modal" data-target="#psp_calendar" onclick="javascript:return false;">
+											<i class="icon-calendar"></i> {l s='From'} <strong class="text-info">{$date_from}</strong> {l s='To'} <strong class="text-info">{$date_to}</strong>
+											<i class="icon-caret-down"></i>
+										</button>
+										<p class="form-control-static"><em>({l s='Only over the past three months' mod='psphipay'})</em></p>
+										<div class="modal fade" id="psp_calendar" tabindex="-1" role="dialog" aria-hidden="true">
+											<div class="modal-dialog modal-lg">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+														<h3 class="modal-title">Choose a date range</h3>
+													</div>
+													<div class="modal-body">
+														{$transactions_dates_range}
+													</div>
+												</div>
+											</div>
+										</div>
+									{elseif $input.type == 'text' || $input.type == 'tags'}
 										{if isset($input.lang) AND $input.lang}
 										{if $languages|count > 1}
 										<div class="form-group">
