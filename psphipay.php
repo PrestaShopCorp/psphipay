@@ -135,9 +135,12 @@ class PSPHipay extends PaymentModule
 				'form_infos' => HipayConfigFormAlerts::getFormInfos(),
 				'form_successes' => HipayConfigFormAlerts::getFormSuccesses(),
 				'module_dir' => $this->_path,
-				'module_local_dir' => $this->local_path
+				'module_local_dir' => $this->local_path,
 			)
 		);
+		
+		
+		$this->context->smarty->assign('alerts', $this->context->smarty->fetch($this->local_path.'views/templates/admin/alerts.tpl'));
 		
 		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 		return $output.$this->renderForm().'<hr />';
