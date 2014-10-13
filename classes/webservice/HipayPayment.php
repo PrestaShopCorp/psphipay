@@ -92,9 +92,9 @@ class HipayPayment extends HipayWS
 
 			'freeData' => $free_data,
 		);
-		
+
 		$results = $this->doQuery('generate', $params);
-		
+
 		if ($results->generateResult->code === 0)
 			return Tools::redirect($results->generateResult->redirectUrl);
 		return false;
@@ -129,7 +129,11 @@ class HipayPayment extends HipayWS
 			die(Tools::displayError('Error occurred while getting categories list.'));
 
 		if (isset($categories['categoriesList']['category']))
-			return array_shift(array_keys($categories['categoriesList']['category']));
+		{
+			$categories_keys = array_keys($categories['categoriesList']['category']);
+			return array_shift($categories_keys);
+		}
+		
 		return 0;
 	}
 
@@ -142,7 +146,7 @@ class HipayPayment extends HipayWS
 		$this->writeXML($xml, $data);
 		$xml->endElement();
 
-		return $xml->outputMemory(true); 
+		return $xml->outputMemory(true);
 	}
 
 	public function writeXML(XMLWriter &$xml, &$data)
