@@ -25,6 +25,10 @@
 
 <div class="form-control-static">
 	{if count($transactions) > 0}
+
+	{assign var="total_fees" value=0}
+	{assign var="total_amount" value=0}
+
 	<table class="table table-bordered" id="psp_hipay_transactions">
 		<thead>
 			<tr>
@@ -36,33 +40,31 @@
 			</tr>
 		</thead>
 		<tbody>
+
 			{foreach from=$transactions item='transaction'}
 				<tr>
 					<td>{$transaction->transactionId|escape:'htmlall':'UTF-8'}</td>
 					<td>{$transaction->createdAt|date_format:'%Y-%m-%d %H:%I:%S'}</td>
 					<td>{$transaction->captureDate|escape:'htmlall':'UTF-8'}</td>
-					<td class="text-right"></td>
-					<td class="text-right">{$transaction->amount|escape:'htmlall':'UTF-8'} {$transaction->currency|escape:'htmlall':'UTF-8'}</td>
-				</tr>
-				<tr>
-					<td>{$transaction->transactionId|escape:'htmlall':'UTF-8'}</td>
-					<td>{$transaction->createdAt|date_format:'%Y-%m-%d %H:%I:%S'}</td>
-					<td>{$transaction->captureDate|escape:'htmlall':'UTF-8'}</td>
-					<td class="text-right">{$transaction->fees|escape:'htmlall':'UTF-8'} {$transaction->currency|escape:'htmlall':'UTF-8'}</td>
-					<td class="text-right"></td>
+					<td class="text-right">{$transaction->fees|string_format:"%.2f"} {$transaction->currency|escape:'htmlall':'UTF-8'}</td>
+					<td class="text-right">{$transaction->amount|string_format:"%.2f"} {$transaction->currency|escape:'htmlall':'UTF-8'}</td>
+
+					{$total_fees = (float)($total_fees + $transaction->fees)}
+					{$total_amount = (float)($total_amount + $transaction->amount)}
+					{assign var="currency" value=$transaction->currency}
 				</tr>
 			{/foreach}
 		</tbody>
 	</table>
-	
+
 	<table class="table">
 		<tbody>
 			<tr>
 				<td width="30%"></td>
 				<td width="20%"></td>
 				<td width="20%" class="text-right"><strong>{l s='Total' mod='psphipay'}</strong></td>
-				<td width="15%" class="text-right">XXX</td>
-				<td width="15%" class="text-right">XXX</td>
+				<td width="15%" class="text-right">{$total_fees|string_format:"%.2f"} {$currency|escape:'htmlall':'UTF-8'}</td>
+				<td width="15%" class="text-right">{$total_amount|string_format:"%.2f"} {$currency|escape:'htmlall':'UTF-8'}</td>
 			</tr>
 		</tbody>
 	</table>

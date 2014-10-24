@@ -33,11 +33,11 @@ class HipayEnvelope extends HipayWS
 {
 
 	protected $client_url = '/soap/user-account-v2';
-	
+
 	protected static $transactions = array();
 
 	/* SOAP method: codes
-	 * 
+	 *
 	 * Parameters :
 	 * wsLogin
 	 * wsPassword
@@ -53,20 +53,25 @@ class HipayEnvelope extends HipayWS
 			$user = new HipayUserAccount();
 			Context::getContext()->employee->psp_hipay_date_from = isset(Context::getContext()->employee->psp_hipay_date_from) ? Context::getContext()->employee->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
 			Context::getContext()->employee->psp_hipay_date_to = isset(Context::getContext()->employee->psp_hipay_date_to) ? Context::getContext()->employee->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
-			
+
 			$params = array(
 				'wsSubAccountLogin' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
 				'startDate' => date('Y-m-dTH:i:s', strtotime(Context::getContext()->employee->psp_hipay_date_from)),
 				'endDate' => date('Y-m-dTH:i:s', strtotime(Context::getContext()->employee->psp_hipay_date_to)),
 				'pageNumber' => 1,
 			);
-			
+
 			$results = $this->doQuery('getTransactions', $params);
 
 			if (($results->getTransactionsResult->code === 0) && (isset($results->getTransactionsResult->transactions->item) == true))
-				self::$transactions = (array)$results->getTransactionsResult->transactions->item;
+			{
+				if (is_array($results->getTransactionsResult->transactions->item) == true)
+					self::$transactions = (array)$results->getTransactionsResult->transactions->item;
+				else
+					self::$transactions = array($results->getTransactionsResult->transactions->item);
+			}
 		}
-		
+
 		return self::$transactions;
 	}
 

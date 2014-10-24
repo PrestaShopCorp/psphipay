@@ -226,7 +226,7 @@ class HipayConfigForm
 			$settings_form_fields = $this->getSettingsFormFields();
 		else
 			$settings_form_fields = array();
-		
+
 		$transactions_form_fields = $this->getTransactionsFormFields();
 
 		if (((bool)Configuration::get('PSP_HIPAY_LIVE_MODE')) == true)
@@ -313,17 +313,17 @@ class HipayConfigForm
 			);
 		}
 	}
-	
+
 	public function getTransactionsFormFields()
 	{
 		$envelope = new HipayEnvelope();
-		
+
 		Context::getContext()->smarty->assign(array(
 			'transactions' => $envelope->getTransactions(),
 		));
-		
+
 		$template_path = _PS_MODULE_DIR_.$this->psp->name.'/views/templates/admin/transactions.tpl';
-		
+
 		return array(
 			'transactions_account_statement' => '<p class="form-control-static">N&deg;'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</p>',
 			'transactions_currency' => '<p class="form-control-static">'.Configuration::get('PSP_HIPAY_CURRENCY').'</p>',
