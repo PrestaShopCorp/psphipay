@@ -97,10 +97,10 @@ class PSPHipay extends PaymentModule
 	{
 		if (Tools::getValue('module_name') != 'psphipay')
 			return false;
-		
+
 		$this->context->controller->addJS($this->_path.'js/configure.js');
 		$this->context->controller->addCSS($this->_path.'css/configure.css');
-		
+
 		return '<script type="text/javascript">
 			var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
 		</script>';
@@ -123,7 +123,7 @@ class PSPHipay extends PaymentModule
 	public function getContent()
 	{
 		HipayConfigFormAlerts::getInstance();
-		
+
 		if (Tools::isSubmit('submitDateRange'))
 			$this->_postProcessDateRanges();
 		elseif (Tools::isSubmit('submitPSPHipay'))
@@ -138,10 +138,10 @@ class PSPHipay extends PaymentModule
 				'module_local_dir' => $this->local_path,
 			)
 		);
-		
-		
+
+
 		$this->context->smarty->assign('alerts', $this->context->smarty->fetch($this->local_path.'views/templates/admin/alerts.tpl'));
-		
+
 		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 		return $output.$this->renderForm().'<hr />';
 	}
@@ -186,6 +186,9 @@ class PSPHipay extends PaymentModule
 
 	protected function _postProcess()
 	{
+		Configuration::updateValue('PSP_HIPAY_LIVE_MODE', Tools::getValue('install_live_mode'));
+		Configuration::updateValue('PSP_HIPAY_USER_EMAIL', Tools::getValue('install_user_email'));
+
 		$disconnect = (Tools::getValue('submitOptionsmodule', false) == 'disconnect');
 		$refresh = (Tools::getValue('submitOptionsmodule', false) == 'refresh');
 
@@ -221,18 +224,18 @@ class PSPHipay extends PaymentModule
 			return false;
 		}
 	}
-	
+
 	protected function _postProcessDateRanges()
 	{
 		$employee = $this->context->employee;
 		$employee->psp_hipay_date_from = date('Y-m-dT', strtotime(Tools::getValue('date_from'))).'00:00:00';
 		$employee->psp_hipay_date_to = date('Y-m-dT', strtotime(Tools::getValue('date_to'))).'23:59:59';
 	}
-	
+
 	protected function refresh()
 	{
 		$cache_classes = array('HipayBusiness', 'HipayTopic', 'HipayUserAccount');
-		
+
 		foreach ($cache_classes as $class)
 			Cache::getInstance()->delete($class.'*');
 	}
@@ -291,7 +294,7 @@ class PSPHipay extends PaymentModule
 		else
 		{
 			HipayConfigFormAlerts::registerFormSuccess('Greatings! Your PrestaShop Payments (by Hipay) account has been associated to your shop!');
-			HipayConfigFormAlerts::registerFormSuccess('You can see all the details associated to your account in the "Settings" tab.');
+			HipayConfigFormAlerts::registerFormSuccess('You can see all the details associated to your account in the Settings tab.');
 			return true;
 		}
 
@@ -340,6 +343,8 @@ class PSPHipay extends PaymentModule
 			'module_dir' => $this->_path,
 			'payment_button' => $this->getPaymentButton(),
 		));
+
+		$this->smarty->assign('psphipay_prod', (bool)Configuration::get('PSP_HIPAY_LIVE_MODE'));
 
 		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 	}

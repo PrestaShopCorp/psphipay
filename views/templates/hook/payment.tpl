@@ -25,7 +25,7 @@
 
 
 <div class="row">
-	<div class="col-xs-12 col-md-6">
+	<div class="col-xs-12 col-md-12">
 		<p class="payment_module" id="psp_hipay_payment_button">
 			{if $cart->getOrderTotal() < 2}
 				<a href="">
@@ -35,7 +35,7 @@
 			{else}
 				<a href="{$link->getModuleLink('psphipay', 'redirect', array(), true)|escape:'htmlall':'UTF-8'}" title="{l s='Pay with Hipay' mod='psphipay'}">
 					<img src="{$domain|cat:$payment_button}" alt="{l s='Pay with Hipay' mod='psphipay'}" width="150px" height="64px" />
-					{l s='Pay with PrestaShop Payment (by Hipay)' mod='psphipay'} {if isset($hipay_prod) && (!$hipay_prod)}{l s='(sandbox / test mode)' mod='psphipay'}{/if}
+					{l s='Pay with PrestaShop Payment (by Hipay)' mod='psphipay'} {if isset($psphipay_prod) && (!$psphipay_prod)}{l s='(sandbox / test mode)' mod='psphipay'}{/if}
 				</a>
 			{/if}
 		</p>

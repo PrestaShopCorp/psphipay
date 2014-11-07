@@ -67,7 +67,10 @@ class HipayUserAccount extends HipayWS
 	/* SOAP method: isAvailable */
 	public function isEmailAvailable()
 	{
-		$params = array('email' => self::$email);
+		$params = array(
+			'email' => self::$email,
+			'entity' => $this->ws_entity,
+		);
 		$result = $this->doQuery('isAvailable', $params);
 
 		if ($result->isAvailableResult->code === 0)
@@ -97,7 +100,7 @@ class HipayUserAccount extends HipayWS
 		{
 			$params = array('accountLogin' => self::$email);
 			$result = $this->doQuery('getAccountInfos', $params);
-			
+
 			if ($result->getAccountInfosResult->code === 0)
 				self::$account_infos = $result->getAccountInfosResult;
 		}
@@ -227,6 +230,7 @@ class HipayUserAccount extends HipayWS
 			'websiteName'=> Tools::getValue('install_user_shop_name'),
 			'websiteUrl'=> Tools::getShopDomain(true, true),
 			'websiteMerchantPassword' => $user_password,
+			'entity' => $this->ws_entity,
 		);
 
 		$result = $this->doQuery('createWithWebsite', $params);
@@ -249,6 +253,7 @@ class HipayUserAccount extends HipayWS
 		$params = array(
 			'accountLogin' => self::$email,
 			'merchantGroupId' => $this->getWsMerchantGroup(),
+			'entity' => $this->ws_entity,
 		);
 
 		$result = $this->doQuery('associateMerchantGroup', $params);

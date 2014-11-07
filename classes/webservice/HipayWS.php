@@ -37,6 +37,7 @@ abstract class HipayWS
 	protected $ws_login = false;
 	protected $ws_password = false;
 	protected $ws_merchant_group = false;
+	protected $ws_entity = 'PrestaShop Payment';
 
 	public function __construct()
 	{
@@ -49,7 +50,7 @@ abstract class HipayWS
 	{
 		$live_mode = (bool)Configuration::get('PSP_HIPAY_LIVE_MODE');
 
-		if ($live_mode === true)
+		if ($live_mode == true)
 		{
 			$this->ws_id = '19853';
 			$this->ws_url = 'https://ws.hipay.com';
@@ -135,9 +136,9 @@ abstract class HipayWS
 				if (empty($value) == false)
 					return $value;
 			}
-				
+
 		}
-		
+
 		try
 		{
 			$params = $params + array(
@@ -145,12 +146,12 @@ abstract class HipayWS
 				'wsLogin' => $this->getWsLogin(),
 				'wsPassword' => $this->getWsPassword()
 			);
-			
+
 			$result = $this->client->__call($function, array(array('parameters' => $params)));
-			
+
 			if ($need_cache == true)
 				Cache::getInstance()->set($cache_key, $result, 3600);
-			
+
 			return $result;
 		}
 		catch (Exception $exception)
