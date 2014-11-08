@@ -58,6 +58,8 @@ class HipayConfigFormAlerts
 	public static function registerFormError($error_message)
 	{
 		self::$errors[] = self::$psp->l($error_message);
+
+		return false;
 	}
 
 	public static function getFormInfos()
@@ -68,6 +70,8 @@ class HipayConfigFormAlerts
 	public static function registerFormInfo($info_message)
 	{
 		self::$infos[] = self::$psp->l($info_message);
+
+		return true;
 	}
 
 	public static function getFormSuccesses()
@@ -78,5 +82,7 @@ class HipayConfigFormAlerts
 	public static function registerFormSuccess($success_message)
 	{
 		self::$successes[] = self::$psp->l($success_message);
+
+		return true;
 	}
 }

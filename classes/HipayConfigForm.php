@@ -116,7 +116,7 @@ class HipayConfigForm
 					'icon' => 'process-icon-refresh',
 					'value' => 'refresh',
 					'class' => 'pull-left'
-				))
+				)),
 			);
 
 			$form['form']['submit'] = $this->generateSubmitButton('Save');
@@ -191,6 +191,13 @@ class HipayConfigForm
 						'label' => 'Date',
 					),
 					$this->generateInputFree('transactions_details', 'Transactions', array('col' => 9, 'offset' => 0)),
+				),
+				'buttons' => array(
+					$this->generateSubmitButton('Refresh transactions', array(
+						'icon' => 'process-icon-refresh',
+						'value' => 'refresh',
+						'class' => 'pull-right'
+					)),
 				),
 			),
 		);

@@ -37,7 +37,7 @@ abstract class HipayWS
 	protected $ws_login = false;
 	protected $ws_password = false;
 	protected $ws_merchant_group = false;
-	protected $ws_entity = 'PrestaShop Payment';
+	protected $ws_entity = 'prestashoppayment';
 
 	public function __construct()
 	{
@@ -64,7 +64,7 @@ abstract class HipayWS
 			$this->ws_url = 'https://test-ws.hipay.com';
 			$this->ws_login = 'd2b4aa9077d3fe036a26317b4284f86e';
 			$this->ws_password = '9ac116a24fb82b12ad353c35922e8797';
-			$this->ws_merchant_group = 4;
+			$this->ws_merchant_group = (Tools::strtoupper($this->context->country->iso_code) == 'FR') ? 12 : 44;
 		}
 
 		$this->client = $this->getClient();

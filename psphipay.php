@@ -87,6 +87,7 @@ class PSPHipay extends PaymentModule
 
 		return parent::install() &&
 			$this->setCurrencies() &&
+			$this->addWaitingOrderState() &&
 			$this->registerHook('header') &&
 			$this->registerHook('payment') &&
 			$this->registerHook('paymentReturn') &&
@@ -112,11 +113,50 @@ class PSPHipay extends PaymentModule
 
 		foreach ($shops as $shop)
 		{
-			if (!Db::getInstance()->execute('
-					INSERT IGNORE INTO `'._DB_PREFIX_.'module_currency` (`id_module`, `id_shop`, `id_currency`)
-					SELECT '.(int)$this->id.', "'.(int)$shop.'", `id_currency` FROM `'._DB_PREFIX_.'currency` WHERE `deleted` = \'0\' AND `iso_code` IN (\'CHF\', \'EUR\', \'GBP\', \'SEK\')'))
+			$sql = 'INSERT IGNORE INTO `'._DB_PREFIX_.'module_currency` (`id_module`, `id_shop`, `id_currency`)
+					SELECT '.(int)$this->id.', "'.(int)$shop.'", `id_currency`
+					FROM `'._DB_PREFIX_.'currency`
+					WHERE `deleted` = \'0\' AND `iso_code` IN (\'CHF\', \'EUR\', \'GBP\', \'SEK\')';
+
+			if (Db::getInstance()->execute($sql) == false)
 				return false;
 		}
+		return true;
+	}
+
+	protected function addWaitingOrderState()
+	{
+		if ((bool)Configuration::get('PSP_HIPAY_OS_WAITING') == false)
+		{
+			$order_state = new OrderState();
+			$order_state->name = array();
+
+			foreach (Language::getLanguages(false) as $language)
+			{
+				if (Tools::strtolower($language['iso_code']) == 'fr')
+					$order_state->name[(int)$language['id_lang']] = "En attente d'autorisation";
+				else
+					$order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
+			}
+
+			$order_state->color = '#4169E1';
+			$order_state->hidden = false;
+			$order_state->send_email = false;
+			$order_state->delivery = false;
+			$order_state->logable = false;
+			$order_state->invoice = false;
+
+			if ($order_state->add() == true)
+			{
+				Configuration::updateValue('PSP_HIPAY_OS_WAITING', $order_state->id);
+				copy($this->local_path.'/logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
+
+				return true;
+			}
+
+			return false;
+		}
+
 		return true;
 	}
 
@@ -129,6 +169,8 @@ class PSPHipay extends PaymentModule
 		elseif (Tools::isSubmit('submitPSPHipay'))
 			$this->_postProcess();
 
+		$tab_pane = Tools::getValue('pane') ? Tools::getValue('pane') : 1;
+		
 		$this->context->smarty->assign(
 			array(
 				'form_errors' => HipayConfigFormAlerts::getFormErrors(),
@@ -136,14 +178,14 @@ class PSPHipay extends PaymentModule
 				'form_successes' => HipayConfigFormAlerts::getFormSuccesses(),
 				'module_dir' => $this->_path,
 				'module_local_dir' => $this->local_path,
+				'tab_pane' => $tab_pane,
 			)
 		);
-
 
 		$this->context->smarty->assign('alerts', $this->context->smarty->fetch($this->local_path.'views/templates/admin/alerts.tpl'));
 
 		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
-		return $output.$this->renderForm().'<hr />';
+		return $output.$this->renderForm();
 	}
 
 	protected function renderForm()
@@ -209,20 +251,17 @@ class PSPHipay extends PaymentModule
 				$this->clearAccountData();
 				$user->saveUserAccountInfos();
 				$success = 'Configuration saved!';
+
 				return HipayConfigFormAlerts::registerFormSuccess($success);
 			}
 			else
 			{
 				HipayConfigFormAlerts::registerFormError('A problem occured while trying to connect to your account.');
-				HipayConfigFormAlerts::registerFormError('Please, try again later.');
-				return false;
+				return HipayConfigFormAlerts::registerFormError('Please, try again later.');
 			}
 		}
 		elseif (empty($email) === false)
-		{
-			HipayConfigFormAlerts::registerFormError('The email address you entered is not valid!');
-			return false;
-		}
+			return HipayConfigFormAlerts::registerFormError('The email address you entered is not valid!');
 	}
 
 	protected function _postProcessDateRanges()
@@ -267,7 +306,7 @@ class PSPHipay extends PaymentModule
 		$this->clearAccountData();
 
 		if ($silent === false)
-			HipayConfigFormAlerts::registerFormInfo('You have been disconnected. Enter your merchant email again to use your module.');
+			return HipayConfigFormAlerts::registerFormInfo('You have been disconnected. Enter your merchant email again to use your module.');
 
 		return true;
 	}
@@ -284,21 +323,18 @@ class PSPHipay extends PaymentModule
 		if ($locale->getLocale() === false)
 		{
 			$error = 'Your default country is not compatible with the Hipay API';
-			HipayConfigFormAlerts::registerFormError($error);
+			return HipayConfigFormAlerts::registerFormError($error);
 		}
 		elseif ($user->createUserAccount() === false)
 		{
 			$error = 'The account creation failed. Please, contact the Hipay customers\' service.';
-			HipayConfigFormAlerts::registerFormError($error);
+			return HipayConfigFormAlerts::registerFormError($error);
 		}
 		else
 		{
 			HipayConfigFormAlerts::registerFormSuccess('Greatings! Your PrestaShop Payments (by Hipay) account has been associated to your shop!');
-			HipayConfigFormAlerts::registerFormSuccess('You can see all the details associated to your account in the Settings tab.');
-			return true;
+			return HipayConfigFormAlerts::registerFormSuccess('You can see all the details associated to your account in the Settings tab.');
 		}
-
-		return false;
 	}
 
 	protected function isPostDataValid()
