@@ -77,6 +77,12 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 				case 'ok':
 					$id_order_state = (int)Configuration::get('PS_OS_PAYMENT');
 					break;
+				case 'nok':
+					$id_order_state = (int)Configuration::get('PS_OS_ERROR');
+					break;
+				case 'cancel':
+					$id_order_state = (int)Configuration::get('PS_OS_CANCELED');
+					break;
 				case 'waiting':
 					$id_order_state = (int)Configuration::get('PSP_HIPAY_OS_WAITING');
 					break;
@@ -85,7 +91,7 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 					break;
 			}
 
-			return $this->{$operation}($order, $id_order_state, $cart_id, $currency, $amount, $secure_key);
+			return $this->placeOrder($order, $id_order_state, $cart_id, $currency, $amount, $secure_key);
 		}
 		else
 		{
@@ -112,24 +118,7 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 		return $valid_secure_key && $valid_token;
 	}
 
-	protected function authorization($order, $id_order_state, $cart_id, $currency, $amount, $secure_key)
-	{
-		if ($id_order_state != (int)Configuration::get('PS_OS_ERROR'))
-		{
-			$payment_method = $order['result']['paymentMethod'];
-			$message = Tools::safeOutput("Payment method: $payment_method");
-		}
-		else
-		{
-			$error_code = $order['result']['returnCode'];
-			$error_desc = $order['result']['returnDescriptionShort'];
-			$message = Tools::safeOutput("Error: [$error_code] $error_desc");
-		}
-
-		return $this->module->validateOrder($cart_id, $id_order_state, $amount, $this->module->displayName, $message, array(), (int)$currency->id, false, $secure_key);
-	}
-
-	protected function capture($order, $id_order_state, $cart_id, $currency, $amount, $secure_key)
+	protected function placeOrder($order, $id_order_state, $cart_id, $currency, $amount, $secure_key)
 	{
 		$order_id = (int)Order::getOrderByCartId($cart_id);
 
@@ -145,13 +134,17 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
 				return $order_history->addWithemail();
 			}
+
+			return $this->displayError('An error occurred while saving transaction details');
 		}
 		else
 		{
 			if ($id_order_state != (int)Configuration::get('PS_OS_ERROR'))
 			{
 				$payment_method = $order['result']['paymentMethod'];
-				$message = Tools::safeOutput("Payment method: $payment_method");
+				$transaction_id = $order['result']['transid'];
+				$message = Tools::safeOutput("Payment method: $payment_method<br />");
+				$message .= Tools::safeOutput("Transaction ID: $payment_method");
 			}
 			else
 			{
@@ -162,25 +155,5 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
 			return $this->module->validateOrder($cart_id, $id_order_state, $amount, $this->module->displayName, $message, array(), (int)$currency->id, false, $secure_key);
 		}
-	}
-
-	protected function refund($order, $id_order_state, $cart_id, $currency, $amount, $secure_key)
-	{
-		$order_id = (int)Order::getOrderByCartId($cart_id);
-
-		/* Payment refunded on Hipay */
-		if ((bool)$order == false)
-			return $this->displayError('An error occurred while processing refund');
-
-		$order = new Order($order_id);
-
-		if (($order->valid == false) || ($order->getCurrentState() === Configuration::get('PS_OS_REFUND')))
-			return $this->displayError('An error occurred while processing refund');
-
-		$order_history = new OrderHistory();
-		$order_history->id_order = $order->id;
-		$order_history->changeIdOrderState((int)(Configuration::get('PS_OS_REFUND')), $order_id);
-
-		return $order_history->addWithemail();
 	}
 }

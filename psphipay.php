@@ -170,7 +170,7 @@ class PSPHipay extends PaymentModule
 			$this->_postProcess();
 
 		$tab_pane = Tools::getValue('pane') ? Tools::getValue('pane') : 1;
-		
+
 		$this->context->smarty->assign(
 			array(
 				'form_errors' => HipayConfigFormAlerts::getFormErrors(),
