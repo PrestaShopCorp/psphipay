@@ -38,7 +38,7 @@
 		{foreach $fieldset.form as $key => $field}
 			{if $key == 'legend'}
 				{block name="legend"}
-					<li {if $index == $tab_pane}class="active"{/if}>
+					<li {if $index == 1}class="active"{/if}>
 						<a href="#form-tab-{$index}" data-toggle="tab">
 							{if isset($field.image)}<img src="{$field.image}" alt="{$field.title|escape:'html':'UTF-8'}" />{/if}
 							{if isset($field.icon)}<i class="{$field.icon}"></i>{/if}

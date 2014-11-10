@@ -71,6 +71,7 @@ class HipayUserAccount extends HipayWS
 			'email' => self::$email,
 			'entity' => $this->ws_entity,
 		);
+
 		$result = $this->doQuery('isAvailable', $params);
 
 		if ($result->isAvailableResult->code === 0)

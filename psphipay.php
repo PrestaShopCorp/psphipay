@@ -169,8 +169,6 @@ class PSPHipay extends PaymentModule
 		elseif (Tools::isSubmit('submitPSPHipay'))
 			$this->_postProcess();
 
-		$tab_pane = Tools::getValue('pane') ? Tools::getValue('pane') : 1;
-
 		$this->context->smarty->assign(
 			array(
 				'form_errors' => HipayConfigFormAlerts::getFormErrors(),
@@ -178,7 +176,6 @@ class PSPHipay extends PaymentModule
 				'form_successes' => HipayConfigFormAlerts::getFormSuccesses(),
 				'module_dir' => $this->_path,
 				'module_local_dir' => $this->local_path,
-				'tab_pane' => $tab_pane,
 			)
 		);
 

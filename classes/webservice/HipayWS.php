@@ -130,9 +130,9 @@ abstract class HipayWS
 		{
 			$cache_key = get_class($this).$function;
 
-			if (Cache::getInstance()->exists($cache_key) == true)
+			if (Cache::isStored($cache_key) == true)
 			{
-				$value = Cache::getInstance()->get($cache_key);
+				$value = Cache::retrieve($cache_key);
 				if (empty($value) == false)
 					return $value;
 			}
@@ -150,7 +150,7 @@ abstract class HipayWS
 			$result = $this->client->__call($function, array(array('parameters' => $params)));
 
 			if ($need_cache == true)
-				Cache::getInstance()->set($cache_key, $result, 3600);
+				Cache::store($cache_key, $result);
 
 			return $result;
 		}
