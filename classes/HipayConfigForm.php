@@ -225,48 +225,19 @@ class HipayConfigForm
 
 	public function getFormsFieldsValues()
 	{
-		$locales_ws = new HipayLocale();
-
-		$install_form_fields = $this->getInstallFormFields();
-
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
-			$settings_form_fields = $this->getSettingsFormFields();
-		else
-			$settings_form_fields = array();
+		{
+			$install_form_fields = $this->getInstallFormFields();
+			$settings_form_fields =  $this->getSettingsFormFields();
+			$transactions_form_fields = $this->getTransactionsFormFields();
+			$customer_form_fields = $this->getCustomersFormFields();
 
-		$transactions_form_fields = $this->getTransactionsFormFields();
-
-		if (((bool)Configuration::get('PSP_HIPAY_LIVE_MODE')) == true)
-			$domain = 'https://www.hipay.com';
-		else
-			$domain = 'https://test-www.hipaywallet.com';
-
-		return array_merge($install_form_fields, $settings_form_fields, $transactions_form_fields, array(
-				/* Form Split */
+			return array_merge($install_form_fields, $settings_form_fields, $transactions_form_fields, $customer_form_fields, array(
 				'input_split' => '<hr />',
+			));
+		}
 
-				/* Install */
-				'install_desc' => '<h4 class="form-control-static">'.$this->psp->l('Account details').'</h4>',
-				'install_locale' => $locales_ws->getLocales(),
-
-				/* Settings */
-				'settings_main_account_desc' => '<h4 class="form-control-static">'.$this->psp->l('Main account').'</h4>',
-				'settings_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_EMAIL').'</strong></p>',
-				'settings_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_NAME').'</strong></p>',
-				'settings_account_number' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</strong></p>',
-				'settings_sub_accounts_desc' => '<h4 class="form-control-static">'.$this->psp->l('Sub-accounts').'</h4>',
-
-				/* Customer area */
-				'customer_area_description' => '<h4 class="form-control-static" style="margin-bottom: 0">'.$this->psp->l('You want to contact the Hipay customers\' service?').'</h4>',
-				'customer_area_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_EMAIL').'</strong></p>',
-				'customer_area_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_NAME').'</strong></p>',
-				'customer_area_account_number' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</strong></p>',
-				'customer_area_availability' => '<h4 class="form-control-static">'.$this->psp->l('The Hipay customers\' service is available from monday to friday 10am to 6pm to answer to all of your questions.').'</h4>',
-				'customer_area_contact_email' => '<p class="form-control-static"><a href="'.$domain.'/info/contact" target="_blank">'.$this->psp->l('Contact the customers\' service').'</a></p>',
-				'customer_area_contact_phone' => '<p class="form-control-static">01 40 18 30 04</p>',
-				'customer_area_contact_postal' => '<p class="form-control-static">55 rue Raspail, 92300 Levallois-Peret, Paris</p>',
-			)
-		);
+		return $this->getInstallFormFields();
 	}
 
 	public function getInstallFormFields()
@@ -286,6 +257,8 @@ class HipayConfigForm
 				'install_live_mode' => Tools::getValue('install_live_mode', Configuration::get('PSP_HIPAY_LIVE_MODE')),
 				'install_user_email' => Tools::getValue('install_user_email', Configuration::get('PSP_HIPAY_USER_EMAIL')),
 
+				'install_desc' => '<h4 class="form-control-static">'.$this->psp->l('Account details').'</h4>',
+
 				'install_user_firstname' => Tools::getValue('install_user_firstname', Context::getContext()->employee->firstname),
 				'install_user_lastname' => Tools::getValue('install_user_lastname', Context::getContext()->employee->lastname),
 				'install_user_shop_name' => Tools::getValue('install_user_shop_name', Configuration::get('PS_SHOP_NAME')),
@@ -298,6 +271,14 @@ class HipayConfigForm
 		$main_account = $this->user->getMainAccountBalance();
 		$sub_accounts = $this->user->getSubAccountsBalances();
 
+		$default_values = array(
+			'settings_main_account_desc' => '<h4 class="form-control-static">'.$this->psp->l('Main account').'</h4>',
+			'settings_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_EMAIL').'</strong></p>',
+			'settings_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_NAME').'</strong></p>',
+			'settings_account_number' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</strong></p>',
+			'settings_sub_accounts_desc' => '<h4 class="form-control-static">'.$this->psp->l('Sub-accounts').'</h4>'
+		);
+
 		if (is_array($sub_accounts) && (count($sub_accounts) > 0))
 		{
 			Context::getContext()->smarty->assign(array(
@@ -307,17 +288,17 @@ class HipayConfigForm
 
 			$template_path = _PS_MODULE_DIR_.$this->psp->name.'/views/templates/admin/sub_accounts.tpl';
 
-			return array(
+			return array_merge($default_values, array(
 				'settings_account_balance' => '<p class="form-control-static">'.number_format($main_account->balance, '2', ',', '').' '.$main_account->currency.'</p>',
 				'settings_sub_accounts_list' => Context::getContext()->smarty->fetch($template_path)
-			);
+			));
 		}
 		else
 		{
-			return array(
+			return array_merge($default_values, array(
 				'settings_account_balance' => '<p class="form-control-static">'.number_format($main_account->balance, '2', ',', '').' '.$main_account->currency.'</p>',
 				'settings_no_sub_accounts' => '<p class="form-control-static">'.$this->psp->l('Nos sub-accounts found.').'</p>',
-			);
+			));
 		}
 	}
 
@@ -338,6 +319,25 @@ class HipayConfigForm
 			'transactions_operations_statement_desc' => '<h4 class="form-control-static">'.$this->psp->l('Operations statement').'</h4>',
 			'transactions_dates_range' => null,
 			'transactions_details' => Context::getContext()->smarty->fetch($template_path),
+		);
+	}
+
+	public function getCustomersFormFields()
+	{
+		if (((bool)Configuration::get('PSP_HIPAY_LIVE_MODE')) == true)
+			$domain = 'https://www.hipay.com';
+		else
+			$domain = 'https://test-www.hipaywallet.com';
+
+		return array(
+			'customer_area_description' => '<h4 class="form-control-static" style="margin-bottom: 0">'.$this->psp->l('You want to contact the Hipay customers\' service?').'</h4>',
+			'customer_area_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_EMAIL').'</strong></p>',
+			'customer_area_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_NAME').'</strong></p>',
+			'customer_area_account_number' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</strong></p>',
+			'customer_area_availability' => '<h4 class="form-control-static">'.$this->psp->l('The Hipay customers\' service is available from monday to friday 10am to 6pm to answer to all of your questions.').'</h4>',
+			'customer_area_contact_email' => '<p class="form-control-static"><a href="'.$domain.'/info/contact" target="_blank">'.$this->psp->l('Contact the customers\' service').'</a></p>',
+			'customer_area_contact_phone' => '<p class="form-control-static">01 40 18 30 04</p>',
+			'customer_area_contact_postal' => '<p class="form-control-static">55 rue Raspail, 92300 Levallois-Peret, Paris</p>'
 		);
 	}
 

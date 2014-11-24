@@ -180,9 +180,7 @@ class PSPHipay extends PaymentModule
 		);
 
 		$this->context->smarty->assign('alerts', $this->context->smarty->fetch($this->local_path.'views/templates/admin/alerts.tpl'));
-
-		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
-		return $output.$this->renderForm();
+		return $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl').$this->renderForm();
 	}
 
 	protected function renderForm()
@@ -202,6 +200,21 @@ class PSPHipay extends PaymentModule
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 
 		$this->config_form = new HipayConfigForm();
+
+		$helper->tpl_vars = array(
+			'fields_value' => $this->config_form->getFormsFieldsValues(),
+			'id_language' => $this->context->language->id,
+			'languages' => $this->context->controller->getLanguages()
+		);
+
+		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
+			$helper->tpl_vars = $this->getTransactionHelper($helper->tpl_vars);
+
+		return $helper->generateForm($this->config_form->getForms());
+	}
+
+	protected function getTransactionHelper($tpl_vars)
+	{
 		$calendar_helper = new HelperCalendar();
 
 		$employee = $this->context->employee;
@@ -211,16 +224,11 @@ class PSPHipay extends PaymentModule
 		$calendar_helper->setDateFrom(Tools::getValue('date_from', $default_date_from));
 		$calendar_helper->setDateTo(Tools::getValue('date_to', $default_date_to));
 
-		$helper->tpl_vars = array(
+		return array_merge($tpl_vars, array(
 			'date_from' => Tools::getValue('date_from', $default_date_from),
 			'date_to' => Tools::getValue('date_to', $default_date_to),
-			'transactions_dates_range' => $calendar_helper->generate(),
-			'fields_value' => $this->config_form->getFormsFieldsValues(),
-			'id_language' => $this->context->language->id,
-			'languages' => $this->context->controller->getLanguages(),
-		);
-
-		return $helper->generateForm($this->config_form->getForms());
+			'transactions_dates_range' => $calendar_helper->generate()
+		));
 	}
 
 	protected function _postProcess()
