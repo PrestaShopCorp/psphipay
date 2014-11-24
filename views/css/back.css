@@ -1,0 +1,88 @@
+#content .tab-pane:first-child .panel {
+	border-top-left-radius: 0;
+}
+
+#content > * {
+	margin: 0 auto;
+	max-width: 900px;
+}
+
+.psphipay-header .text-branded,
+.psphipay-content .text-branded {
+	color: #00aff0;
+}
+
+.psphipay-header h4,
+.psphipay-content h4,
+.psphipay-content h5 {
+	margin: 2px 0;
+	color: #00aff0;
+	font-size: 1.8em;
+}
+
+.psphipay-header h4 {
+	margin-top: 5px;
+}
+
+.psphipay-content h4 {
+	margin-bottom: 10px;
+}
+
+.psphipay-content h5 {
+	font-size: 1.4em;
+	margin-bottom: 10px;
+}
+
+.psphipay-content h6 {
+	font-size: 1.3em;
+	margin: 1px 0 4px 0;
+}
+
+.psphipay-header > .col-md-4 {
+	height: 65px;
+	vertical-align: middle;
+	border-left: 1px solid #ddd;
+}
+
+.psphipay-header > .col-md-4:first-child {
+	border-left: none;
+}
+
+.psphipay-header #create-account-btn {
+	margin-top: 14px;
+}
+
+.psphipay-content dd + dt {
+	margin-top: 5px;
+}
+
+.psphipay-content ul {
+	padding-left: 15px;
+}
+
+.psphipay-content .ul-spaced li {
+	margin-bottom: 5px;
+}
+
+#email_error_message {
+	color: #a94442;
+	padding: 5px 10px;
+	background-color: #f2dede;
+}
+
+/* Form controls */
+.form-control-static {
+	padding-top: 6px !important;
+}
+
+.form-date-actions {
+	border: none !important;
+}
+
+#date-compare {
+	display: none !important;
+}
+
+#payment-logo {
+	max-width: 100% !important;
+}

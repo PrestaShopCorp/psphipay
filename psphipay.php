@@ -99,8 +99,8 @@ class PSPHipay extends PaymentModule
 		if (Tools::getValue('module_name') != 'psphipay')
 			return false;
 
-		$this->context->controller->addJS($this->_path.'js/configure.js');
-		$this->context->controller->addCSS($this->_path.'css/configure.css');
+		$this->context->controller->addJS($this->_path.'views/js/back.js');
+		$this->context->controller->addCSS($this->_path.'views/css/back.css');
 
 		return '<script type="text/javascript">
 			var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
@@ -412,7 +412,7 @@ class PSPHipay extends PaymentModule
 
 	public function hookHeader()
 	{
-		return $this->context->controller->addCSS($this->_path.'/css/psp_hipay.css');
+		return $this->context->controller->addCSS($this->_path.'/views/css/front.css');
 	}
 
 	protected function getPaymentButton()
