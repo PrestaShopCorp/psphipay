@@ -24,50 +24,40 @@
 *}
 
 <div class="panel">
-	<div class="row psphipay-header">
-		<div class="col-xs-6 col-md-6 text-center">
-			<img src="{$module_dir|escape:'html':'UTF-8'}/views/img/hipay.png" id="payment-logo" />
+	<div class="row" id="psphipay-header">
+		<div class="col-xs-12 col-sm-12 col-md-6 text-center">
+			<img src="{$module_dir|escape:'html':'UTF-8'}/views/img/logo.png" id="payment-logo" />
 		</div>
-		<div class="col-xs-6 col-md-6 text-center">
-			<h4>{l s='Online payment processing' mod='psphipay'}</h4>
-			<h4>{l s='Fast - Secure - Reliable' mod='psphipay'}</h4>
+		<div class="col-xs-12 col-sm-12 col-md-6 text-center">
+			<h4>{l s='PrestaShop\'s Official Payment Solution' mod='psphipay'}</h4>
 		</div>
 	</div>
 
 	<hr />
 
-	<div class="psphipay-content">
+	<div id="psphipay-content">
 		<div class="row">
 			<div class="col-md-6">
-				<h5>{l s='The fast, simple multimedia payment solution for everyone in France and Europe!' mod='psphipay'}</h5>
-				<p>
-					{l s='Thanks to its adaptability and performance, Hipay has already won over 12,000 merchants and a million users.' mod='psphipay'}<br />
-					{l s='Its array of 15 of the most effective payment solutions in Europe offers your customers instant recognition and a reassuring guarantee for their consumer habits.' mod='psphipay'}<br />
-					<br />
-					{l s='Once your account is activated you will receive more details by email.' mod='psphipay'}<br />
-					{l s='All merchant using Prestashop can benefit from special price by contacting the following email' mod='psphipay'}: <a href="mailto:prestashop@hipay.com" class="alert-link">prestashop@hipay.com</a><br />
-					<br />
-					{l s='Do not hesitate to contact us. The fees can decrease by 50%.' mod='psphipay'}</dd>
-				</p>
+				<h4>{l s='A complete solution at the best price' mod='psphipay'}</h4>
+				<ul class="ul-spaced">
+					<li>{l s='Start instantly, no contract required to start' mod='psphipay'}</li>
+					<li>{l s='Accept several currencies with 15+ local payment solutions in Europe' mod='psphipay'}</li>
+					<li>{l s='No registration or installation fee' mod='psphipay'}</li>
+					<li>{l s='Anti-fraud system and full-time monitoring of high-risk behavior' mod='psphipay'}</li>
+				</ul>
 			</div>
 
 			<div class="col-md-6">
-				<h5>{l s='Hipay boosts your sales Europe-wide thanks to' mod='psphipay'}</h5>
-				<ul>
-					<li>{l s='Payment solutions specific to each European country' mod='psphipay'}</li>
-					<li>{l s='No subscription or installation charges' mod='psphipay'}</li>
-					<li>{l s='Contacts with extensive experience of technical and financial issues' mod='psphipay'}</li>
-					<li>{l s='Dedicated customer service' mod='psphipay'}</li>
-					<li>{l s='Anti-fraud system and permanent monitoring for high-risk behaviour' mod='psphipay'}.</li>
-					<li>{l s='Hipay is part of the Hi-Media Group (Allopass).' mod='psphipay'}</li>
+				<h4>{l s='From 2.55% + 0.19€ per transaction!' mod='psphipay'}</h4>
+				<ul class="ul-spaced">
+					<li>{l s='A rate that adapts to your volume of activity' mod='psphipay'}</li>
+					<li>{l s='25% less expensive than leading solutions in the market*' mod='psphipay'}</li>
 				</ul>
 				<br />
+				<a href="#">{l s='See the complete list of rates for PrestaShop Payments by HiPay' mod='psphipay'}</a>
+				<br />
 				<em class="text-muted small">
-					&raquo; {l s='You can get a PDF documentation to configure HiPay in Prestashop' mod='psphipay'} :
-					<ul>
-						<li><a href="https://www.hipay.com/dl/HiPay_Wallet_Prestashop_Configuration_Guide_EN.pdf" target="_blank">{l s='English' mod='psphipay'}</a></li>
-						<li><a href="https://www.hipay.com/dl/HiPay_Wallet_Configuration_Module_Prestashop_FR.pdf" target="_blank">{l s='Français' mod='psphipay'}</a></li>
-					</ul>
+					* {l s='Source' mod='psphipay'}
 				</em>
 			</div>
 		</div>
@@ -75,12 +65,35 @@
 		<hr />
 
 		<div class="row">
-			<div class="col-md-6 col-xs-12 text-center">
-				<img src="{$module_dir|escape:'html':'UTF-8'}/views/img/cards.png" id="cart-logo" />
+			<div class="col-md-12 col-xs-12">
+				<h4>{l s='Accept payments from all over Europe in just a few clicks' mod='psphipay'}</h4>
 			</div>
-			<div class="col-md-6 col-xs-12 text-center">
-				<h6 class="text-branded">{l s='For transactions in US Dollars (USD) only' mod='psphipay'}</h6>
-				<p class="text-branded">{l s='Call 888-888-1234 if you have any questions or need more information!' mod='psphipay'}</p>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 col-xs-12 text-center">
+				<img src="{$module_dir|escape:'html':'UTF-8'}/views/img/cards.png" id="cards-logo" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 col-xs-12 text-center">
+				<p>
+					{l s='If you have any questions or need help creating a PrestaShop Payments by HiPay account, contact us at xx-xx-xx-xx or via email at xx@xx.com' mod='psphipay'}
+				</p>
+			</div>
+		</div>
+
+		<hr />
+
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<h4>{l s='3 simple steps' mod='psphipay'}</h4>
+				<ol>
+					<li>{l s='Your account is pre-approved when you create your PrestaShop store so that you can start accepting online payments right away.' mod='psphipay'}</li>
+					<li>{l s='Finalize your PrestaShop Payments by HiPay registration once you reach 2,500€ on your account.' mod='psphipay'}</li>
+					<li>{l s='Easily collect and transfer your money from your PrestaShop Payments by HiPay account without fees.' mod='psphipay'}</li>
+				</ol>
 			</div>
 		</div>
 	</div>

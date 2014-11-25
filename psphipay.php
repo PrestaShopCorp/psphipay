@@ -57,8 +57,8 @@ class PSPHipay extends PaymentModule
 
 		parent::__construct();
 
-		$this->displayName = $this->l('PrestaShop Payment - By Hipay');
-		$this->description = $this->l('Secure payement with Visa, Mastercard and European solutions.');
+		$this->displayName = $this->l('PrestaShop Payments by HiPay');
+		$this->description = $this->l('PrestaShop’s Official Payment Solution, offering the most competitive rates in Europe.');
 
 		// Compliancy
 		$this->limited_countries = array('AT', 'BE', 'CH', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IR', 'IT', 'LI', 'LU', 'LV', 'MC', 'MT', 'NL', 'PT', 'SE', 'SI', 'SK');
