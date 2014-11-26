@@ -29,8 +29,8 @@
 			<tr>
 				<th><strong>Account ID</strong></th>
 				<th><strong>Website email</strong></th>
-				<th><strong>Devise</strong></th>
-				<th><strong>Solde</strong></th>
+				<th><strong>Currency</strong></th>
+				<th><strong>Balance</strong></th>
 			</tr>
 		</thead>
 		<tbody>
