@@ -112,7 +112,7 @@ class HipayConfigForm
 					'value' => 'disconnect',
 					'js' => 'javascript:return confirm(\''.$this->psp->l('Are you sure?').'\')'
 				)),
-				$this->generateSubmitButton('Refresh settings', array(
+				$this->generateSubmitButton('Refresh', array(
 					'icon' => 'process-icon-refresh',
 					'value' => 'refresh',
 					'class' => 'pull-left'
@@ -156,7 +156,7 @@ class HipayConfigForm
 					$this->generateInputFree('settings_main_account_desc', false, array('col' => 12, 'offset' => 0)),
 					$this->generateInputFree('settings_email', 'Email'),
 					$this->generateInputFree('settings_shop_name', 'Shop name'),
-					$this->generateInputFree('settings_account_number', 'Account number'),
+					$this->generateInputFree('settings_account_number', 'Account ID'),
 					$this->generateInputFree('settings_account_balance', 'Balance'),
 					$this->generateFormSplit(),
 					$this->generateInputFree('settings_sub_accounts_desc', false, array('col' => 12, 'offset' => 0)),
@@ -207,7 +207,7 @@ class HipayConfigForm
 	{
 		return array(
 			'form' => array(
-				'legend' => $this->generateLegend('Customer\'s service', 'icon-users'),
+				'legend' => $this->generateLegend('Customer service', 'icon-users'),
 				'input' => array(
 					$this->generateInputFree('customer_area_description', false, array('col' => 12, 'offset' => 0)),
 					$this->generateInputFree('customer_area_email', 'Email'),
@@ -330,12 +330,12 @@ class HipayConfigForm
 			$domain = 'https://test-www.hipaywallet.com';
 
 		return array(
-			'customer_area_description' => '<h4 class="form-control-static" style="margin-bottom: 0">'.$this->psp->l('You want to contact the Hipay customers\' service?').'</h4>',
+			'customer_area_description' => '<h4 class="form-control-static" style="margin-bottom: 0">'.$this->psp->l('Do you want to contact HiPay customer service? Remind them the following information:').'</h4>',
 			'customer_area_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_EMAIL').'</strong></p>',
 			'customer_area_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_WEBSITE_NAME').'</strong></p>',
 			'customer_area_account_number' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</strong></p>',
-			'customer_area_availability' => '<h4 class="form-control-static">'.$this->psp->l('The Hipay customers\' service is available from monday to friday 10am to 6pm to answer to all of your questions.').'</h4>',
-			'customer_area_contact_email' => '<p class="form-control-static"><a href="'.$domain.'/info/contact" target="_blank">'.$this->psp->l('Contact the customers\' service').'</a></p>',
+			'customer_area_availability' => '<h4 class="form-control-static">'.$this->psp->l('HiPay customer service is available Monday to Friday from 10am to 6pm to answer to all of your questions.').'</h4>',
+			'customer_area_contact_email' => '<p class="form-control-static"><a href="'.$domain.'/info/contact" target="_blank">'.$this->psp->l('Contact the customer service').'</a></p>',
 			'customer_area_contact_phone' => '<p class="form-control-static">01 40 18 30 04</p>',
 			'customer_area_contact_postal' => '<p class="form-control-static">55 rue Raspail, 92300 Levallois-Peret, Paris</p>'
 		);
