@@ -332,12 +332,12 @@ class PSPHipay extends PaymentModule
 		}
 		elseif ($user->createUserAccount() === false)
 		{
-			$error = 'The account creation failed. Please, contact the Hipay customers\' service.';
+			$error = 'The account creation failed. Please, contact the Hipay customer service.';
 			return HipayConfigFormAlerts::registerFormError($error);
 		}
 		else
 		{
-			HipayConfigFormAlerts::registerFormSuccess('Greatings! Your PrestaShop Payments (by Hipay) account has been associated to your shop!');
+			HipayConfigFormAlerts::registerFormSuccess('Greetings! Your PrestaShop Payments (by Hipay) account has been associated to your shop!');
 			return HipayConfigFormAlerts::registerFormSuccess('You can see all the details associated to your account in the Settings tab.');
 		}
 	}
