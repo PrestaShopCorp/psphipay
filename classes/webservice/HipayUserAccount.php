@@ -31,136 +31,79 @@ require_once(dirname(__FILE__).'/HipayWS.php');
 
 class HipayUserAccount extends HipayWS
 {
+	protected $accounts_currencies = array();
 
 	protected $client_url = '/soap/user-account-v2';
-	protected static $psp = false;
 
-	/* Merchant email */
-	protected static $email = false;
+	protected $module = false;
 
-	/* Availability object */
-	protected static $availability = false;
-	protected static $account_infos = false;
-
-	/* Sub accounts */
-	public static $accounts_currencies = array();
-
-	public function __construct($email = false)
+	public function __construct($module_instance)
 	{
-		parent::__construct();
+		parent::__construct($module_instance);
 
-		if ($email == false)
-			self::$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
-		else
-			self::$email = $email;
-
-		self::$psp = new PSPHipay();
-
-		self::$accounts_currencies = array(
-			'CHF' => self::$psp->l('Swiss Franc'),
-			'EUR' => self::$psp->l('Euro'),
-			'GBP' => self::$psp->l('British Pound'),
-			'SEK' => self::$psp->l('Swedish Krona'),
+		$this->accounts_currencies = array(
+			'CHF' => $this->module->l('Swiss Franc'),
+			'EUR' => $this->module->l('Euro'),
+			'GBP' => $this->module->l('British Pound'),
+			'SEK' => $this->module->l('Swedish Krona'),
 		);
 	}
 
-	/* SOAP method: isAvailable */
-	public function isEmailAvailable()
+	public function createAccount($email, $firstname, $lastname)
 	{
-		$params = array(
-			'email' => self::$email,
-			'entity' => $this->ws_entity,
+		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency_code = Tools::strtoupper($currency->iso_code);
+
+		$country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$country_code = Tools::strtolower($country->iso_code);
+
+		$language = new Language(Configuration::get('PS_LANG_DEFAULT'));
+		$language_code = Tools::strtoupper($language->iso_code);
+
+		$data = array(
+			'email' => $email,
+			'firstname' => $firstname,
+			'lastname' => $lastname,
+			'currency_code' => $currency_code,
+			'iso_country' => $country_code,
+			'iso_lang' => $language_code,
+			'remote_addr' => Tools::getRemoteAddr(),
+			'shop_email' => Configuration::get('PS_SHOP_EMAIL'),
+			'shop_name' => Configuration::get('PS_SHOP_NAME'),
+			'shop_domain' => Tools::getShopDomainSsl(true, true),
 		);
 
-		$result = $this->doQuery('isAvailable', $params);
+		$result = $this->prestaShopWebservice('/account/create', $data);
 
-		if ($result->isAvailableResult->code === 0)
+		if ($result->code === 0)
 		{
-			self::$availability = $result->isAvailableResult;
+			Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $result->userAccountId);
+			Configuration::updateValue('PSP_HIPAY_USER_SPACE_ID', $result->userSpaceId);
+			Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
+			Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $result->websiteId);
+			Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $result->wsLogin);
+			Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $result->wsPassword);
 
-			if ((bool)$result->isAvailableResult->isAvailable === true)
-				return true;
+			return true;
 		}
 
 		return false;
 	}
 
-	public function getAvailability()
+	public function isEmailAvailable($email)
 	{
-		return self::$availability;
+		$result = $this->prestaShopWebservice('/account/available', array(
+				'email' => $email,
+		));
+
+		return !($result->isAvailable === false);
 	}
 
-	public function isValidAccount()
+	public function getBalances()
 	{
-		return (bool)$this->getAccountInfos();
-	}
-
-	public function getAccountInfos($refresh = false)
-	{
-		if ((self::$account_infos === false) || ($refresh !== false))
-		{
-			$params = array('accountLogin' => self::$email);
-			$result = $this->doQuery('getAccountInfos', $params);
-
-			if ($result->getAccountInfosResult->code === 0)
-				self::$account_infos = $result->getAccountInfosResult;
-		}
-
-		return self::$account_infos;
-	}
-
-	public function getWebsiteIdByIsoCode($iso_code)
-	{
-		$this->getAccountInfos();
-
-		if ($iso_code == self::$account_infos->currency)
-			return self::$account_infos->websites->item->websiteId;
-
-		foreach (self::$account_infos->subAccounts->item as $sub_account)
-			if ($iso_code == $sub_account->currency)
-				return $sub_account->websites->item->websiteId;
-
-		return false;
-	}
-
-	public function getWebsiteEmailByIsoCode($iso_code)
-	{
-		$this->getAccountInfos();
-
-		if ($iso_code == self::$account_infos->currency)
-			return self::$account_infos->websites->item->websiteEmail;
-
-		foreach (self::$account_infos->subAccounts->item as $sub_account)
-			if ($iso_code == $sub_account->currency)
-				return $sub_account->websites->item->websiteEmail;
-
-		return false;
-	}
-
-	public function getWebsiteAccountIdByIsoCode($iso_code)
-	{
-		$this->getAccountInfos();
-
-		if ($iso_code == self::$account_infos->currency)
-			return self::$account_infos->userAccountId;
-
-		foreach (self::$account_infos->subAccounts->item as $sub_account)
-			if ($iso_code == $sub_account->currency)
-				return $sub_account->userAccountId;
-
-		return false;
-	}
-
-	public function getBalances($email = false)
-	{
-		if (self::$account_infos == false)
-			$this->getAccountInfos();
-
-		if ($email == false)
-			$email = self::$email;
-
+		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
 		$params = array('wsSubAccountLogin' => $email);
-		$result = $this->doQuery('getBalance', $params);
+		$result = $this->executeQuery('getBalance', $params);
 
 		if ($result->getBalanceResult->code === 0)
 			return $result->getBalanceResult;
@@ -168,193 +111,36 @@ class HipayUserAccount extends HipayWS
 		return false;
 	}
 
-	public function getMainAccountBalance()
+	public function getMainAccountBalance($balances)
 	{
-		if (self::$account_infos == false)
-			$this->getAccountInfos();
-
-		$balances = $this->getBalances();
-
-		foreach ($balances->balances->item as &$balance)
+		foreach ($balances->balances->item as $balance)
 			if ($balance->userAccountType == 'main')
 				return $balance;
 
 		return false;
 	}
 
-	public function getSubAccountsBalances()
+	public function getTransactions()
 	{
-		$balances = $this->getBalances();
-		$sub_accounts = unserialize(Configuration::get('PSP_HIPAY_USER_SUBACCOUNTS'));
-
-		if ($sub_accounts != false)
-		{
-			foreach ($sub_accounts as &$item)
-			{
-				$item->currency_label = self::$accounts_currencies[$item->currency];
-
-				foreach ($balances->balances->item as $balance)
-					if ($item->userAccountId == $balance->userAccountId)
-						$item = (object)array_merge((array)$item, (array)$balance);
-			}
-
-			return $sub_accounts;
-		}
-
-		return false;
-	}
-
-	public function createUserAccount()
-	{
-		$currency = Currency::getDefaultCurrency();
-
-		$business = new HipayBusiness();
-		$locale = new HipayLocale();
-		$topic = new HipayTopic();
-
-		$locale_code = $locale->getLocale();
-		$user_password = Tools::passwdGen(16);
-
-		Configuration::updateValue('PSP_HIPAY_USER_PASSWORD', $user_password);
+		$this->context->employee->psp_hipay_date_from = isset($this->context->employee->psp_hipay_date_from) ? $this->context->employee->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
+		$this->context->employee->psp_hipay_date_to = isset($this->context->employee->psp_hipay_date_to) ? $this->context->employee->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
 
 		$params = array(
-			'websiteId' => $this->getWsId(),
-			'email' => self::$email,
-			'firstname' => Tools::getValue('install_user_firstname'),
-			'lastname' => Tools::getValue('install_user_lastname'),
-			'currency' => $currency->iso_code,
-			'locale' => $locale_code,
-			'ipAddress' => Tools::getRemoteAddr(),
-			'websiteBusinessLineId' => $business->getBusinessId(),
-			'websiteTopicId' => $topic->getTopicId(),
-			'websiteContactEmail'=> Configuration::get('PS_SHOP_EMAIL'),
-			'websiteName'=> Tools::getValue('install_user_shop_name'),
-			'websiteUrl'=> Tools::getShopDomain(true, true),
-			'websiteMerchantPassword' => $user_password,
-			'entity' => $this->ws_entity,
+			'wsSubAccountLogin' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
+			'startDate' => date('Y-m-dTH:i:s', strtotime($this->context->employee->psp_hipay_date_from)),
+			'endDate' => date('Y-m-dTH:i:s', strtotime($this->context->employee->psp_hipay_date_to)),
+			'pageNumber' => 1,
 		);
 
-		$result = $this->doQuery('createWithWebsite', $params);
+		$results = $this->executeQuery('getTransactions', $params);
 
-		if ($result->createWithWebsiteResult->code === 0)
+		if (($results->getTransactionsResult->code === 0) && (isset($results->getTransactionsResult->transactions->item) == true))
 		{
-			self::$account_infos = $result->createWithWebsiteResult;
-
-			$this->saveNewUserAccountInfos();
-			$this->associateMerchantGroup();
-
-			return true;
+			if (is_array($results->getTransactionsResult->transactions->item) == true)
+				return (array)$results->getTransactionsResult->transactions->item;
+			else
+				return array($results->getTransactionsResult->transactions->item);
 		}
-
-		return false;
-	}
-
-	public function associateMerchantGroup()
-	{
-		$params = array(
-			'accountLogin' => self::$email,
-			'merchantGroupId' => $this->getWsMerchantGroup(),
-			'entity' => $this->ws_entity,
-		);
-
-		$result = $this->doQuery('associateMerchantGroup', $params);
-
-		if ($result->associateMerchantGroupResult->code === 0)
-			return true;
-
-		return false;
-	}
-
-	public function createSubAccounts()
-	{
-		$iso_codes = array_keys(self::$accounts_currencies);
-
-		foreach ($iso_codes as $iso_code)
-		{
-			$sub_account_exists = $this->currencyAccountExists($iso_code);
-
-			if ($sub_account_exists === false)
-				$this->createSubAccount($iso_code);
-		}
-	}
-
-	public function createSubAccount($currency)
-	{
-		$locale = new HipayLocale();
-
-		$params = array(
-			'accountLogin' => self::$email,
-			'duplicateWebsite' => (int)true,
-			'currency' => $currency,
-			'locale' => $locale->getLocale()
-		);
-
-		$result = $this->doQuery('createSubAccount', $params);
-
-		if ($result->createSubaccountResult->code === 0)
-			return true;
-
-		return false;
-	}
-
-	public function currencyAccountExists($currency)
-	{
-		$default_currency = Configuration::get('PSP_HIPAY_CURRENCY');
-
-		if (strcmp($default_currency, $currency) === 0)
-			return true;
-
-		if (isset(self::$account_infos->subAccounts->item))
-		{
-			$sub_accounts = self::$account_infos->subAccounts->item;
-
-			foreach ($sub_accounts as $sub_account)
-				if (strcmp($sub_account->currency, $currency) === 0)
-					return true;
-		}
-
-		return false;
-	}
-
-	public function saveNewUserAccountInfos()
-	{
-		Configuration::updateValue('PSP_HIPAY_SPACE_ID', self::$account_infos->userSpaceId);
-
-		if ($this->getAccountInfos('refresh') !== false)
-			return $this->saveUserAccountInfos();
-
-		return false;
-	}
-
-	public function saveUserAccountInfos()
-	{
-		Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', self::$account_infos->userAccountId);
-		Configuration::updateValue('PSP_HIPAY_USER_EMAIL', self::$email);
-		Configuration::updateValue('PSP_HIPAY_CURRENCY', self::$account_infos->currency);
-
-		Configuration::updateValue('PSP_HIPAY_WEBSITE_EMAIL', self::$account_infos->websites->item->websiteEmail);
-		Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', self::$account_infos->websites->item->websiteId);
-		Configuration::updateValue('PSP_HIPAY_WEBSITE_NAME', self::$account_infos->websites->item->websiteName);
-		Configuration::updateValue('PSP_HIPAY_WEBSITE_URL', self::$account_infos->websites->item->websiteURL);
-
-		$this->associateMerchantGroup();
-		$this->saveUserSubAccountInfos();
-
-		return true;
-	}
-
-	public function saveUserSubAccountInfos()
-	{
-		$this->createSubAccounts();
-		$this->getAccountInfos('refresh');
-
-		if (isset(self::$account_infos->subAccounts->item))
-		{
-			$sub_accounts = serialize(self::$account_infos->subAccounts->item);
-			Configuration::updateValue('PSP_HIPAY_USER_SUBACCOUNTS', $sub_accounts);
-		}
-
-		return true;
 	}
 
 }

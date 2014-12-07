@@ -27,19 +27,17 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-require_once(dirname(__FILE__).'/classes/HipayConfigForm.php');
-require_once(dirname(__FILE__).'/classes/HipayConfigFormAlerts.php');
-
-require_once(dirname(__FILE__).'/classes/webservice/HipayBusiness.php');
-require_once(dirname(__FILE__).'/classes/webservice/HipayEnvelope.php');
-require_once(dirname(__FILE__).'/classes/webservice/HipayLocale.php');
-require_once(dirname(__FILE__).'/classes/webservice/HipayTopic.php');
+require_once(dirname(__FILE__).'/classes/forms/PSPHipayForm.php');
 require_once(dirname(__FILE__).'/classes/webservice/HipayUserAccount.php');
 require_once(dirname(__FILE__).'/classes/webservice/HipayWS.php');
 
 class PSPHipay extends PaymentModule
 {
 	protected $config_form = false;
+
+	protected $_errors = array();
+	protected $_successes = array();
+	protected $_warnings = array();
 
 	public function __construct()
 	{
@@ -96,7 +94,7 @@ class PSPHipay extends PaymentModule
 
 	public function hookBackOfficeHeader()
 	{
-		if (Tools::getValue('module_name') != 'psphipay')
+		if (Tools::getValue('configure') != 'psphipay')
 			return false;
 
 		$this->context->controller->addJS($this->_path.'views/js/back.js');
@@ -107,6 +105,15 @@ class PSPHipay extends PaymentModule
 		</script>';
 	}
 
+	public function hookHeader()
+	{
+		return $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+	}
+
+	/**
+	 * Store the currencies list the module should work with
+	 * @return boolean
+	 */
 	protected function setCurrencies()
 	{
 		$shops = Shop::getShops(true, null, true);
@@ -118,259 +125,185 @@ class PSPHipay extends PaymentModule
 					FROM `'._DB_PREFIX_.'currency`
 					WHERE `deleted` = \'0\' AND `iso_code` IN (\'CHF\', \'EUR\', \'GBP\', \'SEK\')';
 
-			if (Db::getInstance()->execute($sql) == false)
-				return false;
+			return (bool)Db::getInstance()->execute($sql);
 		}
 		return true;
 	}
 
+	/**
+	 * Add waiting order state in database
+	 * If it does not already exists
+	 * @return boolean
+	 */
 	protected function addWaitingOrderState()
 	{
-		if ((bool)Configuration::get('PSP_HIPAY_OS_WAITING') == false)
+		if ((bool)Configuration::get('PSP_HIPAY_OS_WAITING') == true)
+			return true;
+
+		$order_state = new OrderState();
+		$order_state->name = array();
+
+		foreach (Language::getLanguages(false) as $language)
 		{
-			$order_state = new OrderState();
-			$order_state->name = array();
-
-			foreach (Language::getLanguages(false) as $language)
-			{
-				if (Tools::strtolower($language['iso_code']) == 'fr')
-					$order_state->name[(int)$language['id_lang']] = "En attente d'autorisation";
-				else
-					$order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
-			}
-
-			$order_state->color = '#4169E1';
-			$order_state->hidden = false;
-			$order_state->send_email = false;
-			$order_state->delivery = false;
-			$order_state->logable = false;
-			$order_state->invoice = false;
-
-			if ($order_state->add() == true)
-			{
-				Configuration::updateValue('PSP_HIPAY_OS_WAITING', $order_state->id);
-				copy($this->local_path.'/logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
-
-				return true;
-			}
-
-			return false;
+			if (Tools::strtolower($language['iso_code']) == 'fr')
+				$order_state->name[(int)$language['id_lang']] = "En attente d'autorisation";
+			else
+				$order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
 		}
 
-		return true;
+		$order_state->color = '#4169E1';
+		$order_state->hidden = false;
+		$order_state->send_email = false;
+		$order_state->delivery = false;
+		$order_state->logable = false;
+		$order_state->invoice = false;
+
+		if ($order_state->add() == true)
+		{
+			Configuration::updateValue('PSP_HIPAY_OS_WAITING', $order_state->id);
+			@copy($this->local_path.'/logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
+
+			return true;
+		}
+
+		return false;
 	}
 
+	/**
+	 * Load configuration page
+	 * @return string
+	 */
 	public function getContent()
 	{
-		HipayConfigFormAlerts::getInstance();
+		$this->postProcess();
+		$form = new PSPHipayForm($this);
+		$user_account = new HipayUserAccount($this);
 
-		if (Tools::isSubmit('submitDateRange'))
-			$this->_postProcessDateRanges();
-		elseif (Tools::isSubmit('submitPSPHipay'))
-			$this->_postProcess();
-
-		$this->context->smarty->assign(
-			array(
-				'form_errors' => HipayConfigFormAlerts::getFormErrors(),
-				'form_infos' => HipayConfigFormAlerts::getFormInfos(),
-				'form_successes' => HipayConfigFormAlerts::getFormSuccesses(),
-				'module_dir' => $this->_path,
-				'module_local_dir' => $this->local_path,
-			)
-		);
-
-		$this->context->smarty->assign('alerts', $this->context->smarty->fetch($this->local_path.'views/templates/admin/alerts.tpl'));
-		return $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl').$this->renderForm();
-	}
-
-	protected function renderForm()
-	{
-		$helper = new HelperForm();
-
-		$helper->show_toolbar = false;
-		$helper->table = $this->table;
-		$helper->module = $this;
-		$helper->default_form_language = $this->context->language->id;
-		$helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
-
-		$helper->identifier = $this->identifier;
-		$helper->submit_action = 'submitPSPHipay';
-		$helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
-			.'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
-		$helper->token = Tools::getAdminTokenLite('AdminModules');
-
-		$this->config_form = new HipayConfigForm();
-
-		$helper->tpl_vars = array(
-			'fields_value' => $this->config_form->getFormsFieldsValues(),
-			'id_language' => $this->context->language->id,
-			'languages' => $this->context->controller->getLanguages()
-		);
-
+		// Generate configuration forms
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
-			$helper->tpl_vars = $this->getTransactionHelper($helper->tpl_vars);
-
-		return $helper->generateForm($this->config_form->getForms());
-	}
-
-	protected function getTransactionHelper($tpl_vars)
-	{
-		$calendar_helper = new HelperCalendar();
-
-		$employee = $this->context->employee;
-		$default_date_from = isset($employee->psp_hipay_date_from) ? $employee->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
-		$default_date_to = isset($employee->psp_hipay_date_to) ? $employee->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
-
-		$calendar_helper->setDateFrom(Tools::getValue('date_from', $default_date_from));
-		$calendar_helper->setDateTo(Tools::getValue('date_to', $default_date_to));
-
-		return array_merge($tpl_vars, array(
-			'date_from' => Tools::getValue('date_from', $default_date_from),
-			'date_to' => Tools::getValue('date_to', $default_date_to),
-			'transactions_dates_range' => $calendar_helper->generate()
-		));
-	}
-
-	protected function _postProcess()
-	{
-		Configuration::updateValue('PSP_HIPAY_LIVE_MODE', Tools::getValue('install_live_mode'));
-		Configuration::updateValue('PSP_HIPAY_USER_EMAIL', Tools::getValue('install_user_email'));
-
-		$disconnect = (Tools::getValue('submitOptionsmodule', false) == 'disconnect');
-		$refresh = (Tools::getValue('submitOptionsmodule', false) == 'refresh');
-
-		if ($disconnect == true)
-			return $this->disconnect();
-		elseif ($refresh == true)
-			return $this->refresh();
-
-		$email = Tools::getValue('install_user_email');
-		$user = new HipayUserAccount($email);
-
-		if (Validate::isEmail($email) === true)
 		{
-			if ($user->isEmailAvailable() === true)
-				return $this->newUserAccount($user);
-			elseif ($user->isValidAccount() === true)
-			{
-				$this->clearAccountData();
-				$user->saveUserAccountInfos();
-				$success = 'Configuration saved!';
-
-				return HipayConfigFormAlerts::registerFormSuccess($success);
-			}
-			else
-			{
-				HipayConfigFormAlerts::registerFormError('A problem occured while trying to connect to your account.');
-				return HipayConfigFormAlerts::registerFormError('Please, try again later.');
-			}
-		}
-		elseif (empty($email) === false)
-			return HipayConfigFormAlerts::registerFormError('The email address you entered is not valid!');
-	}
-
-	protected function _postProcessDateRanges()
-	{
-		$employee = $this->context->employee;
-		$employee->psp_hipay_date_from = date('Y-m-dT', strtotime(Tools::getValue('date_from'))).'00:00:00';
-		$employee->psp_hipay_date_to = date('Y-m-dT', strtotime(Tools::getValue('date_to'))).'23:59:59';
-	}
-
-	protected function refresh()
-	{
-		$cache_classes = array('HipayBusiness', 'HipayTopic', 'HipayUserAccount');
-
-		foreach ($cache_classes as $class)
-			Cache::getInstance()->delete($class.'*');
-	}
-
-	protected function clearAccountData()
-	{
-		Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
-		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
-		Configuration::deleteByName('PSP_HIPAY_USER_SUBACCOUNTS');
-		Configuration::deleteByName('PSP_HIPAY_USER_PASSWORD');
-		Configuration::deleteByName('PSP_HIPAY_SPACE_ID');
-		Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
-		Configuration::deleteByName('PSP_HIPAY_CURRENCY');
-		Configuration::deleteByName('PSP_HIPAY_WEBSITE_EMAIL');
-		Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
-		Configuration::deleteByName('PSP_HIPAY_WEBSITE_NAME');
-		Configuration::deleteByName('PSP_HIPAY_WEBSITE_URL');
-		Configuration::deleteByName('PSP_HIPAY_BUSINESS_LINE_ID');
-		Configuration::deleteByName('PSP_HIPAY_BUSINESS_LINE_LABEL');
-		Configuration::deleteByName('PSP_HIPAY_TOPIC_ID');
-		Configuration::deleteByName('PSP_HIPAY_TOPIC_LABEL');
-
-		return true;
-	}
-
-	protected function disconnect($silent = false)
-	{
-		$this->refresh();
-		$this->clearAccountData();
-
-		if ($silent === false)
-			return HipayConfigFormAlerts::registerFormInfo('You have been disconnected. Enter your merchant email again to use your module.');
-
-		return true;
-	}
-
-	protected function newUserAccount($user)
-	{
-		$this->disconnect('silent');
-
-		if ($this->isPostDataValid() == false)
-			return false;
-
-		$locale = new HipayLocale();
-
-		if ($locale->getLocale() === false)
-		{
-			$error = 'Your default country is not compatible with the Hipay API';
-			return HipayConfigFormAlerts::registerFormError($error);
-		}
-		elseif ($user->createUserAccount() === false)
-		{
-			$error = 'The account creation failed. Please, contact the Hipay customers\' service.';
-			return HipayConfigFormAlerts::registerFormError($error);
+			$this->context->smarty->assign(array(
+				'is_logged' => true,
+				'settings_form' => $form->getSettingsForm($user_account),
+				'transactions_form' => $form->getTransactionsForm($user_account),
+				'test_form' => $form->getTestForm(),
+				'services_form' => $form->getCustomersServiceForm($user_account),
+			));
 		}
 		else
 		{
-			HipayConfigFormAlerts::registerFormSuccess('Greatings! Your PrestaShop Payments (by Hipay) account has been associated to your shop!');
-			return HipayConfigFormAlerts::registerFormSuccess('You can see all the details associated to your account in the Settings tab.');
+			$complete_form = $this->shouldDisplayCompleteLoginForm($user_account);
+
+			$this->context->smarty->assign(array(
+				'is_logged' => false,
+				'login_form' => $form->getLoginForm($complete_form),
+			));
 		}
+
+		// Set alert messages
+		$this->context->smarty->assign(array(
+			'form_errors' => $this->_errors,
+			'form_successes' => $this->_successes,
+			'form_infos' => $this->_warnings,
+		));
+
+		// Define templates paths
+		$alerts = $this->local_path.'views/templates/admin/alerts.tpl';
+		$configuration = $this->local_path.'views/templates/admin/configuration.tpl';
+
+		$this->context->smarty->assign(array(
+			'alerts' => $this->context->smarty->fetch($alerts),
+			'module_dir' => $this->_path,
+		));
+
+		return $this->context->smarty->fetch($configuration);
 	}
 
-	protected function isPostDataValid()
+	protected function shouldDisplayCompleteLoginForm($user_account)
 	{
-		$valid = true;
-
-		if ((Tools::isSubmit('install_user_email') == true) &&
-			((Tools::isSubmit('install_user_firstname') == true) &&
-			(Tools::isSubmit('install_user_lastname') == true) &&
-			(Tools::isSubmit('install_user_shop_name') == true)))
+		// If merchant tries to login / subscribe
+		if (Tools::isSubmit('submitLogin') == true)
 		{
-			if (Validate::isName(Tools::getValue('install_user_firstname')) == false)
-			{
-				HipayConfigFormAlerts::registerFormError('The first name you entered is not valid!');
-				$valid = false;
-			}
-			if (Validate::isName(Tools::getValue('install_user_lastname')) == false)
-			{
-				HipayConfigFormAlerts::registerFormError('The last name you entered is not valid!');
-				$valid = false;
-			}
-		}
-		elseif ((Tools::isSubmit('install_user_email') == true) &&
-			((Tools::isSubmit('install_user_firstname') == false) &&
-			(Tools::isSubmit('install_user_lastname') == false) &&
-			(Tools::isSubmit('install_user_shop_name') == false)))
-			return false;
+			$email = Tools::getValue('install_user_email');
 
-		return $valid;
+			if (Validate::isEmail($email))
+			{
+				$this->_warnings[] = $this->l('Please, enter account details');
+
+				$available = $user_account->isEmailAvailable($email);
+				return ($available == true) ? 'new_account': 'existing_account';
+			}
+
+			$this->module->_errors[] = $this->l('Invalid email address');
+		}
+
+		return false;
 	}
 
+	protected function postProcess()
+	{
+		if (Tools::isSubmit('submitReset') == true)
+		{
+			Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
+			Configuration::deleteByName('PSP_HIPAY_USER_SPACE_ID');
+			Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
+			Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
+			Configuration::deleteByName('PSP_HIPAY_WS_LOGIN');
+			Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD');
+
+			return true;
+		}
+		elseif (Tools::isSubmit('submitLogin') == true)
+		{
+			$email = Tools::getValue('install_user_email');
+			$firstname = Tools::getValue('install_user_firstname');
+			$lastname = Tools::getValue('install_user_lastname');
+
+			if ($email && $firstname && $lastname)
+			{
+				$is_email = (bool)Validate::isEmail($email);
+				$is_firstname = (bool)Validate::isName($firstname);
+				$is_lastname = (bool)Validate::isName($lastname);
+
+				if ($is_email && $is_firstname && $is_lastname)
+				{
+					$user_account = new HipayUserAccount($this);
+					return $user_account->createAccount($email, $firstname, $lastname);
+				}
+			}
+		}
+		elseif (Tools::isSubmit('submitTestMode') == true)
+		{
+			Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', (bool)Tools::getValue('test_account_mode'));
+
+			return true;
+		}
+
+
+		return false;
+	}
+
+	/**
+	 * Clear every single merchant account data
+	 * @return boolean
+	 */
+	protected function clearAccountData()
+	{
+		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID', $result->userAccoundId);
+		Configuration::deleteByName('PSP_HIPAY_USER_SPACE_ID', $result->userSpaceId);
+		Configuration::deleteByName('PSP_HIPAY_USER_EMAIL', $email);
+		Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID', $result->websiteId);
+		Configuration::deleteByName('PSP_HIPAY_WS_LOGIN', $result->wsLogin);
+		Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD', $result->wsPassword);
+
+		return true;
+	}
+
+	/**
+	 * Display a payment button
+	 * @param array $params
+	 * @return string
+	 */
 	public function hookPayment($params)
 	{
 		$currency_id = $params['cart']->id_currency;
@@ -390,6 +323,10 @@ class PSPHipay extends PaymentModule
 		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 	}
 
+	/**
+	 * Display the payment confirmation page
+	 * @param array $params
+	 */
 	public function hookPaymentReturn($params)
 	{
 		if ($this->active == false)
@@ -410,22 +347,26 @@ class PSPHipay extends PaymentModule
 		return $this->display(__FILE__, 'views/templates/hook/confirmation.tpl');
 	}
 
-	public function hookHeader()
-	{
-		return $this->context->controller->addCSS($this->_path.'/views/css/front.css');
-	}
-
+	/**
+	 * Get the appropriate payment button's image
+	 * @return string
+	 */
 	protected function getPaymentButton()
 	{
-		$iso_code = Tools::strtoupper($this->context->country->iso_code);
+		$iso_code = Tools::strtolower($this->context->country->iso_code);
 
 		if (file_exists(dirname(__FILE__).'/img/payment_buttons/'.$iso_code.'.png'))
 			return $this->_path.'/img/payment_buttons/'.$iso_code.'.png';
-		return $this->_path.'/img/payment_buttons/DEFAULT.png';
+		return $this->_path.'/img/payment_buttons/default.png';
 	}
 
+	/**
+	 * Check if the given currency is supported by the provider
+	 * @param string $iso_code currency iso code
+	 * @return boolean
+	 */
 	public function isSupportedCurrency($iso_code)
 	{
-		return (bool)in_array(Tools::strtoupper($iso_code), $this->limited_currencies);
+		return in_array(Tools::strtoupper($iso_code), $this->limited_currencies);
 	}
 }

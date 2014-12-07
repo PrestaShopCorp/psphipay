@@ -29,45 +29,20 @@ if (!defined('_PS_VERSION_'))
 
 abstract class HipayWS
 {
+	protected $context = false;
 	protected $client = false;
 	protected $client_url = false;
+	protected $module = false;
 
-	protected $ws_id = false;
-	protected $ws_url = false;
-	protected $ws_login = false;
-	protected $ws_password = false;
-	protected $ws_merchant_group = false;
-	protected $ws_entity = 'prestashoppayment';
+	protected $prestashop_api = 'http://payments.prestashop.dev/psphipay';
 
-	public function __construct()
+	protected $ws_url = 'https://ws.hipay.com';
+	protected $ws_test_url = 'https://test-ws.hipay.com';
+
+	public function __construct($module_instance)
 	{
 		$this->context = Context::getContext();
-
-		$this->init();
-	}
-
-	public function init()
-	{
-		$live_mode = (bool)Configuration::get('PSP_HIPAY_LIVE_MODE');
-
-		if ($live_mode == true)
-		{
-			$this->ws_id = '19853';
-			$this->ws_url = 'https://ws.hipay.com';
-			$this->ws_login = 'f4908a6ab46c717f03e91a8b59ce7dd6';
-			$this->ws_password = '65f4d8c1304ef10bbd056649def4ab9b';
-			$this->ws_merchant_group = 5;
-		}
-		else
-		{
-			$this->ws_id = '6979';
-			$this->ws_url = 'https://test-ws.hipay.com';
-			$this->ws_login = 'd2b4aa9077d3fe036a26317b4284f86e';
-			$this->ws_password = '9ac116a24fb82b12ad353c35922e8797';
-			$this->ws_merchant_group = (Tools::strtoupper($this->context->country->iso_code) == 'FR') ? 12 : 44;
-		}
-
-		$this->client = $this->getClient();
+		$this->module = $module_instance;
 	}
 
 	public function getWsId()
@@ -97,7 +72,10 @@ abstract class HipayWS
 
 	public function getWsClientURL()
 	{
-		return $this->ws_url.$this->client_url.'?wsdl';
+		if ((bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE') == false)
+			return $this->ws_url.$this->client_url.'?wsdl';
+
+		return $this->ws_test_url.$this->client_url.'?wsdl';
 	}
 
 	public function getClient()
@@ -118,45 +96,47 @@ abstract class HipayWS
 		{
 			return false;
 		}
-
 	}
 
-	public function doQuery($function, $params = array())
+	public function executeQuery($function, $params = array())
 	{
-		$cache_classes = array('HipayBusiness', 'HipayTopic', 'HipayUserAccount');
-		$need_cache = in_array(get_class($this), $cache_classes) == true;
-
-		if ($need_cache == true)
-		{
-			$cache_key = get_class($this).$function;
-
-			if (Cache::isStored($cache_key) == true)
-			{
-				$value = Cache::retrieve($cache_key);
-				if (empty($value) == false)
-					return $value;
-			}
-
-		}
-
 		try
 		{
+			if ($this->client === false)
+				$this->client = $this->getClient();
+
 			$params = $params + array(
-				'websiteId' => $this->getWsId(),
-				'wsLogin' => $this->getWsLogin(),
-				'wsPassword' => $this->getWsPassword()
+				'websiteId' => Configuration::get('PSP_HIPAY_WEBSITE_ID'),
+				'wsLogin' => Configuration::get('PSP_HIPAY_WS_LOGIN'),
+				'wsPassword' => Configuration::get('PSP_HIPAY_WS_PASSWORD'),
 			);
 
-			$result = $this->client->__call($function, array(array('parameters' => $params)));
-
-			if ($need_cache == true)
-				Cache::store($cache_key, $result);
-
-			return $result;
+			return $this->client->__call($function, array(array('parameters' => $params)));
 		}
 		catch (Exception $exception)
 		{
 			return false;
 		}
+	}
+
+	public function prestaShopWebservice($method, $data)
+	{
+		$params = $data + array(
+			'sandbox_mode' => (bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'),
+		);
+
+		$options = array('http' =>
+			array(
+				'method'  => 'POST',
+				'header'  => 'Content-type: application/x-www-form-urlencoded',
+				'content' => http_build_query($params)
+			)
+		);
+
+		$context  = stream_context_create($options);
+		$result = Tools::file_get_contents($this->prestashop_api.$method, false, $context);
+		$values = Tools::jsonDecode($result);
+
+		return $values->data;
 	}
 }

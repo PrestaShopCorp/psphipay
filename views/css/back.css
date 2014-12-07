@@ -7,6 +7,10 @@
 	max-width: 900px;
 }
 
+#content > .alert {
+	margin: 20px auto;
+}
+
 #content p {
 	margin: 0 auto;
 }
@@ -64,8 +68,26 @@
 	padding-top: 6px !important;
 }
 
+table.form-control-static {
+	padding: 0 !important;
+	border: none !important;
+	border-top: 1px solid #EAEDEF !important;
+}
+
+table.form-control-static thead th:first-child {
+	border-left: 1px solid #EAEDEF !important;
+}
+
+table.form-control-static thead th:last-child {
+	border-right: 1px solid #EAEDEF !important;
+}
+
 .form-date-actions {
 	border: none !important;
+}
+
+.form-group {
+	margin-bottom: 5px !important;
 }
 
 #date-compare {
