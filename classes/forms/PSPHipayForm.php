@@ -180,13 +180,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'input' => array(
 				$this->generateInputFree('transactions_account_statement', 'Account statement'),
 				$this->generateInputFree('transactions_current_date', 'Date'),
-				$this->generateFormSplit(),
-				$this->generateInputFree('transactions_operations_statement_desc', false, array('col' => 12, 'offset' => 0)),
-				array(
-					'type' => 'psp_calendar',
-					'name' => 'transactions_dates_range',
-					'label' => 'Date',
-				),
+				$this->generateInputFree('transactions_dates_range', 'Range'),
 				$this->generateInputFree('transactions_details', 'Transactions', array('col' => 9, 'offset' => 0)),
 			),
 			'buttons' => array(
@@ -262,20 +256,20 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		$details = null;
 
 		foreach ($accounts->balances->item as $sub_account)
-		if ($sub_account->userAccountId != $account->userAccountId)
-		$details .= '<tr>
-		<td>'.$sub_account->userAccountId.'</td>
-		<td>'.(int)$sub_account->balance.' '.(string)$sub_account->currency.'</td>
-		</tr>';
+			if ($sub_account->userAccountId != $account->userAccountId)
+				$details .= '<tr>
+					<td>'.$sub_account->userAccountId.'</td>
+					<td>'.(int)$sub_account->balance.' '.(string)$sub_account->currency.'</td>
+				</tr>';
 
 		$sub_accounts_values = array(
 			'sub_accounts_details' => '<h4 class="form-control-static">'.$this->module->l('Sub-accounts').'</h4>',
 			'sub_accounts_values' => '<table class="form-control-static table table-bordered table-hover table-striped">
 			<thead>
-			<tr>
-			<th><strong>'.$this->module->l('Account ID').'</strong></th>
-			<th><strong>'.$this->module->l('Balance').'</strong></th>
-			</tr>
+				<tr>
+					<th><strong>'.$this->module->l('Account ID').'</strong></th>
+					<th><strong>'.$this->module->l('Balance').'</strong></th>
+				</tr>
 			</thead>
 			<tbody>'.$details.'</tbody>
 			</table>',
@@ -311,15 +305,41 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$template_path = _PS_MODULE_DIR_.$this->module->name.'/views/templates/admin/transactions.tpl';
 
-		return array(
+		$this->context->smarty->assign(array(
+			'date_from' => $default_date_from,
+			'date_to' => $default_date_to,
+			'transactions_dates_form' => $calendar_helper->generate(),
+		));
+
+		$transactions_values = array(
 			'transactions_account_statement' => '<p class="form-control-static">N&deg;'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</p>',
 			'transactions_current_date' => '<p class="form-control-static">'.date('Y-m-d H:i:s').'</p>',
-			'transactions_operations_statement_desc' => '<h4 class="form-control-static">'.$this->module->l('Operations statement').'</h4>',
-			'date_from' => Tools::getValue('date_from', $default_date_from),
-			'date_to' => Tools::getValue('date_to', $default_date_to),
-			'transactions_dates_range' => $calendar_helper->generate(),
-			'transactions' => $user_account->getTransactions(),
+			'transactions_dates_range' => $this->context->smarty->fetch($template_path),
 		);
+
+		$details = null;
+		$transactions = $user_account->getTransactions();
+
+		if ((is_array($transactions) == true) && (count($transactions) > 0))
+		{
+			foreach ($transactions as $transaction)
+				$details .= '<tr>
+					<td>'.$transaction->userAccountId.'</td>
+					<td>'.(int)$transaction->balance.' '.(string)$transaction->currency.'</td>
+				</tr>';
+		}
+
+		$transactions_values['transactions_details'] = '<table class="form-control-static table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th><strong>'.$this->module->l('Account ID').'</strong></th>
+					<th><strong>'.$this->module->l('Balance').'</strong></th>
+				</tr>
+			</thead>
+			<tbody>'.$details.'</tbody>
+		</table>';
+
+		return $transactions_values;
 	}
 
 }

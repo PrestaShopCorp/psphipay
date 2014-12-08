@@ -41,7 +41,7 @@ class PSPHipayRedirectModuleFrontController extends ModuleFrontController
 		require_once(dirname(__FILE__).'/../../classes/webservice/HipayPayment.php');
 
 		$results = null;
-		$payment = new HipayPayment();
+		$payment = new HipayPayment($this->module);
 
 		if ($payment->generate($results) == false)
 		{

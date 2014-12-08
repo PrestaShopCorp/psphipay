@@ -99,6 +99,19 @@ class HipayUserAccount extends HipayWS
 		return !($result->isAvailable === false);
 	}
 
+	public function getAccountInfos($refresh = false)
+	{
+		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
+
+		$params = array('accountLogin' => $email);
+		$result = $this->executeQuery('getAccountInfos', $params);
+
+		if ($result->getAccountInfosResult->code === 0)
+			return $result->getAccountInfosResult;
+
+		return false;
+	}
+
 	public function getBalances()
 	{
 		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
@@ -141,6 +154,34 @@ class HipayUserAccount extends HipayWS
 			else
 				return array($results->getTransactionsResult->transactions->item);
 		}
+	}
+
+	public function getWebsiteAccountIdByIsoCode($iso_code)
+	{
+		$account = $this->getAccountInfos();
+
+		if ($iso_code == $account->currency)
+			return $account->userAccountId;
+
+		foreach ($account->subAccounts->item as $sub_account)
+			if ($iso_code == $sub_account->currency)
+				return $sub_account->userAccountId;
+
+		return false;
+	}
+
+	public function getWebsiteIdByIsoCode($iso_code)
+	{
+		$account = $this->getAccountInfos();
+
+		if ($iso_code == $account->currency)
+			return $account->websites->item->websiteId;
+
+		foreach ($account->subAccounts->item as $sub_account)
+			if ($iso_code == $sub_account->currency)
+				return $sub_account->websites->item->websiteId;
+
+		return false;
 	}
 
 }

@@ -355,9 +355,9 @@ class PSPHipay extends PaymentModule
 	{
 		$iso_code = Tools::strtolower($this->context->country->iso_code);
 
-		if (file_exists(dirname(__FILE__).'/img/payment_buttons/'.$iso_code.'.png'))
-			return $this->_path.'/img/payment_buttons/'.$iso_code.'.png';
-		return $this->_path.'/img/payment_buttons/default.png';
+		if (file_exists(dirname(__FILE__).'views/img/payment_buttons/'.$iso_code.'.png'))
+			return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
+		return $this->_path.'views/img/payment_buttons/default.png';
 	}
 
 	/**

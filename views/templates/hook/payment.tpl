@@ -34,7 +34,7 @@
 				</a>
 			{else}
 				<a href="{$link->getModuleLink('psphipay', 'redirect', array(), true)|escape:'htmlall':'UTF-8'}" title="{l s='Pay with Hipay' mod='psphipay'}">
-					<img src="{$domain|cat:$payment_button}" alt="{l s='Pay with Hipay' mod='psphipay'}" width="150px" height="64px" />
+					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay with Hipay' mod='psphipay'}" width="150px" height="64px" />
 					{l s='Pay with PrestaShop Payment (by Hipay)' mod='psphipay'} {if isset($psphipay_prod) && (!$psphipay_prod)}{l s='(sandbox / test mode)' mod='psphipay'}{/if}
 				</a>
 			{/if}

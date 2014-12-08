@@ -42,10 +42,10 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
 			$amount = (float)$order['result']['origAmount'];
 
-			Context::getContext()->cart = new Cart((int)$cart_id);
-			Context::getContext()->customer = new Customer((int)$customer_id);
-			Context::getContext()->currency = new Currency((int)Context::getContext()->cart->id_currency);
-			Context::getContext()->language = new Language((int)Context::getContext()->customer->id_lang);
+			$this->context->cart = new Cart((int)$cart_id);
+			$this->context->customer = new Customer((int)$customer_id);
+			$this->context->currency = new Currency((int)$this->context->cart->id_currency);
+			$this->context->language = new Language((int)$this->context->customer->id_lang);
 
 			return $this->registerOrder($order, $cart_id, $amount, $secure_key);
 		}
@@ -55,8 +55,8 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
 	protected function displayError($message)
 	{
-		$this->context->smarty->assign('path', '
-			<a href="'.$this->context->link->getPageLink('order', null, null, 'step=3').'">'.$this->module->l('Order').'</a>
+		$this->context->smarty->assign('path',
+			'<a href="'.$this->context->link->getPageLink('order', null, null, 'step=3').'">'.$this->module->l('Order').'</a>
 			<span class="navigation-pipe">&gt;</span>'.$this->module->l('Error'));
 
 		$this->errors[] = $this->module->l($message);
@@ -70,7 +70,7 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 		{
 			$operation = trim(strtolower($order['result']['operation']));
 			$status = trim(strtolower($order['result']['status']));
-			$currency = Context::getContext()->currency;
+			$currency = $this->context->currency;
 
 			switch ($status)
 			{
@@ -112,7 +112,7 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 		elseif ((isset($order['result']['status']) == false) || (isset($order['result']['merchantDatas']) == false))
 			return false;
 
-		$valid_secure_key = (Context::getContext()->customer->secure_key == $order['result']['merchantDatas']['_aKey_secure_key']);
+		$valid_secure_key = ($this->context->customer->secure_key == $order['result']['merchantDatas']['_aKey_secure_key']);
 		$valid_token = (Tools::encrypt($order['result']['merchantDatas']['_aKey_cart_id']) == $order['result']['merchantDatas']['_aKey_token']);
 
 		return $valid_secure_key && $valid_token;
