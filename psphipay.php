@@ -1,28 +1,28 @@
 <?php
 /**
-* 2007-2014 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+ * 2007-2014 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ */
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -84,12 +84,12 @@ class PSPHipay extends PaymentModule
 		Configuration::updateValue('PSP_HIPAY_LIVE_MODE', false);
 
 		return parent::install() &&
-			$this->setCurrencies() &&
-			$this->addWaitingOrderState() &&
-			$this->registerHook('header') &&
-			$this->registerHook('payment') &&
-			$this->registerHook('paymentReturn') &&
-			$this->registerHook('backOfficeHeader');
+		$this->setCurrencies() &&
+		$this->addWaitingOrderState() &&
+		$this->registerHook('header') &&
+		$this->registerHook('payment') &&
+		$this->registerHook('paymentReturn') &&
+		$this->registerHook('backOfficeHeader');
 	}
 
 	public function hookBackOfficeHeader()
@@ -176,6 +176,7 @@ class PSPHipay extends PaymentModule
 	public function getContent()
 	{
 		$this->postProcess();
+
 		$form = new PSPHipayForm($this);
 		$user_account = new HipayUserAccount($this);
 
@@ -186,7 +187,7 @@ class PSPHipay extends PaymentModule
 				'is_logged' => true,
 				'settings_form' => $form->getSettingsForm($user_account),
 				'transactions_form' => $form->getTransactionsForm($user_account),
-				'test_form' => $form->getTestForm(),
+				'sandbox_form' => $form->getSandboxForm(),
 				'services_form' => $form->getCustomersServiceForm($user_account),
 			));
 		}
@@ -230,8 +231,7 @@ class PSPHipay extends PaymentModule
 			{
 				$this->_warnings[] = $this->l('Please, enter account details');
 
-				$available = $user_account->isEmailAvailable($email);
-				return ($available == true) ? 'new_account': 'existing_account';
+                return $user_account->isEmailAvailable($email) ? 'new_account': 'existing_account';
 			}
 
 			$this->module->_errors[] = $this->l('Invalid email address');
@@ -243,45 +243,82 @@ class PSPHipay extends PaymentModule
 	protected function postProcess()
 	{
 		if (Tools::isSubmit('submitReset') == true)
-		{
-			Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
-			Configuration::deleteByName('PSP_HIPAY_USER_SPACE_ID');
-			Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
-			Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
-			Configuration::deleteByName('PSP_HIPAY_WS_LOGIN');
-			Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD');
-
-			return true;
-		}
+			$this->clearAccountData();
 		elseif (Tools::isSubmit('submitLogin') == true)
 		{
 			$email = Tools::getValue('install_user_email');
-			$firstname = Tools::getValue('install_user_firstname');
-			$lastname = Tools::getValue('install_user_lastname');
+			$is_email = (bool)Validate::isEmail($email);
 
-			if ($email && $firstname && $lastname)
+			$first_name = Tools::getValue('install_user_first_name');
+			$last_name = Tools::getValue('install_user_last_name');
+
+            $website_id = Tools::getValue('install_website_id');
+            $ws_login = Tools::getValue('install_ws_login');
+			$ws_password = Tools::getValue('install_ws_password');
+
+			if ($is_email == false)
+				return false;
+			elseif ($first_name && $last_name)
+				$this->createMerchantAccount($email, $first_name, $last_name);
+			elseif ($website_id && $ws_login && $ws_password)
 			{
-				$is_email = (bool)Validate::isEmail($email);
-				$is_firstname = (bool)Validate::isName($firstname);
-				$is_lastname = (bool)Validate::isName($lastname);
+                $is_valid_website_id = (bool)Validate::isInt($website_id);
+				$is_valid_login = (bool)Validate::isMd5($ws_login);
+				$is_valid_password = (bool)Validate::isMd5($ws_password);
 
-				if ($is_email && $is_firstname && $is_lastname)
-				{
-					$user_account = new HipayUserAccount($this);
-					return $user_account->createAccount($email, $firstname, $lastname);
-				}
+				if ($is_valid_website_id && $is_valid_login && $is_valid_password)
+					return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
+				else
+					return false;
 			}
 		}
-		elseif (Tools::isSubmit('submitTestMode') == true)
-		{
-			Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', (bool)Tools::getValue('test_account_mode'));
+		elseif (Tools::isSubmit('submitSandboxMode') == true)
+			Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', (bool)Tools::getValue('sandbox_account_mode'));
 
-			return true;
-		}
-
-
-		return false;
+		return true;
 	}
+
+    protected function createMerchantAccount($email, $first_name, $last_name)
+    {
+        $is_first_name = (bool)Validate::isName($first_name);
+        $is_last_name = (bool)Validate::isName($last_name);
+
+        if ($is_first_name && $is_last_name)
+        {
+            $user_account = new HipayUserAccount($this);
+
+            // Live mode
+            if ($user_account->isEmailAvailable($email, false) == true)
+                $user_account->createAccount($email, $first_name, $last_name, false);
+
+            // Sandbox mode
+            if ($user_account->isEmailAvailable($email, true) == true)
+                $user_account->createAccount($email, $first_name, $last_name, true);
+        }
+    }
+
+    protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password)
+    {
+        Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
+        Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $website_id);
+        Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $ws_login);
+        Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $ws_password);
+
+        $user_account = new HipayUserAccount($this);
+        $account = $user_account->getAccountInfos();
+
+        if (isset($account->code) && ($account->code == 0))
+            Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $account->userAccountId);
+        else
+        {
+            $this->_errors[] = $this->l('Authentication failed!');
+            $this->clearAccountData();
+
+            return false;
+        }
+
+        return true;
+    }
 
 	/**
 	 * Clear every single merchant account data
@@ -289,12 +326,11 @@ class PSPHipay extends PaymentModule
 	 */
 	protected function clearAccountData()
 	{
-		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID', $result->userAccoundId);
-		Configuration::deleteByName('PSP_HIPAY_USER_SPACE_ID', $result->userSpaceId);
-		Configuration::deleteByName('PSP_HIPAY_USER_EMAIL', $email);
-		Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID', $result->websiteId);
-		Configuration::deleteByName('PSP_HIPAY_WS_LOGIN', $result->wsLogin);
-		Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD', $result->wsPassword);
+		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
+        Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
+        Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
+        Configuration::deleteByName('PSP_HIPAY_WS_LOGIN');
+		Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD');
 
 		return true;
 	}

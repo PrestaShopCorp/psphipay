@@ -105,11 +105,22 @@ abstract class HipayWS
 			if ($this->client === false)
 				$this->client = $this->getClient();
 
-			$params = $params + array(
-				'websiteId' => Configuration::get('PSP_HIPAY_WEBSITE_ID'),
-				'wsLogin' => Configuration::get('PSP_HIPAY_WS_LOGIN'),
-				'wsPassword' => Configuration::get('PSP_HIPAY_WS_PASSWORD'),
-			);
+            if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
+			{
+				$params = $params + array(
+					'websiteId' => Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID'),
+					'wsLogin' => Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN'),
+					'wsPassword' => Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD'),
+				);
+			}
+			else
+			{
+				$params = $params + array(
+					'websiteId' => Configuration::get('PSP_HIPAY_WEBSITE_ID'),
+					'wsLogin' => Configuration::get('PSP_HIPAY_WS_LOGIN'),
+					'wsPassword' => Configuration::get('PSP_HIPAY_WS_PASSWORD'),
+				);
+			}
 
 			return $this->client->__call($function, array(array('parameters' => $params)));
 		}
@@ -121,17 +132,11 @@ abstract class HipayWS
 
 	public function prestaShopWebservice($method, $data)
 	{
-		$params = $data + array(
-			'sandbox_mode' => (bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'),
-		);
-
-		$options = array('http' =>
-			array(
-				'method'  => 'POST',
-				'header'  => 'Content-type: application/x-www-form-urlencoded',
-				'content' => http_build_query($params)
-			)
-		);
+		$options = array('http' => array(
+            'method'  => 'POST',
+            'header'  => 'Content-type: application/x-www-form-urlencoded',
+            'content' => http_build_query($data)
+        ));
 
 		$context  = stream_context_create($options);
 		$result = Tools::file_get_contents($this->prestashop_api.$method, false, $context);

@@ -49,7 +49,7 @@ class HipayUserAccount extends HipayWS
 		);
 	}
 
-	public function createAccount($email, $firstname, $lastname)
+	public function createAccount($email, $first_name, $last_name, $sandbox_mode = false)
 	{
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$currency_code = Tools::strtoupper($currency->iso_code);
@@ -62,12 +62,13 @@ class HipayUserAccount extends HipayWS
 
 		$data = array(
 			'email' => $email,
-			'firstname' => $firstname,
-			'lastname' => $lastname,
+			'first_name' => $first_name,
+			'last_name' => $last_name,
 			'currency_code' => $currency_code,
 			'iso_country' => $country_code,
 			'iso_lang' => $language_code,
 			'remote_addr' => Tools::getRemoteAddr(),
+            'sandbox_mode' => (int)$sandbox_mode,
 			'shop_email' => Configuration::get('PS_SHOP_EMAIL'),
 			'shop_name' => Configuration::get('PS_SHOP_NAME'),
 			'shop_domain' => Tools::getShopDomainSsl(true, true),
@@ -77,12 +78,22 @@ class HipayUserAccount extends HipayWS
 
 		if ($result->code === 0)
 		{
-			Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $result->userAccountId);
-			Configuration::updateValue('PSP_HIPAY_USER_SPACE_ID', $result->userSpaceId);
 			Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
-			Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $result->websiteId);
-			Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $result->wsLogin);
-			Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $result->wsPassword);
+
+            if ($sandbox_mode == false)
+            {
+                Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $result->userAccountId);
+                Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $result->websiteId);
+                Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $result->wsLogin);
+                Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $result->wsPassword);
+            }
+            else
+            {
+                Configuration::updateValue('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID', $result->userAccountId);
+                Configuration::updateValue('PSP_HIPAY_SANDBOX_WEBSITE_ID', $result->websiteId);
+                Configuration::updateValue('PSP_HIPAY_SANDBOX_WS_LOGIN', $result->wsLogin);
+                Configuration::updateValue('PSP_HIPAY_SANDBOX_WS_PASSWORD', $result->wsPassword);
+            }
 
 			return true;
 		}
@@ -90,16 +101,17 @@ class HipayUserAccount extends HipayWS
 		return false;
 	}
 
-	public function isEmailAvailable($email)
+	public function isEmailAvailable($email, $sandbox_mode = false)
 	{
 		$result = $this->prestaShopWebservice('/account/available', array(
-				'email' => $email,
+            'email' => $email,
+            'sandbox_mode' => (int)$sandbox_mode,
 		));
 
-		return !($result->isAvailable === false);
+		return ! ($result->isAvailable === false);
 	}
 
-	public function getAccountInfos($refresh = false)
+	public function getAccountInfos()
 	{
 		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
 
