@@ -54,7 +54,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getCustomersServiceForm($user_account)
 	{
-		$this->helper->submit_action = 'submitPSPHipayConfiguration';
 		$this->helper->tpl_vars['fields_value'] = $this->getCustomersServiceFormValues($user_account);
 
 		$form = array('form' => array(
@@ -81,7 +80,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getLoginForm($complete_form = false)
 	{
-		$this->helper->submit_action = 'submitPSPHipayConfiguration';
 		$this->helper->tpl_vars['fields_value'] = $this->getLoginFormValues($complete_form);
 
 		$form = array('form' => array(
@@ -104,8 +102,8 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		}
 		elseif ($complete_form == 'existing_account')
 		{
-            $form['form']['input'][] = $this->generateInputText('install_website_id', 'Website ID', array('class' => 'fixed-width-lg'));
-            $form['form']['input'][] = $this->generateInputText('install_ws_login', 'WS Login', array('class' => 'fixed-width-xxl'));
+			$form['form']['input'][] = $this->generateInputText('install_website_id', 'Website ID', array('class' => 'fixed-width-lg'));
+			$form['form']['input'][] = $this->generateInputText('install_ws_login', 'WS Login', array('class' => 'fixed-width-xxl'));
 			$form['form']['input'][] = $this->generateInputText('install_ws_password', 'WS Password', array('class' => 'fixed-width-xxl'));
 
 			$form['form']['buttons'][] = $this->generateSubmitButton('Reset', array(
@@ -123,7 +121,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getSettingsForm($user_account)
 	{
-		$this->helper->submit_action = 'submitPSPHipayConfiguration';
 		$this->helper->tpl_vars['fields_value'] = $this->getSettingsFormValues($user_account);
 
 		$form = array('form' => array(
@@ -155,15 +152,14 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getSandboxForm()
 	{
-		$this->helper->submit_action = 'submitPSPHipayConfiguration';
 		$this->helper->tpl_vars['fields_value'] = $this->getSandboxFormValues();
 
 		$form = array('form' => array(
 			'input' => array(
 				$this->generateSwitchButton('sandbox_account_mode', 'Sandbox mode'),
-                $this->generateInputText('sandbox_website_id', 'Website ID', array('class' => 'fixed-width-lg')),
-                $this->generateInputText('sandbox_ws_login', 'WS Login', array('class' => 'fixed-width-xxl')),
-                $this->generateInputText('sandbox_ws_password', 'WS Password', array('class' => 'fixed-width-xxl')),
+				$this->generateInputText('sandbox_website_id', 'Website ID', array('class' => 'fixed-width-lg')),
+				$this->generateInputText('sandbox_ws_login', 'WS Login', array('class' => 'fixed-width-xxl')),
+				$this->generateInputText('sandbox_ws_password', 'WS Password', array('class' => 'fixed-width-xxl')),
 			),
 			'buttons' => array(
 				$this->generateSubmitButton('Save', array(
@@ -181,20 +177,20 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getTransactionsForm($user_account)
 	{
-		$this->helper->submit_action = 'submitPSPHipayConfiguration';
 		$this->helper->tpl_vars['fields_value'] = $this->getTransactionsFormValues($user_account);
 
 		$form = array('form' => array(
 			'input' => array(
 				$this->generateInputFree('info_sandbox_mode', false, array('col' => 12, 'offset' => 0)),
 
-				$this->generateInputFree('transactions_account_statement', 'Account statement'),
+				$this->generateInputFree('transactions_account_id', 'Account ID'),
 				$this->generateInputFree('transactions_current_date', 'Date'),
 				$this->generateInputFree('transactions_dates_range', 'Range'),
 				$this->generateInputFree('transactions_details', 'Transactions', array('col' => 9, 'offset' => 0)),
 			),
 			'buttons' => array(
 				$this->generateSubmitButton('Refresh', array(
+					'name' => 'submitDateRange',
 					'icon' => 'process-icon-refresh',
 					'value' => 'refresh',
 				)),
@@ -244,8 +240,8 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		}
 		elseif ($complete_form == 'existing_account')
 		{
-            $values['install_website_id'] = Tools::getValue('install_website_id', Configuration::get('PSP_HIPAY_WEBSITE_ID'));
-            $values['install_ws_login'] = Tools::getValue('install_ws_login', Configuration::get('PSP_HIPAY_WS_LOGIN'));
+			$values['install_website_id'] = Tools::getValue('install_website_id', Configuration::get('PSP_HIPAY_WEBSITE_ID'));
+			$values['install_ws_login'] = Tools::getValue('install_ws_login', Configuration::get('PSP_HIPAY_WS_LOGIN'));
 			$values['install_ws_password'] = Tools::getValue('install_ws_password', Configuration::get('PSP_HIPAY_WS_PASSWORD'));
 		}
 
@@ -304,9 +300,9 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	{
 		return array(
 			'sandbox_account_mode' => Tools::getValue('sandbox_account_mode', Configuration::get('PSP_HIPAY_SANDBOX_MODE')),
-            'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
-            'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
-            'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
+			'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
+			'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
+			'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
 		);
 	}
 
@@ -317,28 +313,30 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	{
 		$calendar_helper = new HelperCalendar();
 
-		$employee = $this->context->employee;
+		$psp_hipay_date_from = isset($this->context->cookie->psp_hipay_date_from)? $this->context->cookie->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
+		$psp_hipay_date_to = isset($this->context->cookie->psp_hipay_date_to) ? $this->context->cookie->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
 
-		$default_date_from = isset($employee->psp_hipay_date_from) ? $employee->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
-		$default_date_to = isset($employee->psp_hipay_date_to) ? $employee->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
+		$calendar_helper->setDateFrom(Tools::getValue('date_from', date('Y-m-d', strtotime($psp_hipay_date_from))));
+		$calendar_helper->setDateTo(Tools::getValue('date_to', date('Y-m-d', strtotime($psp_hipay_date_to))));
 
-		$calendar_helper->setDateFrom(Tools::getValue('date_from', $default_date_from));
-		$calendar_helper->setDateTo(Tools::getValue('date_to', $default_date_to));
+		$user_account_id = Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? Configuration::get('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID') : Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID');
 
 		$template_path = _PS_MODULE_DIR_.$this->module->name.'/views/templates/admin/transactions.tpl';
 
 		$this->context->smarty->assign(array(
-			'date_from' => $default_date_from,
-			'date_to' => $default_date_to,
+			'date_from' => date('Y-m-d H:i', strtotime($psp_hipay_date_from)),
+			'date_to' => date('Y-m-d H:i', strtotime($psp_hipay_date_to)),
 			'transactions_dates_form' => $calendar_helper->generate(),
 		));
+
+		$calendar_template = $this->context->smarty->fetch($template_path);
 
 		$transactions_values = array(
 			'info_sandbox_mode' => Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
 
-			'transactions_account_statement' => '<p class="form-control-static">N&deg;'.Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID').'</p>',
+			'transactions_account_id' => '<p class="form-control-static">N&deg;'.$user_account_id.'</p>',
 			'transactions_current_date' => '<p class="form-control-static">'.date('Y-m-d H:i:s').'</p>',
-			'transactions_dates_range' => $this->context->smarty->fetch($template_path),
+			'transactions_dates_range' => $calendar_template,
 		);
 
 		$details = null;
@@ -347,17 +345,23 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		if ((is_array($transactions) == true) && (count($transactions) > 0))
 		{
 			foreach ($transactions as $transaction)
+			{
 				$details .= '<tr>
-					<td>'.$transaction->userAccountId.'</td>
-					<td>'.(int)$transaction->balance.' '.(string)$transaction->currency.'</td>
+					<td>'.$transaction->createdAt.'</td>
+					<td>'.number_format($transaction->amount, 2).' '.(string)$transaction->currency.'</td>
+					<td>'.number_format($transaction->fees, 2).' '.(string)$transaction->currencyFees.'</td>
+					<td class="text-center"><i class="icon icon-'.(($transaction->transactionStatus == 'CAPTURED') ? 'check' : 'clock-o').'"></i></td>
 				</tr>';
+			}
 		}
 
 		$transactions_values['transactions_details'] = '<table class="form-control-static table table-bordered table-hover table-striped">
 			<thead>
 				<tr>
-					<th><strong>'.$this->module->l('Account ID').'</strong></th>
+					<th><strong>'.$this->module->l('Created at').'</strong></th>
 					<th><strong>'.$this->module->l('Balance').'</strong></th>
+					<th><strong>'.$this->module->l('Fees').'</strong></th>
+					<th><strong>'.$this->module->l('Captured').'</strong></th>
 				</tr>
 			</thead>
 			<tbody>'.$details.'</tbody>

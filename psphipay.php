@@ -231,7 +231,7 @@ class PSPHipay extends PaymentModule
 			{
 				$this->_warnings[] = $this->l('Please, enter account details');
 
-                return $user_account->isEmailAvailable($email) ? 'new_account': 'existing_account';
+				return $user_account->isEmailAvailable($email) ? 'new_account': 'existing_account';
 			}
 
 			$this->module->_errors[] = $this->l('Invalid email address');
@@ -242,97 +242,153 @@ class PSPHipay extends PaymentModule
 
 	protected function postProcess()
 	{
-		if (Tools::isSubmit('submitReset') == true)
-			$this->clearAccountData();
-		elseif (Tools::isSubmit('submitLogin') == true)
+		if (Tools::isSubmit('submitReset'))
+			return $this->clearAccountData();
+		elseif (Tools::isSubmit('submitLogin'))
+			return $this->login();
+		elseif (Tools::isSubmit('submitDateRange'))
 		{
-			$email = Tools::getValue('install_user_email');
-			$is_email = (bool)Validate::isEmail($email);
-
-			$first_name = Tools::getValue('install_user_first_name');
-			$last_name = Tools::getValue('install_user_last_name');
-
-            $website_id = Tools::getValue('install_website_id');
-            $ws_login = Tools::getValue('install_ws_login');
-			$ws_password = Tools::getValue('install_ws_password');
-
-			if ($is_email == false)
-				return false;
-			elseif ($first_name && $last_name)
-				$this->createMerchantAccount($email, $first_name, $last_name);
-			elseif ($website_id && $ws_login && $ws_password)
-			{
-                $is_valid_website_id = (bool)Validate::isInt($website_id);
-				$is_valid_login = (bool)Validate::isMd5($ws_login);
-				$is_valid_password = (bool)Validate::isMd5($ws_password);
-
-				if ($is_valid_website_id && $is_valid_login && $is_valid_password)
-					return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
-				else
-					return false;
-			}
+			$this->context->smarty->assign('active_tab', 'transactions');
+			return $this->saveTransactionsDateRange();
 		}
-		elseif (Tools::isSubmit('submitSandboxMode') == true)
-			Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', (bool)Tools::getValue('sandbox_account_mode'));
+		elseif (Tools::isSubmit('submitSandboxMode'))
+		{
+			$this->context->smarty->assign('active_tab', 'sandbox');
+			return $this->switchSandboxMode();
+		}
+	}
+
+	/**
+	* Clear every single merchant account data
+	* @return boolean
+	*/
+	protected function clearAccountData()
+	{
+		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
+		Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
+		Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
+		Configuration::deleteByName('PSP_HIPAY_WS_LOGIN');
+		Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD');
 
 		return true;
 	}
 
-    protected function createMerchantAccount($email, $first_name, $last_name)
-    {
-        $is_first_name = (bool)Validate::isName($first_name);
-        $is_last_name = (bool)Validate::isName($last_name);
-
-        if ($is_first_name && $is_last_name)
-        {
-            $user_account = new HipayUserAccount($this);
-
-            // Live mode
-            if ($user_account->isEmailAvailable($email, false) == true)
-                $user_account->createAccount($email, $first_name, $last_name, false);
-
-            // Sandbox mode
-            if ($user_account->isEmailAvailable($email, true) == true)
-                $user_account->createAccount($email, $first_name, $last_name, true);
-        }
-    }
-
-    protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password)
-    {
-        Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
-        Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $website_id);
-        Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $ws_login);
-        Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $ws_password);
-
-        $user_account = new HipayUserAccount($this);
-        $account = $user_account->getAccountInfos();
-
-        if (isset($account->code) && ($account->code == 0))
-            Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $account->userAccountId);
-        else
-        {
-            $this->_errors[] = $this->l('Authentication failed!');
-            $this->clearAccountData();
-
-            return false;
-        }
-
-        return true;
-    }
-
-	/**
-	 * Clear every single merchant account data
-	 * @return boolean
-	 */
-	protected function clearAccountData()
+	protected function createMerchantAccount($email, $first_name, $last_name)
 	{
-		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
-        Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
-        Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
-        Configuration::deleteByName('PSP_HIPAY_WS_LOGIN');
-		Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD');
+		$is_first_name = (bool)Validate::isName($first_name);
+		$is_last_name = (bool)Validate::isName($last_name);
+
+		if ($is_first_name && $is_last_name)
+		{
+			$user_account = new HipayUserAccount($this);
+
+			// Live mode
+			if ($user_account->isEmailAvailable($email, false) == true)
+				$user_account->createAccount($email, $first_name, $last_name, false);
+
+			// Sandbox mode
+			if ($user_account->isEmailAvailable($email, true) == true)
+				$user_account->createAccount($email, $first_name, $last_name, true);
+		}
+	}
+
+	protected function login()
+	{
+		$email = Tools::getValue('install_user_email');
+		$is_email = (bool)Validate::isEmail($email);
+
+		$first_name = Tools::getValue('install_user_first_name');
+		$last_name = Tools::getValue('install_user_last_name');
+
+		$website_id = Tools::getValue('install_website_id');
+		$ws_login = Tools::getValue('install_ws_login');
+		$ws_password = Tools::getValue('install_ws_password');
+
+		if ($is_email == false)
+			return false;
+		elseif ($first_name && $last_name)
+			$this->createMerchantAccount($email, $first_name, $last_name);
+		elseif ($website_id && $ws_login && $ws_password)
+		{
+			$is_valid_website_id = (bool)Validate::isInt($website_id);
+			$is_valid_login = (bool)Validate::isMd5($ws_login);
+			$is_valid_password = (bool)Validate::isMd5($ws_password);
+
+			Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', false);
+
+			if ($is_valid_website_id && $is_valid_login && $is_valid_password)
+				return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
+			return false;
+		}
 
 		return true;
+	}
+
+	protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password)
+	{
+		Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
+
+		if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
+		{
+			Configuration::updateValue('PSP_HIPAY_SANDBOX_WEBSITE_ID', $website_id);
+			Configuration::updateValue('PSP_HIPAY_SANDBOX_WS_LOGIN', $ws_login);
+			Configuration::updateValue('PSP_HIPAY_SANDBOX_WS_PASSWORD', $ws_password);
+		}
+		else
+		{
+			Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $website_id);
+			Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $ws_login);
+			Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $ws_password);
+		}
+
+		$user_account = new HipayUserAccount($this);
+		$account = $user_account->getAccountInfos();
+
+		if (isset($account->code) && ($account->code == 0))
+		{
+			if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
+				Configuration::updateValue('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID', $account->userAccountId);
+			else
+				Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $account->userAccountId);
+		}
+		else
+		{
+			$this->_errors[] = $this->l('Authentication failed!');
+			$this->clearAccountData();
+
+			return false;
+		}
+
+		return true;
+	}
+
+	protected function saveTransactionsDateRange()
+	{
+		if (Tools::isSubmit('date_from') && Tools::isSubmit('date_to'))
+		{
+			$this->context->cookie->psp_hipay_date_from = Tools::getValue('date_from');
+			$this->context->cookie->psp_hipay_date_to = Tools::getValue('date_to');
+		}
+	}
+
+	protected function switchSandboxMode()
+	{
+		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
+
+		$website_id = Tools::getValue('sandbox_website_id');
+		$ws_login = Tools::getValue('sandbox_ws_login');
+		$ws_password = Tools::getValue('sandbox_ws_password');
+
+		$is_valid_website_id = (bool)Validate::isInt($website_id);
+		$is_valid_login = (bool)Validate::isMd5($ws_login);
+		$is_valid_password = (bool)Validate::isMd5($ws_password);
+
+		$sandbox_mode = (bool)Tools::getValue('sandbox_account_mode');
+		Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', $sandbox_mode);
+
+		if ($sandbox_mode && $is_valid_website_id && $is_valid_login && $is_valid_password)
+			return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
+		return false;
 	}
 
 	/**

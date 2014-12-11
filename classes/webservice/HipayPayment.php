@@ -115,7 +115,11 @@ class HipayPayment extends HipayWS
 	protected function getCategory()
 	{
 		$sandbox_mode = (bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE');
-		$website_id = (int)Configuration::get('PSP_HIPAY_WEBSITE_ID');
+
+		if ($sandbox_mode)
+			$website_id = (int)Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID');
+		else
+			$website_id = (int)Configuration::get('PSP_HIPAY_WEBSITE_ID');
 
 		if ($sandbox_mode === true)
 			$url = $this->categories_test_domain.$this->categories_url.$website_id;

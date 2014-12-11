@@ -34,7 +34,7 @@ abstract class HipayWS
 	protected $client_url = false;
 	protected $module = false;
 
-	protected $prestashop_api = 'http://payments.prestashop.dev/psphipay';
+	protected $prestashop_api = 'http://payments.prestashop.com/psphipay';
 
 	protected $ws_url = 'https://ws.hipay.com';
 	protected $ws_test_url = 'https://test-ws.hipay.com';
@@ -105,7 +105,7 @@ abstract class HipayWS
 			if ($this->client === false)
 				$this->client = $this->getClient();
 
-            if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
+			if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
 			{
 				$params = $params + array(
 					'websiteId' => Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID'),
@@ -133,10 +133,10 @@ abstract class HipayWS
 	public function prestaShopWebservice($method, $data)
 	{
 		$options = array('http' => array(
-            'method'  => 'POST',
-            'header'  => 'Content-type: application/x-www-form-urlencoded',
-            'content' => http_build_query($data)
-        ));
+			'method'  => 'POST',
+			'header'  => 'Content-type: application/x-www-form-urlencoded',
+			'content' => http_build_query($data)
+		));
 
 		$context  = stream_context_create($options);
 		$result = Tools::file_get_contents($this->prestashop_api.$method, false, $context);
