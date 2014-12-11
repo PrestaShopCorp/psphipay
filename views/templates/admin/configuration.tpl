@@ -109,10 +109,10 @@
 			<li role="presentation"{if ((isset($active_tab) == false) || ($active_tab == 'settings'))} class="active"{/if}><a href="#psp_settings_form" aria-controls="psp_settings_form" role="tab" data-toggle="tab">
 				<span class="icon icon-cogs"></span> Settings</a>
 			</li>
-			<li role="presentation"{if ($active_tab == 'transactions')} class="active"{/if}><a href="#psp_transactions_form" aria-controls="psp_transactions_form" role="tab" data-toggle="tab">
+			<li role="presentation"{if ((isset($active_tab) == true) && ($active_tab == 'transactions'))} class="active"{/if}><a href="#psp_transactions_form" aria-controls="psp_transactions_form" role="tab" data-toggle="tab">
 				<span class="icon icon-money"></span> Transactions</a>
 			</li>
-			<li role="presentation"{if ($active_tab == 'sandbox')} class="active"{/if}><a href="#psp_sandbox_form" aria-controls="psp_sandbox_form" role="tab" data-toggle="tab">
+			<li role="presentation"{if ((isset($active_tab) == true) && ($active_tab == 'sandbox'))} class="active"{/if}><a href="#psp_sandbox_form" aria-controls="psp_sandbox_form" role="tab" data-toggle="tab">
 				<span class="icon icon-check-square-o"></span> Sandbox</a>
 			</li>
 			<li role="presentation"><a href="#psp_services_form" aria-controls="psp_services_form" role="tab" data-toggle="tab">
@@ -122,8 +122,8 @@
 
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == false) || ($active_tab == 'settings'))} active{/if}" id="psp_settings_form">{$settings_form}</div>
-			<div role="tabpanel" class="tab-pane{if ($active_tab == 'transactions')} active{/if}" id="psp_transactions_form">{$transactions_form}</div>
-			<div role="tabpanel" class="tab-pane{if ($active_tab == 'sandbox')} active{/if}" id="psp_sandbox_form">{$sandbox_form}</div>
+			<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == true) && ($active_tab == 'transactions'))} active{/if}" id="psp_transactions_form">{$transactions_form}</div>
+			<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == true) && ($active_tab == 'sandbox'))} active{/if}" id="psp_sandbox_form">{$sandbox_form}</div>
 			<div role="tabpanel" class="tab-pane" id="psp_services_form">{$services_form}</div>
 		</div>
 	</div>
