@@ -264,11 +264,20 @@ class PSPHipay extends PaymentModule
 	*/
 	protected function clearAccountData()
 	{
-		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
 		Configuration::deleteByName('PSP_HIPAY_USER_EMAIL');
+		Configuration::deleteByName('PSP_HIPAY_SANDBOX_MODE');
+
+		// Live mode
+		Configuration::deleteByName('PSP_HIPAY_USER_ACCOUNT_ID');
 		Configuration::deleteByName('PSP_HIPAY_WEBSITE_ID');
 		Configuration::deleteByName('PSP_HIPAY_WS_LOGIN');
 		Configuration::deleteByName('PSP_HIPAY_WS_PASSWORD');
+
+		// Sandbox mode
+		Configuration::deleteByName('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID');
+		Configuration::deleteByName('PSP_HIPAY_SANDBOX_WEBSITE_ID');
+		Configuration::deleteByName('PSP_HIPAY_SANDBOX_WS_LOGIN');
+		Configuration::deleteByName('PSP_HIPAY_SANDBOX_WS_PASSWORD');
 
 		return true;
 	}
