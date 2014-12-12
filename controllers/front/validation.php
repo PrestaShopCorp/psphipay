@@ -93,16 +93,6 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
 			return $this->placeOrder($order, $id_order_state, $cart_id, $currency, $amount, $secure_key);
 		}
-		else
-		{
-			$id_order_state = Configuration::get('PS_OS_ERROR');
-
-			$error_code = $order['result']['returnCode'];
-			$error_desc = $order['result']['returnDescriptionShort'];
-			$message = Tools::safeOutput("Error: [$error_code] $error_desc");
-
-			return $this->module->validateOrder($cart_id, $id_order_state, $amount, $this->module->displayName, $message, array(), (int)$currency->id, false, $secure_key);
-		}
 	}
 
 	protected function isValidOrder($order)
@@ -112,8 +102,15 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 		elseif ((isset($order['result']['status']) == false) || (isset($order['result']['merchantDatas']) == false))
 			return false;
 
+		$sandbox_mode = (bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE');
+
+		if ($sandbox_mode)
+			$ws_login = (int)Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN');
+		else
+			$ws_login = (int)Configuration::get('PSP_HIPAY_WS_LOGIN');
+
 		$valid_secure_key = ($this->context->customer->secure_key == $order['result']['merchantDatas']['_aKey_secure_key']);
-		$valid_token = (Tools::encrypt($order['result']['merchantDatas']['_aKey_cart_id']) == $order['result']['merchantDatas']['_aKey_token']);
+		$valid_token = (Tools::encrypt($ws_login.$order['result']['merchantDatas']['_aKey_cart_id']) == $order['result']['merchantDatas']['_aKey_token']);
 
 		return $valid_secure_key && $valid_token;
 	}

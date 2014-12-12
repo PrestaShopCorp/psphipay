@@ -102,12 +102,19 @@ class HipayPayment extends HipayWS
 
 	protected function getFreeData()
 	{
+		$sandbox_mode = (bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE');
+
+		if ($sandbox_mode)
+			$ws_login = (int)Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN');
+		else
+			$ws_login = (int)Configuration::get('PSP_HIPAY_WS_LOGIN');
+
 		return array(
 			'item' => array(
 				array('key' => 'cart_id', 'value' => $this->context->cart->id),
 				array('key' => 'customer_id', 'value' => $this->context->customer->id),
 				array('key' => 'secure_key', 'value' => $this->context->customer->secure_key),
-				array('key' => 'token', 'value' => Tools::encrypt($this->context->cart->id)),
+				array('key' => 'token', 'value' => Tools::encrypt($ws_login.$this->context->cart->id)),
 			),
 		);
 	}
