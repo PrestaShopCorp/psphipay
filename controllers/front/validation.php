@@ -138,8 +138,9 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 			if ($id_order_state != (int)Configuration::get('PS_OS_ERROR'))
 			{
 				$payment_method = $order['result']['paymentMethod'];
+				$transaction_id = $order['result']['transid'];
 				$message = Tools::safeOutput("Payment method: $payment_method<br />");
-				$message .= Tools::safeOutput("Transaction ID: $payment_method");
+				$message .= Tools::safeOutput("Transaction ID: $transaction_id");
 			}
 			else
 			{
