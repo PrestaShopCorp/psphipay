@@ -68,8 +68,6 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 	{
 		if ($this->isValidOrder($order) === true)
 		{
-			$operation = trim(strtolower($order['result']['operation']));
-			$status = trim(strtolower($order['result']['status']));
 			$currency = $this->context->currency;
 
 			switch ($status)

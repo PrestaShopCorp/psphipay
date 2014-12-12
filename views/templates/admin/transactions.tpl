@@ -23,8 +23,10 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<button class="btn btn-default" data-toggle="modal" data-target="#transactions_dates_range" onclick="javascript:$('#datepicker').removeClass('hide'); return false;">
-	<i class="icon-calendar"></i> {l s='From' mod='psphipay'} <strong class="text-info">{$date_from}</strong> {l s='To' mod='psphipay'} <strong class="text-info">{$date_to}</strong>
+<button class="btn btn-default" data-toggle="modal" data-target="#transactions_dates_range" id="transactions_dates_range_button">
+	<i class="icon-calendar"></i>
+	{l s='From' mod='psphipay'} <strong class="text-info">{$date_from|escape:'htmlall':'UTF-8'}</strong>
+	{l s='To' mod='psphipay'} <strong class="text-info">{$date_to|escape:'htmlall':'UTF-8'}</strong>
 	<i class="icon-caret-down"></i>
 </button>
 <p class="form-control-static"><em>({l s='Only over the past three months' mod='psphipay'})</em></p>

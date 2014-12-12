@@ -39,11 +39,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		return $this->helper;
 	}
 
-	protected function form_lang()
-	{
-		$this->helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
-	}
-
 	public function generateForm($form)
 	{
 		return $this->helper->generateForm($form);
@@ -206,10 +201,11 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getCustomersServiceFormValues()
 	{
-		$user_account_id = Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? Configuration::get('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID') : Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID');
+		$sandbox_mode = Configuration::get('PSP_HIPAY_SANDBOX_MODE');
+		$user_account_id = $sandbox_mode ? Configuration::get('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID') : Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID');
 
 		return array(
-			'info_sandbox_mode' => Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
+			'info_sandbox_mode' => $sandbox_mode ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
 
 			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
 			'customers_service_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
@@ -253,7 +249,8 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	 */
 	public function getSettingsFormValues($user_account)
 	{
-		$user_account_id = Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? Configuration::get('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID') : Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID');
+		$sandbox_mode = Configuration::get('PSP_HIPAY_SANDBOX_MODE');
+		$user_account_id = $sandbox_mode ? Configuration::get('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID') : Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID');
 
 		$accounts = $user_account->getBalances();
 		$account = $user_account->getMainAccountBalance($accounts);
