@@ -102,7 +102,7 @@ abstract class HipayWS
 	{
 		try
 		{
-			if ($this->client === false)
+			if ((isset($this->client) == false) || ($this->client === false))
 				$this->client = $this->getClient();
 
 			if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
@@ -122,7 +122,11 @@ abstract class HipayWS
 				);
 			}
 
-			return $this->client->__call($function, array(array('parameters' => $params)));
+			$output = $this->client->__call($function, array(array('parameters' => $params)));
+
+			unset($this->client);
+
+			return $output;
 		}
 		catch (Exception $exception)
 		{
