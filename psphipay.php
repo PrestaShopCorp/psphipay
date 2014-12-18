@@ -59,8 +59,15 @@ class PSPHipay extends PaymentModule
 		$this->description = $this->l('PrestaShop’s Official Payment Solution, offering the most competitive rates in Europe.');
 
 		// Compliancy
-		$this->limited_countries = array('AT', 'BE', 'CH', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IR', 'IT', 'LI', 'LU', 'LV', 'MC', 'MT', 'NL', 'PT', 'SE', 'SI', 'SK');
-		$this->limited_currencies = array('CHF', 'EUR', 'GBP', 'SEK');
+		$this->limited_countries = array(
+			'AT', 'BE', 'CH', 'CY', 'CZ', 'DE', 'DK',
+			'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IE',
+			'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MT',
+			'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SE',
+			'SI', 'SK', 'TR',
+		);
+
+		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'SEK', 'USD');
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 	}
