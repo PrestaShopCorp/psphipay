@@ -426,7 +426,7 @@ class PSPHipay extends PaymentModule
 			'payment_button' => $this->getPaymentButton(),
 		));
 
-		$this->smarty->assign('psphipay_prod', (bool)Configuration::get('PSP_HIPAY_LIVE_MODE'));
+		$this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
 
 		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 	}
@@ -461,10 +461,17 @@ class PSPHipay extends PaymentModule
 	 */
 	protected function getPaymentButton()
 	{
-		$iso_code = Tools::strtolower($this->context->country->iso_code);
+		$id_address = $this->context->cart->id_address_invoice;
 
-		if (file_exists(dirname(__FILE__).'views/img/payment_buttons/'.$iso_code.'.png'))
-			return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
+		if ($id_address)
+		{
+			$address = new Address((int)$id_address);
+			$country = new Country((int)$address->id_country);
+			$iso_code = Tools::strtolower($country->iso_code);
+
+			if (file_exists(dirname(__FILE__).'/views/img/payment_buttons/'.$iso_code.'.png'))
+				return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
+		}
 		return $this->_path.'views/img/payment_buttons/default.png';
 	}
 
