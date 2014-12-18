@@ -59,10 +59,21 @@ class PSPHipay extends PaymentModule
 		$this->description = $this->l('PrestaShop’s Official Payment Solution, offering the most competitive rates in Europe.');
 
 		// Compliancy
-		$this->limited_countries = array('AT', 'BE', 'CH', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IR', 'IT', 'LI', 'LU', 'LV', 'MC', 'MT', 'NL', 'PT', 'SE', 'SI', 'SK');
-		$this->limited_currencies = array('CHF', 'EUR', 'GBP', 'SEK');
+		$this->limited_countries = array(
+			'AT', 'BE', 'CH', 'CY', 'CZ', 'DE', 'DK',
+			'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IE',
+			'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MT',
+			'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SE',
+			'SI', 'SK', 'TR',
+		);
+
+		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'SEK', 'USD');
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+
+		if (!Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID') || !Configuration::get('PSP_HIPAY_WEBSITE_ID') ||
+			!Configuration::get('PSP_HIPAY_WS_LOGIN') || !Configuration::get('PSP_HIPAY_WS_PASSWORD'))
+			$this->warning = $this->l('Please, don\'t forget to configure your module');
 	}
 
 	public function install()
@@ -419,7 +430,7 @@ class PSPHipay extends PaymentModule
 			'payment_button' => $this->getPaymentButton(),
 		));
 
-		$this->smarty->assign('psphipay_prod', (bool)Configuration::get('PSP_HIPAY_LIVE_MODE'));
+		$this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
 
 		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 	}
@@ -454,10 +465,17 @@ class PSPHipay extends PaymentModule
 	 */
 	protected function getPaymentButton()
 	{
-		$iso_code = Tools::strtolower($this->context->country->iso_code);
+		$id_address = $this->context->cart->id_address_invoice;
 
-		if (file_exists(dirname(__FILE__).'views/img/payment_buttons/'.$iso_code.'.png'))
-			return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
+		if ($id_address)
+		{
+			$address = new Address((int)$id_address);
+			$country = new Country((int)$address->id_country);
+			$iso_code = Tools::strtolower($country->iso_code);
+
+			if (file_exists(dirname(__FILE__).'/views/img/payment_buttons/'.$iso_code.'.png'))
+				return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
+		}
 		return $this->_path.'views/img/payment_buttons/default.png';
 	}
 
