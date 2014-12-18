@@ -70,6 +70,10 @@ class PSPHipay extends PaymentModule
 		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'SEK', 'USD');
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+
+		if (!Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID') || !Configuration::get('PSP_HIPAY_WEBSITE_ID') ||
+			!Configuration::get('PSP_HIPAY_WS_LOGIN') || !Configuration::get('PSP_HIPAY_WS_PASSWORD'))
+			$this->warning = $this->l('Please, don\'t forget to configure your module');
 	}
 
 	public function install()
