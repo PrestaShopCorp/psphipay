@@ -147,8 +147,8 @@ class HipayUserAccount extends HipayWS
 
 	public function getTransactions()
 	{
-		$psp_hipay_date_from = isset($this->context->cookie->psp_hipay_date_from) ? $this->context->cookie->psp_hipay_date_from : date('Y-m-dT').'00:00:00';
-		$psp_hipay_date_to = isset($this->context->cookie->psp_hipay_date_to) ? $this->context->cookie->psp_hipay_date_to : date('Y-m-dT').'23:59:59';
+		$psp_hipay_date_from = (isset($this->context->cookie->psp_hipay_date_from) ? $this->context->cookie->psp_hipay_date_from : date('Y-m-dT')).'00:00:00';
+		$psp_hipay_date_to = (isset($this->context->cookie->psp_hipay_date_to) ? $this->context->cookie->psp_hipay_date_to : date('Y-m-dT')).'23:59:59';
 
 		$params = array(
 			'wsSubAccountLogin' => Configuration::get('PSP_HIPAY_USER_EMAIL'),

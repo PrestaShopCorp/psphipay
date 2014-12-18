@@ -345,8 +345,8 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		$template_path = _PS_MODULE_DIR_.$this->module->name.'/views/templates/admin/transactions.tpl';
 
 		$this->context->smarty->assign(array(
-			'date_from' => date('Y-m-d H:i', strtotime($psp_hipay_date_from)),
-			'date_to' => date('Y-m-d H:i', strtotime($psp_hipay_date_to)),
+			'date_from' => date('Y-m-d 00:00', strtotime($psp_hipay_date_from)),
+			'date_to' => date('Y-m-d 23:59', strtotime($psp_hipay_date_to)),
 			'transactions_dates_form' => $calendar_helper->generate(),
 		));
 
