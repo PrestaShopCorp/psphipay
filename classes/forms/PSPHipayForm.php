@@ -286,7 +286,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'main_account_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
 			'main_account_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PS_SHOP_NAME').'</strong></p>',
 			'main_account_id' => '<p class="form-control-static"><strong>'.$user_account_id.'</strong></p>',
-			'main_account_balance' => '<p class="form-control-static"><strong>'.(int)$account->balance.' '.(string)$account->currency.'</strong></p>',
+			'main_account_balance' => '<p class="form-control-static"><strong>'.number_format($account->balance, 2).' '.(string)$account->currency.'</strong></p>',
 		);
 
 		$details = null;
@@ -295,7 +295,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			if ($sub_account->userAccountId != $account->userAccountId)
 				$details .= '<tr>
 					<td>'.$sub_account->userAccountId.'</td>
-					<td>'.(int)$sub_account->balance.' '.(string)$sub_account->currency.'</td>
+					<td>'.number_format($sub_account->balance, 2).' '.(string)$sub_account->currency.'</td>
 				</tr>';
 
 		$sub_accounts_values = array(
@@ -380,7 +380,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			<thead>
 				<tr>
 					<th><strong>'.$this->module->l('Created at').'</strong></th>
-					<th><strong>'.$this->module->l('Balance').'</strong></th>
+					<th><strong>'.$this->module->l('Amount').'</strong></th>
 					<th><strong>'.$this->module->l('Fees').'</strong></th>
 					<th><strong>'.$this->module->l('Captured').'</strong></th>
 				</tr>
