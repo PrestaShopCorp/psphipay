@@ -92,8 +92,6 @@ class PSPHipay extends PaymentModule
 			return false;
 		}
 
-		Configuration::updateValue('PSP_HIPAY_LIVE_MODE', false);
-
 		return parent::install() &&
 		$this->setCurrencies() &&
 		$this->addWaitingOrderState() &&
