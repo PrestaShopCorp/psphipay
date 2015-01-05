@@ -88,6 +88,13 @@
 	background-color: #f2dede;
 }
 
+#welcome-message {
+	display: inline-block;
+	margin-bottom: 14px;
+	font-size: 1.2em;
+	color: gray;
+}
+
 /* Form controls */
 .form-control-static {
 	padding-top: 6px !important;
@@ -105,6 +112,15 @@ table.form-control-static thead th:first-child {
 
 table.form-control-static thead th:last-child {
 	border-right: 1px solid #EAEDEF !important;
+}
+
+#faq_q_a dt {
+	font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
+	font-size: 15px;
+}
+
+#faq_q_a dd + dt {
+	margin-top: 10px;
 }
 
 .form-date-actions {

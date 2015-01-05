@@ -79,15 +79,17 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'input' => array(
 				$this->generateInputFree('info_sandbox_mode', false, array('col' => 12, 'offset' => 0)),
 
+				$this->generateInputFree('customers_service_contact_details', false, array('col' => 12, 'offset' => 0)),
+				$this->generateInputFree('customers_service_contact_form', 'By email'),
+				$this->generateInputFree('customers_service_phone_number', 'By phone'),
+				$this->generateInputFree('customers_service_address', 'Address'),
+
 				$this->generateInputFree('customers_service_contact_info', false, array('col' => 12, 'offset' => 0)),
 				$this->generateInputFree('customers_service_email', 'Email'),
 				$this->generateInputFree('customers_service_shop_name', 'Shop name'),
 				$this->generateInputFree('customers_service_account_id', 'Account number'),
 
-				$this->generateInputFree('customers_service_contact_details', false, array('col' => 12, 'offset' => 0)),
-				$this->generateInputFree('customers_service_contact_form', 'By email'),
-				$this->generateInputFree('customers_service_phone_number', 'By phone'),
-				$this->generateInputFree('customers_service_address', 'Address'),
+				$this->generateInputFree('customers_service_q_a', false, array('col' => 12, 'offset' => 0)),
 			),
 		));
 
@@ -101,34 +103,73 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	{
 		$this->helper->tpl_vars['fields_value'] = $this->getLoginFormValues($complete_form);
 
+		$email = Tools::getValue('install_user_email');
+		$is_email = (bool)Validate::isEmail($email);
+		$email_description = $is_email ? null : 'Please, enter your email address in the field above';
+
 		$form = array('form' => array(
 			'legend' => $this->generateLegend('Login', 'icon-user'),
 			'input' => array(
-				$this->generateInputEmail('install_user_email', 'Email', 'Please, enter your email address in the field bellow'),
-			),
-			'buttons' => array(
-				$this->generateSubmitButton('Login / Subscribe', array(
-					'name' => 'submitLogin',
-					'icon' => 'process-icon-update',
-				)),
+				$this->generateInputEmail('install_user_email', 'Email', $email_description),
 			),
 		));
 
 		if ($complete_form == 'new_account')
 		{
-			$form['form']['input'][] = $this->generateInputText('install_user_first_name', 'First name', array('class' => 'fixed-width-xxl'));
-			$form['form']['input'][] = $this->generateInputText('install_user_last_name', 'Last name', array('class' => 'fixed-width-xxl'));
-		}
-		elseif ($complete_form == 'existing_account')
-		{
-			$form['form']['input'][] = $this->generateInputText('install_website_id', 'Website ID', array('class' => 'fixed-width-lg'));
-			$form['form']['input'][] = $this->generateInputText('install_ws_login', 'WS Login', array('class' => 'fixed-width-xxl'));
-			$form['form']['input'][] = $this->generateInputText('install_ws_password', 'WS Password', array('class' => 'fixed-width-xxl'));
+			$form['form']['input'][] = $this->generateInputText('install_user_first_name', 'First name', array(
+				'class' => 'fixed-width-xxl',
+				'required' => true,
+			));
+			$form['form']['input'][] = $this->generateInputText('install_user_last_name', 'Last name', array(
+				'class' => 'fixed-width-xxl',
+				'required' => true,
+			));
 
 			$form['form']['buttons'][] = $this->generateSubmitButton('Reset', array(
 				'class' => 'pull-left',
 				'name' => 'submitReset',
 				'icon' => 'process-icon-eraser',
+			));
+			$form['form']['buttons'][] = $this->generateSubmitButton('Subscribe', array(
+				'name' => 'submitLogin',
+				'icon' => 'process-icon-next',
+			));
+		}
+		elseif ($complete_form == 'existing_account')
+		{
+			$form['form']['input'][] = $this->generateInputText('install_website_id', 'Website ID', array(
+				'class' => 'fixed-width-lg',
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access'),
+				'required' => true,
+			));
+			$form['form']['input'][] = $this->generateInputText('install_ws_login', 'WS Login', array(
+				'class' => 'fixed-width-xxl',
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access'),
+				'required' => true,
+			));
+			$form['form']['input'][] = $this->generateInputText('install_ws_password', 'WS Password', array(
+				'class' => 'fixed-width-xxl',
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Creating a button" under the URL of your website'),
+				'required' => true,
+			));
+
+			$form['form']['buttons'][] = $this->generateSubmitButton('Reset', array(
+				'class' => 'pull-left',
+				'name' => 'submitReset',
+				'icon' => 'process-icon-eraser',
+			));
+			$form['form']['buttons'][] = $this->generateSubmitButton('Log in', array(
+				'name' => 'submitLogin',
+				'icon' => 'process-icon-next',
+			));
+		}
+		else
+		{
+			$form['form']['input'][] = $this->generateInputFree('install_user_info', false, array('col' => 12, 'offset' => 0));
+
+			$form['form']['buttons'][] = $this->generateSubmitButton('Log in / Subscribe', array(
+				'name' => 'submitLogin',
+				'icon' => 'process-icon-next',
 			));
 		}
 
@@ -150,10 +191,13 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateInputFree('main_account_email', 'Email'),
 				$this->generateInputFree('main_account_shop_name', 'Shop name'),
 				$this->generateInputFree('main_account_id', 'Account ID'),
-				$this->generateInputFree('main_account_balance', 'Balance'),
+				$this->generateInputFree('main_account_balance', 'Balance', array(
+					'hint' => 'Your account balance is automatically updated after each new transaction',
+				)),
 
 				$this->generateInputFree('sub_accounts_details', false, array('col' => 12, 'offset' => 0)),
-				$this->generateInputFree('sub_accounts_values', false),
+				$this->generateInputFree('sub_accounts_description', false, array('col' => 12, 'offset' => 0)),
+				$this->generateInputFree('sub_accounts_values', false, array('col' => 12, 'offset' => 0)),
 			),
 			'buttons' => array(
 				$this->generateSubmitButton('Disconnect', array(
@@ -179,6 +223,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateInputText('sandbox_website_id', 'Website ID', array('class' => 'fixed-width-lg')),
 				$this->generateInputText('sandbox_ws_login', 'WS Login', array('class' => 'fixed-width-xxl')),
 				$this->generateInputText('sandbox_ws_password', 'WS Password', array('class' => 'fixed-width-xxl')),
+				$this->generateInputFree('sandbox_mode_info', false, array('col' => 12, 'offset' => 0)),
 			),
 			'buttons' => array(
 				$this->generateSubmitButton('Save', array(
@@ -228,18 +273,22 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		$sandbox_mode = Configuration::get('PSP_HIPAY_SANDBOX_MODE');
 		$user_account_id = $sandbox_mode ? Configuration::get('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID') : Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID');
 
+		$template_path = _PS_MODULE_DIR_.$this->module->name.'/views/templates/admin/faq.tpl';
+
 		return array(
 			'info_sandbox_mode' => $sandbox_mode ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
+
+			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
+			'customers_service_contact_form' => '<p class="form-control-static"><a href="https://Sandbox-www.hipaywallet.com/info/contact" target="_blank">'.$this->module->l('Contact the customers\' service').'</a></strong></p>',
+			'customers_service_phone_number' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
+			'customers_service_address' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
 
 			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
 			'customers_service_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
 			'customers_service_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PS_SHOP_NAME').'</strong></p>',
 			'customers_service_account_id' => '<p class="form-control-static"><strong>'.$user_account_id.'</strong></p>',
 
-			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
-			'customers_service_contact_form' => '<p class="form-control-static"><a href="https://Sandbox-www.hipaywallet.com/info/contact" target="_blank">'.$this->module->l('Contact the customers\' service').'</a></strong></p>',
-			'customers_service_phone_number' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
-			'customers_service_address' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
+			'customers_service_q_a' => $this->context->smarty->fetch($template_path),
 		);
 	}
 
@@ -251,6 +300,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	{
 		$values = array(
 			'install_user_email' => Tools::getValue('install_user_email', Configuration::get('PSP_HIPAY_USER_EMAIL')),
+			'install_user_info' => $this->module->l('If you have any questions or need help creating a PrestaShop Payments by HiPay account, contact us at prestashop@hipay.com'),
 		);
 
 		if ($complete_form == 'new_account')
@@ -269,6 +319,24 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	}
 
 	/**
+	* Sandbox form values
+	*/
+	public function getSandboxFormValues()
+	{
+		return array(
+			'sandbox_account_mode' => Tools::getValue('sandbox_account_mode', Configuration::get('PSP_HIPAY_SANDBOX_MODE')),
+			'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
+			'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
+			'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
+			'sandbox_mode_info' => '<p class="form-control-static">'.
+			$this->module->l('Thanks to the below sub-accounts, you can accept payments in several currencies on your store.').'<br />'.
+			$this->module->l('To withdraw money from your sub-accounts, you should transfer their respective balances to your main account first.').' '.
+			$this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.', '<a href="#">', '</a>').
+			'</p>',
+		);
+	}
+
+	/**
 	 * Settings form values
 	 */
 	public function getSettingsFormValues($user_account)
@@ -282,7 +350,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		$main_account_values = array(
 			'info_sandbox_mode' => Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
 
-			'main_account_details' => '<h4 class="form-control-static">'.$this->module->l('Main account').'</h4>',
+			'main_account_details' => '<h4 class="form-control-static">'.$this->module->l('Your main account').'</h4>',
 			'main_account_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
 			'main_account_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PS_SHOP_NAME').'</strong></p>',
 			'main_account_id' => '<p class="form-control-static"><strong>'.$user_account_id.'</strong></p>',
@@ -295,15 +363,22 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			if ($sub_account->userAccountId != $account->userAccountId)
 				$details .= '<tr>
 					<td>'.$sub_account->userAccountId.'</td>
+					<td>'.$this->module->l($this->module->currencies_titles[(string)$sub_account->currency]).'</td>
 					<td>'.number_format($sub_account->balance, 2).' '.(string)$sub_account->currency.'</td>
 				</tr>';
 
 		$sub_accounts_values = array(
 			'sub_accounts_details' => '<h4 class="form-control-static">'.$this->module->l('Sub-accounts').'</h4>',
+			'sub_accounts_description' => '<p class="form-control-static">'.
+				$this->module->l('Thanks to the below sub-accounts, you can accept payments in several currencies on your store.').'<br />'.
+				$this->module->l('To withdraw money from your sub-accounts, you should transfer their respective balances to your main account first.').' '.
+				$this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.', '<a href="#">', '</a>').
+			'</p>',
 			'sub_accounts_values' => '<table class="form-control-static table table-bordered table-hover table-striped">
 			<thead>
 				<tr>
 					<th><strong>'.$this->module->l('Account ID').'</strong></th>
+					<th><strong>'.$this->module->l('Currency').'</strong></th>
 					<th><strong>'.$this->module->l('Balance').'</strong></th>
 				</tr>
 			</thead>
@@ -312,19 +387,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		);
 
 		return array_merge($main_account_values, $sub_accounts_values);
-	}
-
-	/**
-	 * Settings form values
-	 */
-	public function getSandboxFormValues()
-	{
-		return array(
-			'sandbox_account_mode' => Tools::getValue('sandbox_account_mode', Configuration::get('PSP_HIPAY_SANDBOX_MODE')),
-			'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
-			'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
-			'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
-		);
 	}
 
 	/**
@@ -375,18 +437,21 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				</tr>';
 			}
 		}
+		else
+			$details = '<tr><td colspan="4" class="text-center"><em>'.$this->module->l('You have no transaction for the selected period').'.</em></td></tr>';
 
-		$transactions_values['transactions_details'] = '<table class="form-control-static table table-bordered table-hover table-striped">
-			<thead>
-				<tr>
-					<th><strong>'.$this->module->l('Created at').'</strong></th>
-					<th><strong>'.$this->module->l('Amount').'</strong></th>
-					<th><strong>'.$this->module->l('Fees').'</strong></th>
-					<th><strong>'.$this->module->l('Captured').'</strong></th>
-				</tr>
-			</thead>
-			<tbody>'.$details.'</tbody>
-		</table>';
+
+			$transactions_values['transactions_details'] = '<table class="form-control-static table table-bordered table-hover table-striped">
+				<thead>
+					<tr>
+						<th><strong>'.$this->module->l('Created at').'</strong></th>
+						<th><strong>'.$this->module->l('Amount').'</strong></th>
+						<th><strong>'.$this->module->l('Fees').'</strong></th>
+						<th><strong>'.$this->module->l('Captured').'</strong></th>
+					</tr>
+				</thead>
+				<tbody>'.$details.'</tbody>
+			</table>';
 
 		return $transactions_values;
 	}

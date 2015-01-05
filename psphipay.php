@@ -39,6 +39,15 @@ class PSPHipay extends PaymentModule
 	protected $_successes = array();
 	protected $_warnings = array();
 
+	public $currencies_titles = array(
+		'AUD' => 'Australian Dollar',
+		'CAD' => 'cad',
+		'CHF' => 'chf',
+		'GBP' => 'gbp',
+		'SEK' => 'sek',
+		'USD' => 'usd',
+	);
+
 	public function __construct()
 	{
 		$this->name = 'psphipay';
@@ -199,6 +208,12 @@ class PSPHipay extends PaymentModule
 				'sandbox_form' => $form->getSandboxForm(),
 				'services_form' => $form->getCustomersServiceForm($user_account),
 			));
+
+			if (Configuration::get('PSP_HIPAY_WELCOME_MESSAGE_SHOWN') == false)
+			{
+				Configuration::updateValue('PSP_HIPAY_WELCOME_MESSAGE_SHOWN', true);
+				$this->context->smarty->assign('welcome_message', true);
+			}
 		}
 		else
 		{
@@ -237,11 +252,7 @@ class PSPHipay extends PaymentModule
 			$email = Tools::getValue('install_user_email');
 
 			if (Validate::isEmail($email))
-			{
-				$this->_warnings[] = $this->l('Please, enter account details');
-
-				return $user_account->isEmailAvailable($email) ? 'new_account': 'existing_account';
-			}
+				return $user_account->isEmailAvailable($email) ? 'new_account' : 'existing_account';
 
 			$this->module->_errors[] = $this->l('Invalid email address');
 		}
@@ -325,7 +336,7 @@ class PSPHipay extends PaymentModule
 		if ($is_email == false)
 			return false;
 		elseif ($first_name && $last_name)
-			$this->createMerchantAccount($email, $first_name, $last_name);
+			return $this->createMerchantAccount($email, $first_name, $last_name);
 		elseif ($website_id && $ws_login && $ws_password)
 		{
 			$is_valid_website_id = (bool)Validate::isInt($website_id);
@@ -336,9 +347,13 @@ class PSPHipay extends PaymentModule
 
 			if ($is_valid_website_id && $is_valid_login && $is_valid_password)
 				return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
+
+			$this->_warnings[] = $this->l('The credentials you have entered are invalid. Please try again.');
+			$this->_warnings[] = $this->l('If you have lost these details, please log in to your HiPay account ton retrieve it');
 			return false;
 		}
 
+		$this->_warnings[] = $this->l('To create your PrestaShop Payments by Hipay account, please enter your name and click on Subscribe');
 		return true;
 	}
 
