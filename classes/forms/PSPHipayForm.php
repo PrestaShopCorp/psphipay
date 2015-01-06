@@ -281,7 +281,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
 			'customers_service_contact_form' => '<p class="form-control-static"><a href="https://Sandbox-www.hipaywallet.com/info/contact" target="_blank">'.$this->module->l('Contact the customers\' service').'</a></strong></p>',
 			'customers_service_phone_number' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
-			'customers_service_address' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
+			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay - Société HPME / HiMedia Group%1$sSeed Factory%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium'), '<br />').'</strong></p>',
 
 			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
 			'customers_service_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
@@ -331,7 +331,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'sandbox_mode_info' => '<p class="form-control-static">'.
 			$this->module->l('Thanks to the below sub-accounts, you can accept payments in several currencies on your store.').'<br />'.
 			$this->module->l('To withdraw money from your sub-accounts, you should transfer their respective balances to your main account first.').' '.
-			$this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.', '<a href="#">', '</a>').
+			sprintf($this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.'), '<a href="#">', '</a>').
 			'</p>',
 		);
 	}
@@ -372,7 +372,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'sub_accounts_description' => '<p class="form-control-static">'.
 				$this->module->l('Thanks to the below sub-accounts, you can accept payments in several currencies on your store.').'<br />'.
 				$this->module->l('To withdraw money from your sub-accounts, you should transfer their respective balances to your main account first.').' '.
-				$this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.', '<a href="#">', '</a>').
+				sprintf($this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.'), '<a href="#">', '</a>').
 			'</p>',
 			'sub_accounts_values' => '<table class="form-control-static table table-bordered table-hover table-striped">
 			<thead>
@@ -424,16 +424,31 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$details = null;
 		$transactions = $user_account->getTransactions();
-
+        
 		if ((is_array($transactions) == true) && (count($transactions) > 0))
 		{
 			foreach ($transactions as $transaction)
 			{
-				$details .= '<tr>
-					<td>'.$transaction->createdAt.'</td>
+                switch ($transaction->transactionStatus)
+                {
+                    case 'CAPTURED':
+				        $details .= '<tr class="psphipay-captured">';
+                        $icon = 'check';
+                        break;
+                    case 'UNAUTHED':
+                        $icon = 'remove';
+				        $details .= '<tr class="psphipay-unauthed">';
+                        break;
+                    default:
+				        $details .= '<tr>';
+                        $icon = 'clock-o';
+                        break;
+                }
+                
+				$details .= '<td>'.$transaction->createdAt.'</td>
 					<td>'.number_format($transaction->amount, 2).' '.(string)$transaction->currency.'</td>
 					<td>'.number_format($transaction->fees, 2).' '.(string)$transaction->currencyFees.'</td>
-					<td class="text-center"><i class="icon icon-'.(($transaction->transactionStatus == 'CAPTURED') ? 'check' : 'clock-o').'"></i></td>
+					<td class="text-center"><i class="icon icon-'.$icon.'"></i></td>
 				</tr>';
 			}
 		}

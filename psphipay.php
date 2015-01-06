@@ -40,12 +40,12 @@ class PSPHipay extends PaymentModule
 	protected $_warnings = array();
 
 	public $currencies_titles = array(
-		'AUD' => 'Australian Dollar',
-		'CAD' => 'cad',
-		'CHF' => 'chf',
-		'GBP' => 'gbp',
-		'SEK' => 'sek',
-		'USD' => 'usd',
+		'AUD' => 'Australian dollar',
+		'CAD' => 'Canadian dollar',
+		'CHF' => 'Swiss franc',
+		'GBP' => 'Pound sterling',
+		'SEK' => 'Swedish krona',
+		'USD' => 'United States dollar',
 	);
 
 	public function __construct()
