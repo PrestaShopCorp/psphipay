@@ -29,6 +29,10 @@ $(document).ready(function() {
 		$('#datepicker').removeClass('hide');
 		return false;
 	});
+	
+	if ($('#psphipay_warning_modal').length > 0) {
+		$('#psphipay_warning_modal').modal('show');
+	}
 
 	$('#datepicker').removeClass('hide');
 	$('#datepicker-cancel').hide();

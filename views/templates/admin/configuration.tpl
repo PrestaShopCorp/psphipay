@@ -51,6 +51,26 @@
 				</div>
 			</div>
 		{else}
+			{if ($balance_warning == true)}
+				<div class="modal fade" id="psphipay_warning_modal" tabindex="-1" role="dialog" aria-labelledby="psphipay_warning_modal_label" aria-hidden="true" data-show="true" onload="$(this).modal('show')">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title" id="psphipay_warning_modal_label">{l s='Warning!' mod='psphipay'}</h4>
+							</div>
+							<div class="modal-body">
+								<p>
+									{l s='Your account balance is getting close to %1$s. Please make sure your account has been identified to be able to trasnfer money from your HiPay account to your own bank account.' mod='psphipay' sprintf=[$amount_limit]}
+								</p>
+								<br />
+								<a href="#">{l s='Click here for more information.' mod='psphipay'}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			{/if}
+
 			<div class="row">
 				<div class="col-md-12 col-xs-12">
 					{if ($is_logged == true)}

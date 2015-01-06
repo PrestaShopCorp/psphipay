@@ -201,12 +201,20 @@ class PSPHipay extends PaymentModule
 		// Generate configuration forms
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
 		{
+			$amount_limit = 1000;
+			
+			$accounts = $user_account->getBalances();
+			$account = $user_account->getMainAccountBalance($accounts);
+			$balance_warning = (int)$account->balance > $amount_limit;
+			
 			$this->context->smarty->assign(array(
 				'is_logged' => true,
-				'settings_form' => $form->getSettingsForm($user_account),
-				'transactions_form' => $form->getTransactionsForm($user_account),
+				'amount_limit' => Tools::displayPrice($amount_limit, $this->context->currency),
+				'balance_warning' => $balance_warning,
 				'sandbox_form' => $form->getSandboxForm(),
 				'services_form' => $form->getCustomersServiceForm($user_account),
+				'settings_form' => $form->getSettingsForm($user_account),
+				'transactions_form' => $form->getTransactionsForm($user_account),
 			));
 
 			if (Configuration::get('PSP_HIPAY_WELCOME_MESSAGE_SHOWN') == false)
