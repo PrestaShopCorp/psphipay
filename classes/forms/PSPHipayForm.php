@@ -432,20 +432,18 @@ class PSPHipayForm extends PSPHipayFormInputs {
                 switch ($transaction->transactionStatus)
                 {
                     case 'CAPTURED':
-				        $details .= '<tr class="psphipay-captured">';
                         $icon = 'check';
                         break;
                     case 'UNAUTHED':
                         $icon = 'remove';
-				        $details .= '<tr class="psphipay-unauthed">';
                         break;
                     default:
-				        $details .= '<tr>';
                         $icon = 'clock-o';
                         break;
                 }
                 
-				$details .= '<td>'.$transaction->createdAt.'</td>
+				$details .= '<tr>
+					<td>'.$transaction->createdAt.'</td>
 					<td>'.number_format($transaction->amount, 2).' '.(string)$transaction->currency.'</td>
 					<td>'.number_format($transaction->fees, 2).' '.(string)$transaction->currencyFees.'</td>
 					<td class="text-center"><i class="icon icon-'.$icon.'"></i></td>

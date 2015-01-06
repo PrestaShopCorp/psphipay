@@ -71,6 +71,7 @@ class PSPHipay extends PaymentModule
 			'AUD' => $this->l('Australian dollar'),
 			'CAD' => $this->l('Canadian dollar'),
 			'CHF' => $this->l('Swiss franc'),
+			'EUR' => $this->l('Euro'),
 			'GBP' => $this->l('Pound sterling'),
 			'SEK' => $this->l('Swedish krona'),
 			'USD' => $this->l('United States dollar'),
