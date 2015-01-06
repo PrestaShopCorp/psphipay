@@ -39,15 +39,6 @@ class PSPHipay extends PaymentModule
 	protected $_successes = array();
 	protected $_warnings = array();
 
-	public $currencies_titles = array(
-		'AUD' => 'Australian dollar',
-		'CAD' => 'Canadian dollar',
-		'CHF' => 'Swiss franc',
-		'GBP' => 'Pound sterling',
-		'SEK' => 'Swedish krona',
-		'USD' => 'United States dollar',
-	);
-
 	public function __construct()
 	{
 		$this->name = 'psphipay';
@@ -74,6 +65,15 @@ class PSPHipay extends PaymentModule
 			'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MT',
 			'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SE',
 			'SI', 'SK', 'TR',
+		);
+		
+		$this->currencies_titles = array(
+			'AUD' => $this->l('Australian dollar'),
+			'CAD' => $this->l('Canadian dollar'),
+			'CHF' => $this->l('Swiss franc'),
+			'GBP' => $this->l('Pound sterling'),
+			'SEK' => $this->l('Swedish krona'),
+			'USD' => $this->l('United States dollar'),
 		);
 
 		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'SEK', 'USD');
