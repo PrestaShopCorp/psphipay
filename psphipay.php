@@ -38,6 +38,12 @@ class PSPHipay extends PaymentModule
 	protected $_errors = array();
 	protected $_successes = array();
 	protected $_warnings = array();
+	
+	public $default_currency = 'EUR';
+	
+	public $currencies_titles = array();
+	public $limited_countries = array();
+	public $limited_currencies = array();
 
 	public function __construct()
 	{

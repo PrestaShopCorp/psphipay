@@ -53,6 +53,9 @@ class HipayUserAccount extends HipayWS
 	{
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$currency_code = Tools::strtoupper($currency->iso_code);
+		
+		if (in_array($currency_code, $this->module->limited_currencies) == false)
+			$currency_code = Tools::strtoupper($this->module->default_currency);
 
 		$country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
 		$country_code = Tools::strtolower($country->iso_code);
