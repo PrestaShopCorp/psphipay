@@ -51,7 +51,7 @@
 				</div>
 			</div>
 		{else}
-			{if ($balance_warning == true)}
+			{if isset($balance_warning) && ($balance_warning == true)}
 				<div class="modal fade" id="psphipay_warning_modal" tabindex="-1" role="dialog" aria-labelledby="psphipay_warning_modal_label" aria-hidden="true" data-show="true" onload="$(this).modal('show')">
 					<div class="modal-dialog">
 						<div class="modal-content">
