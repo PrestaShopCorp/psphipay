@@ -104,6 +104,12 @@ abstract class HipayWS
 		{
 			if ((isset($this->client) == false) || ($this->client === false))
 				$this->client = $this->getClient();
+			
+			if ($this->client == false)
+			{
+				$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service');
+				return false;
+			}
 
 			if (Configuration::get('PSP_HIPAY_SANDBOX_MODE'))
 			{
@@ -130,6 +136,7 @@ abstract class HipayWS
 		}
 		catch (Exception $exception)
 		{
+			$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service');
 			return false;
 		}
 	}

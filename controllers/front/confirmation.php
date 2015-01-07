@@ -26,7 +26,6 @@
 
 class PSPHipayConfirmationModuleFrontController extends ModuleFrontController
 {
-
 	public function postProcess()
 	{
 		if ((Tools::isSubmit('cart_id') == false) || (Tools::isSubmit('secure_key') == false))
