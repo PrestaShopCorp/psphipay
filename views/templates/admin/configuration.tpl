@@ -89,14 +89,14 @@
 								<h4>{l s='A complete solution at the best price' mod='psphipay'}</h4>
 								<ul class="ul-spaced">
 									<li>{l s='Start instantly, no contract required to start' mod='psphipay'}</li>
-									<li>{l s='Accept several currencies with 15+ local payment solutions in Europe' mod='psphipay'}</li>
+									<li>{l s='Accept several currencies with 10+ local payment solutions in Europe' mod='psphipay'}</li>
 									<li>{l s='No registration or installation fee' mod='psphipay'}</li>
 									<li>{l s='Anti-fraud system and full-time monitoring of high-risk behavior' mod='psphipay'}</li>
 								</ul>
 							</div>
 
 							<div class="col-md-6">
-								<h4>{l s='From 2.55% + 0.19€ per transaction!' mod='psphipay'}</h4>
+								<h4>{l s='From 1.05% + 0.25€ per transaction!' mod='psphipay'}</h4>
 								<ul class="ul-spaced">
 									<li>{l s='A rate that adapts to your volume of activity' mod='psphipay'}</li>
 									<li>{l s='25% less expensive than leading solutions in the market*' mod='psphipay'}</li>
@@ -128,11 +128,11 @@
 
 						<div class="row">
 							<div class="col-md-12 col-xs-12">
-								<h4>{l s='3 simple steps' mod='psphipay'}</h4>
+								<h4>{l s='3 simple steps:' mod='psphipay'}</h4>
 								<ol>
 									<li>{l s='Your account is pre-approved when you create your PrestaShop store so that you can start accepting online payments right away.' mod='psphipay'}</li>
-									<li>{l s='Finalize your PrestaShop Payments by HiPay registration once you reach 2,500€ on your account.' mod='psphipay'}</li>
-									<li>{l s='Easily collect and transfer your money from your PrestaShop Payments by HiPay account without fees.' mod='psphipay'}</li>
+									<li>{l s='Finalize your PrestaShop Payments by HiPay registration before you reach 2,500€ on your account.' mod='psphipay'}</li>
+									<li>{l s='Easily collect and transfer your money from your PrestaShop Payments by HiPay account to your own bank account.' mod='psphipay'}</li>
 								</ol>
 							</div>
 						</div>

@@ -219,7 +219,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$form = array('form' => array(
 			'input' => array(
-				$this->generateSwitchButton('sandbox_account_mode', 'Sandbox mode'),
+				$this->generateSwitchButton('sandbox_account_mode', 'Test mode'),
 				$this->generateInputText('sandbox_website_id', 'Website ID', array('class' => 'fixed-width-lg')),
 				$this->generateInputText('sandbox_ws_login', 'WS Login', array('class' => 'fixed-width-xxl')),
 				$this->generateInputText('sandbox_ws_password', 'WS Password', array('class' => 'fixed-width-xxl')),
@@ -278,12 +278,12 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		return array(
 			'info_sandbox_mode' => $sandbox_mode ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
 
-			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
-			'customers_service_contact_form' => '<p class="form-control-static"><a href="https://Sandbox-www.hipaywallet.com/info/contact" target="_blank">'.$this->module->l('Contact the customers\' service').'</a></strong></p>',
+			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('I need some help, who should I contact?').'</h4>',
+			'customers_service_contact_form' => '<p class="form-control-static"><a href="https://Sandbox-www.hipaywallet.com/info/contact" target="_blank">'.$this->module->l('Send a message').'</a></strong></p>',
 			'customers_service_phone_number' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
 			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay - Société HPME / HiMedia Group%1$sSeed Factory%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium'), '<br />').'</strong></p>',
 
-			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('You want to contact the Hipay customers\' service?').'</h4>',
+			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('Please remind them your account details').'</h4>',
 			'customers_service_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
 			'customers_service_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PS_SHOP_NAME').'</strong></p>',
 			'customers_service_account_id' => '<p class="form-control-static"><strong>'.$user_account_id.'</strong></p>',
@@ -329,9 +329,10 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
 			'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
 			'sandbox_mode_info' => '<p class="form-control-static">'.
-			$this->module->l('Thanks to the below sub-accounts, you can accept payments in several currencies on your store.').'<br />'.
-			$this->module->l('To withdraw money from your sub-accounts, you should transfer their respective balances to your main account first.').' '.
-			sprintf($this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.'), '<a href="#">', '</a>').
+			$this->module->l('You have received two set of credentials when your account has been created: one for the main account, one for your test account.').'<br />'.
+			$this->module->l('Use your test credentials to connect to HiPay and retrieve the needed info (Website ID, WS login and password). Enter it above, and then save.').'<br /> '.
+			$this->module->l('You can now make some tests!').'<br />'.'<br />'.
+			sprintf($this->module->l('For more info on how to conduct your tests, please %1$sclick here to read the FAQ%2$s.'), '<a href="#">', '</a>').
 			'</p>',
 		);
 	}
