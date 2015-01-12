@@ -152,7 +152,10 @@ abstract class HipayWS
 		$context  = stream_context_create($options);
 		$result = Tools::file_get_contents($this->prestashop_api.$method, false, $context);
 		$values = Tools::jsonDecode($result);
-
-		return $values->data;
+		
+		if (isset($values->data))
+			return $values->data;
+		
+		return false;
 	}
 }

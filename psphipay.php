@@ -79,17 +79,18 @@ class PSPHipay extends PaymentModule
 			'CHF' => $this->l('Swiss franc'),
 			'EUR' => $this->l('Euro'),
 			'GBP' => $this->l('Pound sterling'),
+			'PLN' => $this->l('Polish złoty'),
 			'SEK' => $this->l('Swedish krona'),
 			'USD' => $this->l('United States dollar'),
 		);
 
-		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'SEK', 'USD');
+		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'PLN', 'SEK', 'USD');
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
 		if (!Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID') || !Configuration::get('PSP_HIPAY_WEBSITE_ID') ||
 			!Configuration::get('PSP_HIPAY_WS_LOGIN') || !Configuration::get('PSP_HIPAY_WS_PASSWORD'))
-			$this->warning = $this->l('Please, don\'t forget to configure your module');
+			$this->warning = $this->l('Please, do not forget to configure your module');
 	}
 
 	public function install()
@@ -200,10 +201,10 @@ class PSPHipay extends PaymentModule
 	 */
 	public function getContent()
 	{
-		$this->postProcess();
-
 		$form = new PSPHipayForm($this);
 		$user_account = new HipayUserAccount($this);
+		
+		$this->postProcess($user_account);
 
 		// Generate configuration forms
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
@@ -212,7 +213,11 @@ class PSPHipay extends PaymentModule
 			
 			$accounts = $user_account->getBalances();
 			$account = $user_account->getMainAccountBalance($accounts);
-			$balance_warning = (int)$account->balance > $amount_limit;
+			
+			if (isset($account->balance))
+				$balance_warning = (int)$account->balance > $amount_limit;
+			else
+				$balance_warning = false;
 			
 			$this->context->smarty->assign(array(
 				'is_logged' => true,
@@ -275,12 +280,12 @@ class PSPHipay extends PaymentModule
 		return false;
 	}
 
-	protected function postProcess()
+	protected function postProcess($user_account)
 	{
 		if (Tools::isSubmit('submitReset'))
 			return $this->clearAccountData();
 		elseif (Tools::isSubmit('submitLogin'))
-			return $this->login();
+			return $this->login($user_account);
 		elseif (Tools::isSubmit('submitDateRange'))
 		{
 			$this->context->smarty->assign('active_tab', 'transactions');
@@ -336,7 +341,7 @@ class PSPHipay extends PaymentModule
 		}
 	}
 
-	protected function login()
+	protected function login($user_account)
 	{
 		$email = Tools::getValue('install_user_email');
 		$is_email = (bool)Validate::isEmail($email);
@@ -365,10 +370,17 @@ class PSPHipay extends PaymentModule
 
 			$this->_warnings[] = $this->l('The credentials you have entered are invalid. Please try again.');
 			$this->_warnings[] = $this->l('If you have lost these details, please log in to your HiPay account ton retrieve it');
+			
 			return false;
 		}
 
-		$this->_warnings[] = $this->l('To create your PrestaShop Payments by Hipay account, please enter your name and click on Subscribe');
+		// Email available
+		if ($user_account->isEmailAvailable($email))
+			$this->_warnings[] = $this->l('To create your PrestaShop Payments by Hipay account, please enter your name and click on Subscribe');
+		// Email not available
+		else
+			$this->_warnings[] = $this->l('You already have an account, please fill the fields below');
+		
 		return true;
 	}
 

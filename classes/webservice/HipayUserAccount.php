@@ -36,6 +36,8 @@ class HipayUserAccount extends HipayWS
 	protected $client_url = '/soap/user-account-v2';
 
 	protected $module = false;
+	
+	protected static $email_available = null;
 
 	public function __construct($module_instance)
 	{
@@ -106,12 +108,20 @@ class HipayUserAccount extends HipayWS
 
 	public function isEmailAvailable($email, $sandbox_mode = false)
 	{
-		$result = $this->prestaShopWebservice('/account/available', array(
-			'email' => $email,
-			'sandbox_mode' => (int)$sandbox_mode,
-		));
-
-		return ! ($result->isAvailable === false);
+		if (!is_bool(static::$email_available))
+		{		
+			$result = $this->prestaShopWebservice('/account/available', array(
+				'email' => $email,
+				'sandbox_mode' => (int)$sandbox_mode,
+			));
+			
+			if (isset($result->isAvailable))
+				static::$email_available = ! ($result->isAvailable === false);
+			else
+				return false;
+		}
+		
+		return static::$email_available;
 	}
 
 	public function getAccountInfos()
@@ -132,7 +142,7 @@ class HipayUserAccount extends HipayWS
 		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
 		$params = array('wsSubAccountLogin' => $email);
 		$result = $this->executeQuery('getBalance', $params);
-
+		
 		if ($result->getBalanceResult->code === 0)
 			return $result->getBalanceResult;
 
@@ -142,8 +152,12 @@ class HipayUserAccount extends HipayWS
 	public function getMainAccountBalance($balances)
 	{
 		foreach ($balances->balances->item as $balance)
-			if ($balance->userAccountType == 'main')
+		{
+			if (isset($balance->userAccountType) == false)
+				return false;
+			elseif ($balance->userAccountType == 'main')
 				return $balance;
+		}
 
 		return false;
 	}

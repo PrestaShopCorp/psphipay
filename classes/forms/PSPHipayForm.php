@@ -347,6 +347,13 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$accounts = $user_account->getBalances();
 		$account = $user_account->getMainAccountBalance($accounts);
+		
+		if (isset($account->balance) == false)
+		{
+			$account = new stdClass;
+			$account->balance = 0;
+			$account->currency = $this->context->currency->iso_code;
+		}
 
 		$main_account_values = array(
 			'info_sandbox_mode' => Configuration::get('PSP_HIPAY_SANDBOX_MODE') ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
@@ -360,14 +367,21 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$details = null;
 
-		foreach ($accounts->balances->item as $sub_account)
-			if ($sub_account->userAccountId != $account->userAccountId)
-				$details .= '<tr>
-					<td>'.$sub_account->userAccountId.'</td>
-					<td>'.$this->module->l($this->module->currencies_titles[(string)$sub_account->currency]).'</td>
-					<td>'.number_format($sub_account->balance, 2).' '.(string)$sub_account->currency.'</td>
-				</tr>';
-
+		if ((is_array($accounts->balances->item) == true) && (count($accounts->balances->item) > 0))
+		{
+			foreach ($accounts->balances->item as $sub_account)
+			{
+				if ($sub_account->userAccountId != $account->userAccountId)
+					$details .= '<tr>
+						<td>'.$sub_account->userAccountId.'</td>
+						<td>'.$this->module->l($this->module->currencies_titles[(string)$sub_account->currency]).'</td>
+						<td>'.number_format($sub_account->balance, 2).' '.(string)$sub_account->currency.'</td>
+					</tr>';
+			}
+		}
+		else
+			$details = '<tr><td colspan="4" class="text-center"><em>'.$this->module->l('You have no sub-accounts').'.</em></td></tr>';
+		
 		$sub_accounts_values = array(
 			'sub_accounts_details' => '<h4 class="form-control-static">'.$this->module->l('Sub-accounts').'</h4>',
 			'sub_accounts_description' => '<p class="form-control-static">'.
