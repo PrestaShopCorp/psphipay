@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2014 PrestaShop SA
+* @copyright 2007-2015 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
@@ -38,7 +38,7 @@
 	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse2" aria-expanded="true" aria-controls="collapse1">{l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse2" class="panel-collapse collapse">
 		<p>
-			{l s='PrestaShop Payments by HiPay works with the following currencies:'}<br />
+			{l s='PrestaShop Payments by HiPay works with the following currencies:' mod='psphipay'}<br />
 			{l s='Australian Dollar, Canadian Dollar, Swiss Franc, Euro, British Pound, Swedish Krona, US Dollar.' mod='psphipay'}
 		</p>
 	</dd>
@@ -113,7 +113,7 @@
 			<ol>
 				<li>{l s='the order is complete (you have received a confirmation email),' mod='psphipay'}</li>
 				<li>{l s='it shows in your back-office' mod='psphipay'}</li>
-				<li>{l s='your test balance and transactions have been updated with the good amount'}</li>
+				<li>{l s='your test balance and transactions have been updated with the good amount' mod='psphipay'}</li>
 			</ol>
 			{l s='Do not forget to switch back to the normal mode once you have finished your tests!' mod='psphipay'}
 		</p>

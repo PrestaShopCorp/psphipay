@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2014 PrestaShop SA
+* @copyright 2007-2015 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 */
@@ -104,7 +104,7 @@ abstract class HipayWS
 		{
 			if ((isset($this->client) == false) || ($this->client === false))
 				$this->client = $this->getClient();
-			
+
 			if ($this->client == false)
 			{
 				$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service');
@@ -152,10 +152,10 @@ abstract class HipayWS
 		$context  = stream_context_create($options);
 		$result = Tools::file_get_contents($this->prestashop_api.$method, false, $context);
 		$values = Tools::jsonDecode($result);
-		
+
 		if (isset($values->data))
 			return $values->data;
-		
+
 		return false;
 	}
 }

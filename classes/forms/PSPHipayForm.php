@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,8 +18,8 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-* @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2014 PrestaShop SA
+* @author	PrestaShop SA <contact@prestashop.com>
+* @copyright 2007-2015 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 */
@@ -348,7 +348,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$accounts = $user_account->getBalances();
 		$account = $user_account->getMainAccountBalance($accounts);
-		
+
 		if (isset($account->balance) == false)
 		{
 			$account = new stdClass;
@@ -382,7 +382,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		}
 		else
 			$details = '<tr><td colspan="4" class="text-center"><em>'.$this->module->l('You have no sub-accounts').'.</em></td></tr>';
-		
+
 		$sub_accounts_values = array(
 			'sub_accounts_details' => '<h4 class="form-control-static">'.$this->module->l('Sub-accounts').'</h4>',
 			'sub_accounts_description' => '<p class="form-control-static">'.
@@ -440,24 +440,24 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$details = null;
 		$transactions = $user_account->getTransactions();
-        
+
 		if ((is_array($transactions) == true) && (count($transactions) > 0))
 		{
 			foreach ($transactions as $transaction)
 			{
-                switch ($transaction->transactionStatus)
-                {
-                    case 'CAPTURED':
-                        $icon = 'check';
-                        break;
-                    case 'UNAUTHED':
-                        $icon = 'remove';
-                        break;
-                    default:
-                        $icon = 'clock-o';
-                        break;
-                }
-                
+				switch ($transaction->transactionStatus)
+				{
+					case 'CAPTURED':
+						$icon = 'check';
+						break;
+					case 'UNAUTHED':
+						$icon = 'remove';
+						break;
+					default:
+						$icon = 'clock-o';
+						break;
+				}
+
 				$details .= '<tr>
 					<td>'.$transaction->createdAt.'</td>
 					<td>'.number_format($transaction->amount, 2).' '.(string)$transaction->currency.'</td>

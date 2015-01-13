@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2014 PrestaShop SA
+* @copyright 2007-2015 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 */
@@ -36,7 +36,7 @@ class HipayUserAccount extends HipayWS
 	protected $client_url = '/soap/user-account-v2';
 
 	protected $module = false;
-	
+
 	protected static $email_available = null;
 
 	public function __construct($module_instance)
@@ -55,7 +55,7 @@ class HipayUserAccount extends HipayWS
 	{
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$currency_code = Tools::strtoupper($currency->iso_code);
-		
+
 		if (in_array($currency_code, $this->module->limited_currencies) == false)
 			$currency_code = Tools::strtoupper($this->module->default_currency);
 
@@ -109,18 +109,18 @@ class HipayUserAccount extends HipayWS
 	public function isEmailAvailable($email, $sandbox_mode = false)
 	{
 		if (!is_bool(static::$email_available))
-		{		
+		{
 			$result = $this->prestaShopWebservice('/account/available', array(
 				'email' => $email,
 				'sandbox_mode' => (int)$sandbox_mode,
 			));
-			
+
 			if (isset($result->isAvailable))
 				static::$email_available = ! ($result->isAvailable === false);
 			else
 				return false;
 		}
-		
+
 		return static::$email_available;
 	}
 
@@ -142,7 +142,7 @@ class HipayUserAccount extends HipayWS
 		$email = Configuration::get('PSP_HIPAY_USER_EMAIL');
 		$params = array('wsSubAccountLogin' => $email);
 		$result = $this->executeQuery('getBalance', $params);
-		
+
 		if ($result->getBalanceResult->code === 0)
 			return $result->getBalanceResult;
 

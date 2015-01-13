@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2014 PrestaShop SA
+* @copyright 2007-2015 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 */
@@ -38,9 +38,9 @@ class PSPHipay extends PaymentModule
 	protected $_errors = array();
 	protected $_successes = array();
 	protected $_warnings = array();
-	
+
 	public $default_currency = 'EUR';
-	
+
 	public $currencies_titles = array();
 	public $limited_countries = array();
 	public $limited_currencies = array();
@@ -72,7 +72,7 @@ class PSPHipay extends PaymentModule
 			'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SE',
 			'SI', 'SK', 'TR',
 		);
-		
+
 		$this->currencies_titles = array(
 			'AUD' => $this->l('Australian dollar'),
 			'CAD' => $this->l('Canadian dollar'),
@@ -203,22 +203,22 @@ class PSPHipay extends PaymentModule
 	{
 		$form = new PSPHipayForm($this);
 		$user_account = new HipayUserAccount($this);
-		
+
 		$this->postProcess($user_account);
 
 		// Generate configuration forms
 		if (Configuration::get('PSP_HIPAY_USER_EMAIL'))
 		{
 			$amount_limit = 1000;
-			
+
 			$accounts = $user_account->getBalances();
 			$account = $user_account->getMainAccountBalance($accounts);
-			
+
 			if (isset($account->balance))
 				$balance_warning = (int)$account->balance > $amount_limit;
 			else
 				$balance_warning = false;
-			
+
 			$this->context->smarty->assign(array(
 				'is_logged' => true,
 				'amount_limit' => Tools::displayPrice($amount_limit, $this->context->currency),
@@ -370,7 +370,7 @@ class PSPHipay extends PaymentModule
 
 			$this->_warnings[] = $this->l('The credentials you have entered are invalid. Please try again.');
 			$this->_warnings[] = $this->l('If you have lost these details, please log in to your HiPay account ton retrieve it');
-			
+
 			return false;
 		}
 
@@ -380,7 +380,7 @@ class PSPHipay extends PaymentModule
 		// Email not available
 		else
 			$this->_warnings[] = $this->l('You already have an account, please fill the fields below');
-		
+
 		return true;
 	}
 
