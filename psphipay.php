@@ -369,7 +369,7 @@ class PSPHipay extends PaymentModule
 				return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
 
 			$this->_warnings[] = $this->l('The credentials you have entered are invalid. Please try again.');
-			$this->_warnings[] = $this->l('If you have lost these details, please log in to your HiPay account ton retrieve it');
+			$this->_warnings[] = $this->l('If you have lost these details, please log in to your HiPay account to retrieve it');
 
 			return false;
 		}
