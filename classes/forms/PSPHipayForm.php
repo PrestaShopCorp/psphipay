@@ -18,7 +18,7 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-* @author	PrestaShop SA <contact@prestashop.com>
+* @author    PrestaShop SA <contact@prestashop.com>
 * @copyright 2007-2015 PrestaShop SA
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
@@ -332,7 +332,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'sandbox_mode_info' => '<p class="form-control-static">'.
 			$this->module->l('You have received two set of credentials when your account has been created: one for the main account, one for your test account.').'<br />'.
 			$this->module->l('Use your test credentials to connect to HiPay and retrieve the needed info (Website ID, WS login and password). Enter it above, and then save.').'<br /> '.
-			$this->module->l('You can now make some tests!').'<br />'.'<br />'.
+			$this->module->l('You can now make some tests!').'<br /><br />'.
 			sprintf($this->module->l('For more info on how to conduct your tests, please %1$sclick here to read the FAQ%2$s.'), '<a href="#">', '</a>').
 			'</p>',
 		);
@@ -468,7 +468,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		}
 		else
 			$details = '<tr><td colspan="4" class="text-center"><em>'.$this->module->l('You have no transaction for the selected period').'.</em></td></tr>';
-
 
 			$transactions_values['transactions_details'] = '<table class="form-control-static table table-bordered table-hover table-striped">
 				<thead>
