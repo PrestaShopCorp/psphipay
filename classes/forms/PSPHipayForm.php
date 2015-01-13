@@ -203,6 +203,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateSubmitButton('Disconnect', array(
 					'name' => 'submitReset',
 					'icon' => 'process-icon-power',
+					'js' => 'return confirm(\''.$this->module->l('Are you sure you want to log out?').'\');',
 				)),
 			),
 		));
