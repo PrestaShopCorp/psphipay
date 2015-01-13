@@ -117,10 +117,16 @@ table.form-control-static thead th:last-child {
 #faq_q_a dt {
 	font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
 	font-size: 15px;
+	margin-bottom: 5px;
+}
+
+#faq_q_a dt:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 #faq_q_a dd + dt {
-	margin-top: 10px;
+	margin-top: 20px;
 }
 
 .form-date-actions {
