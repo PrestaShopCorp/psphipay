@@ -81,8 +81,8 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 				$this->generateInputFree('customers_service_contact_details', false, array('col' => 12, 'offset' => 0)),
 				$this->generateInputFree('customers_service_contact_form', 'By email'),
-				$this->generateInputFree('customers_service_phone_number', 'By phone'),
 				$this->generateInputFree('customers_service_address', 'Address'),
+				$this->generateInputFree('customers_service_address_2', 'or'),
 
 				$this->generateInputFree('customers_service_contact_info', false, array('col' => 12, 'offset' => 0)),
 				$this->generateInputFree('customers_service_email', 'Email'),
@@ -280,9 +280,9 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'info_sandbox_mode' => $sandbox_mode ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
 
 			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('I need some help, who should I contact?').'</h4>',
-			'customers_service_contact_form' => '<p class="form-control-static"><a href="https://Sandbox-www.hipaywallet.com/info/contact" target="_blank">'.$this->module->l('Send a message').'</a></strong></p>',
-			'customers_service_phone_number' => '<p class="form-control-static">'.$this->module->l('XXXXXXXXXXXXX').'</strong></p>',
-			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay - Société HPME / HiMedia Group%1$sSeed Factory%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium'), '<br />').'</strong></p>',
+			'customers_service_contact_form' => '<p class="form-control-static"><a href="mailto:prestashop@hipay.com" target="_blank">'.$this->module->l('prestashop@hipay.com').'</a></strong></p>',
+			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay / Société HPME%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium'), '<br />').'</strong></p>',
+			'customers_service_address_2' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay%1$s6 place du Colonel Bourgoin%1$s75012 Paris - France'), '<br />').'</strong></p>',
 
 			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('Please remind them your account details').'</h4>',
 			'customers_service_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',

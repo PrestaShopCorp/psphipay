@@ -39,7 +39,7 @@
 	<dd id="collapse2" class="panel-collapse collapse">
 		<p>
 			{l s='PrestaShop Payments by HiPay works with the following currencies:' mod='psphipay'}<br />
-			{l s='Australian Dollar, Canadian Dollar, Swiss Franc, Euro, British Pound, Swedish Krona, US Dollar.' mod='psphipay'}
+			{l s='Australian Dollar, Canadian Dollar, Swiss Franc, Euro, British Pound, Swedish Krona, US Dollar, Polish Sloty.' mod='psphipay'}
 		</p>
 	</dd>
 
@@ -48,7 +48,7 @@
 		{l s='If you want to offer new currencies on your shop, please follow these steps:' mod='psphipay'}<br />
 		<ol>
 			<li>{l s='In Localization > Currencies, add the new currency you want to activate' mod='psphipay'}</li>
-			<li>{l s='In Modules > Payment, activate the new currency for PrestaShop Payments by Hipay. If you don’t want to accept this currency through other payment solutions, please make sure it is activated only for PrestaShop Payments by HiPay.' mod='psphipay'}</li>
+			<li>{l s='In Modules > Payment, activate the new currency for PrestaShop Payments by HiPay. If you don’t want to accept this currency through other payment solutions, please make sure it is activated only for PrestaShop Payments by HiPay.' mod='psphipay'}</li>
 		</ol>
 	</dd>
 
@@ -115,14 +115,24 @@
 				<li>{l s='it shows in your back-office' mod='psphipay'}</li>
 				<li>{l s='your test balance and transactions have been updated with the good amount' mod='psphipay'}</li>
 			</ol>
-			{l s='Do not forget to switch back to the normal mode once you have finished your tests!' mod='psphipay'}
+			<b>{l s='Do not forget to switch back to the normal mode once you have finished your tests!' mod='psphipay'}</b>
 		</p>
 	</dd>
 
 	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse10" aria-expanded="true" aria-controls="collapse1">{l s='What is “identification” and why my account should be “identified”?' mod='psphipay'}</dt>
 	<dd id="collapse10" class="panel-collapse collapse">
 		<p>
-			{l s='blabla' mod='psphipay'}
+			{l s='An unidentified account is an account which we have not checked yet, nor confirmed its identification details upon signing up. The balance of an unidentified account cannot exceed €2500.' mod='psphipay'}<br />
+		
+			<br />
+
+			{l s='Any transaction which, if completed, would exceed this maximum balance, will be refused by our system.' mod='psphipay'}<br />
+			{l s='For an account to the registered as «Identified» by HiPay’s Verification Department, you must send HiPay the legal and administrative documents we need to positively establish your identity (i.e. the information you entered when you first signed up).' mod='psphipay'}<br />
+			{l s='In keeping with our General Conditions of Use, you must inform HiPay of any changes to your personal data, and submit suitable items of written proof.' mod='psphipay'}<br />
+			
+			<br />
+
+			{l s='Please click here for more info'}
 		</p>
 	</dd>
 </dl>

@@ -88,7 +88,7 @@
 							<div class="col-md-6">
 								<h4>{l s='A complete solution at the best price' mod='psphipay'}</h4>
 								<ul class="ul-spaced">
-									<li>{l s='Start instantly, no contract required to start' mod='psphipay'}</li>
+									<li>{l s='Start now, no contract required' mod='psphipay'}</li>
 									<li>{l s='Accept several currencies with 10+ local payment solutions in Europe' mod='psphipay'}</li>
 									<li>{l s='No registration or installation fee' mod='psphipay'}</li>
 									<li>{l s='Anti-fraud system and full-time monitoring of high-risk behavior' mod='psphipay'}</li>
