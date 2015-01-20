@@ -26,7 +26,7 @@
 <hr />
 
 <dl id="faq_q_a">
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse1" aria-expanded="true" aria-controls="collapse1">{l s='In which countries can I use PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse1" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='In which countries can I use PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse1" class="panel-collapse collapse">
 		<p>
 			{l s='PrestaShop Payments by HiPay will be available to your customers in the following countries:' mod='psphipay'}<br />
@@ -35,7 +35,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse2" aria-expanded="true" aria-controls="collapse1">{l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse2" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse2" class="panel-collapse collapse">
 		<p>
 			{l s='PrestaShop Payments by HiPay works with the following currencies:' mod='psphipay'}<br />
@@ -43,7 +43,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse3" aria-expanded="true" aria-controls="collapse1">{l s='I want to have PrestaShop Payments by HiPay currencies available in my shop, how can I do?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse3" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='I want to have PrestaShop Payments by HiPay currencies available in my shop, how can I do?' mod='psphipay'}</dt>
 	<dd id="collapse3" class="panel-collapse collapse">
 		{l s='If you want to offer new currencies on your shop, please follow these steps:' mod='psphipay'}<br />
 		<ol>
@@ -52,7 +52,7 @@
 		</ol>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse4" aria-expanded="true" aria-controls="collapse1">{l s='Which payment solutions are available with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse4" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='Which payment solutions are available with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse4" class="panel-collapse collapse">
 		<p>
 			{l s='The payment solutions available on your shop with PrestaShop Payments by HiPay depend on your customer’s delivery address: each country has a different set of payment solutions' mod='psphipay'}<br />
@@ -61,7 +61,7 @@
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse5" aria-expanded="true" aria-controls="collapse1">{l s='How can I transfer my account balance to my own bank account?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse5" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='How can I transfer my account balance to my own bank account?' mod='psphipay'}</dt>
 	<dd id="collapse5" class="panel-collapse collapse">
 		<p>
 			{l s='You can transfer your account balance from your main account only. If you wish to withdraw your sub-accounts balances too (if any), you should transfer these balances to your main account first. You can only withdraw money from your main account.' mod='psphipay'}<br />
@@ -70,7 +70,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse6" aria-expanded="true" aria-controls="collapse1">{l s='How much does it cost?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse6" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='How much does it cost?' mod='psphipay'}</dt>
 	<dd id="collapse6" class="panel-collapse collapse">
 		<p>
 			{l s='Click here to view the full rates.' mod='psphipay'}<br />
@@ -78,14 +78,14 @@
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse7" aria-expanded="true" aria-controls="collapse1">{l s='I want more info, where should I look?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse7" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='I want more info, where should I look?' mod='psphipay'}</dt>
 	<dd id="collapse7" class="panel-collapse collapse">
 		<p>
 			{l s='Don’t hesitate to log in to your HiPay account to have more detailed information on your account and your transactions.' mod='psphipay'}
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse8" aria-expanded="true" aria-controls="collapse1">{l s='Why do I have some sub-accounts?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse8" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='Why do I have some sub-accounts?' mod='psphipay'}</dt>
 	<dd id="collapse8" class="panel-collapse collapse">
 		<p>
 			{l s='Your account is created based on your shop’s main currency. To handle other available currencies, some sub-accounts have been created. Each sub-account handles a different currency.' mod='psphipay'}<br />
@@ -93,7 +93,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse9" aria-expanded="true" aria-controls="collapse1">{l s='I want to make a test payment, how should I do?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse9" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='I want to make a test payment, how should I do?' mod='psphipay'}</dt>
 	<dd id="collapse9" class="panel-collapse collapse">
 		<p>
 			{l s='You have received two set of credentials when your account has been created: one for the main account, one for your test account.' mod='psphipay'}<br />
@@ -119,7 +119,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse10" aria-expanded="true" aria-controls="collapse1">{l s='What is “identification” and why my account should be “identified”?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse10" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='What is “identification” and why my account should be “identified”?' mod='psphipay'}</dt>
 	<dd id="collapse10" class="panel-collapse collapse">
 		<p>
 			{l s='An unidentified account is an account which we have not checked yet, nor confirmed its identification details upon signing up. The balance of an unidentified account cannot exceed €2500.' mod='psphipay'}<br />

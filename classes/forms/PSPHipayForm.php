@@ -279,7 +279,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		return array(
 			'info_sandbox_mode' => $sandbox_mode ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.').'</div>' : null,
 
-			'customers_service_contact_details' =>  '<h4 class="form-control-static">'.$this->module->l('I need some help, who should I contact?').'</h4>',
+			'customers_service_contact_details' =>  '<h4 class="form-control-static"><i class="icon icon-question-circle"></i> '.$this->module->l('I need some help, who should I contact?').'</h4>',
 			'customers_service_contact_form' => '<p class="form-control-static"><a href="mailto:prestashop@hipay.com" target="_blank">'.$this->module->l('prestashop@hipay.com').'</a></strong></p>',
 			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay / Société HPME%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium'), '<br />').'</strong></p>',
 			'customers_service_address_2' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay%1$s6 place du Colonel Bourgoin%1$s75012 Paris - France'), '<br />').'</strong></p>',
