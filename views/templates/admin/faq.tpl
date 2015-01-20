@@ -115,7 +115,7 @@
 				<li>{l s='it shows in your back-office' mod='psphipay'}</li>
 				<li>{l s='your test balance and transactions have been updated with the good amount' mod='psphipay'}</li>
 			</ol>
-			<b>{l s='Do not forget to switch back to the normal mode once you have finished your tests!' mod='psphipay'}</b>
+			<strong>{l s='Do not forget to switch back to the normal mode once you have finished your tests!' mod='psphipay'}</strong>
 		</p>
 	</dd>
 
