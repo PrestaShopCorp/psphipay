@@ -29,9 +29,9 @@
 	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse1" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='In which countries can I use PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse1" class="panel-collapse collapse">
 		<p>
-			{l s='PrestaShop Payments by HiPay will be available to your customers in the following countries:' mod='psphipay'}<br />
-			{l s='Austria, Belgium, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Ireland, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Monaco, Netherlands, Norway, Poland, Portugal, Romania, Russia, Slovakia, Slovenia, Spain, Sweden, Swiss, Turkey and the United Kingdom.' mod='psphipay'}<br />
-			{l s='If your customer’s delivery address is in one of these countries, then PrestaShop Payments by HiPay will be automatically offered as a payment method.' mod='psphipay'}
+			{l s='PrestaShop Payments by HiPay is available to all your customers, wherever they are.' mod='psphipay'}<br />
+			{l s='Depending on a customer\'s country, some local and leading payment solutions will be available as well.' mod='psphipay'}<br />
+			{l s='To see which payment methods are available per country, please click here.' mod='psphipay'}
 		</p>
 	</dd>
 
