@@ -37,7 +37,7 @@ abstract class PSPHipayFormInputs {
 	{
 		$input = array(
 			'type' => $type,
-			'label' => $this->module->l($label),
+			'label' => $label,
 			'name' => $name,
 		);
 
@@ -52,7 +52,7 @@ abstract class PSPHipayFormInputs {
 	{
 		return $this->generateInputText($name, $title, array(
 			'required' => true,
-			'desc' => $this->module->l($description),
+			'desc' => $description,
 			'placeholder' => $this->module->l('email@domain.com'),
 		));
 	}
@@ -70,7 +70,7 @@ abstract class PSPHipayFormInputs {
 	public function generateLegend($title, $icon = false)
 	{
 		return array(
-			'title' => $this->module->l($title),
+			'title' => $title,
 			'icon' => $icon,
 		);
 	}
@@ -94,7 +94,7 @@ abstract class PSPHipayFormInputs {
 	{
 		$input = array(
 			'type' => 'switch',
-			'label' => $this->module->l($title),
+			'label' => $title,
 			'name' => $name,
 			'is_bool' => true,
 			'values' => array(

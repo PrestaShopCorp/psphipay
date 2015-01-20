@@ -80,14 +80,14 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateInputFree('info_sandbox_mode', false, array('col' => 12, 'offset' => 0)),
 
 				$this->generateInputFree('customers_service_contact_details', false, array('col' => 12, 'offset' => 0)),
-				$this->generateInputFree('customers_service_contact_form', 'By email'),
-				$this->generateInputFree('customers_service_address', 'Address'),
-				$this->generateInputFree('customers_service_address_2', 'or'),
+				$this->generateInputFree('customers_service_contact_form', $this->module->l('By email')),
+				$this->generateInputFree('customers_service_address', $this->module->l('Address')),
+				$this->generateInputFree('customers_service_address_2', $this->module->l('or')),
 
 				$this->generateInputFree('customers_service_contact_info', false, array('col' => 12, 'offset' => 0)),
-				$this->generateInputFree('customers_service_email', 'Email'),
-				$this->generateInputFree('customers_service_shop_name', 'Shop name'),
-				$this->generateInputFree('customers_service_account_id', 'Account number'),
+				$this->generateInputFree('customers_service_email', $this->module->l('Email')),
+				$this->generateInputFree('customers_service_shop_name', $this->module->l('Shop name')),
+				$this->generateInputFree('customers_service_account_id', $this->module->l('Account number')),
 
 				$this->generateInputFree('customers_service_q_a', false, array('col' => 12, 'offset' => 0)),
 			),
@@ -105,60 +105,60 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$email = Tools::getValue('install_user_email');
 		$is_email = (bool)Validate::isEmail($email);
-		$email_description = $is_email ? null : 'Please, enter your email address in the field above';
+		$email_description = $is_email ? null : $this->module->l('Please, enter your email address in the field above');
 
 		$form = array('form' => array(
-			'legend' => $this->generateLegend('Login', 'icon-user'),
+			'legend' => $this->generateLegend($this->module->l('Login'), 'icon-user'),
 			'input' => array(
-				$this->generateInputEmail('install_user_email', 'Email', $email_description),
+				$this->generateInputEmail('install_user_email', $this->module->l('Email'), $email_description),
 			),
 		));
 
 		if ($complete_form == 'new_account')
 		{
-			$form['form']['input'][] = $this->generateInputText('install_user_first_name', 'First name', array(
+			$form['form']['input'][] = $this->generateInputText('install_user_first_name', $this->module->l('First name'), array(
 				'class' => 'fixed-width-xxl',
 				'required' => true,
 			));
-			$form['form']['input'][] = $this->generateInputText('install_user_last_name', 'Last name', array(
+			$form['form']['input'][] = $this->generateInputText('install_user_last_name', $this->module->l('Last name'), array(
 				'class' => 'fixed-width-xxl',
 				'required' => true,
 			));
 
-			$form['form']['buttons'][] = $this->generateSubmitButton('Reset', array(
+			$form['form']['buttons'][] = $this->generateSubmitButton($this->module->l('Reset'), array(
 				'class' => 'pull-left',
 				'name' => 'submitReset',
 				'icon' => 'process-icon-eraser',
 			));
-			$form['form']['buttons'][] = $this->generateSubmitButton('Subscribe', array(
+			$form['form']['buttons'][] = $this->generateSubmitButton($this->module->l('Subscribe'), array(
 				'name' => 'submitLogin',
 				'icon' => 'process-icon-next',
 			));
 		}
 		elseif ($complete_form == 'existing_account')
 		{
-			$form['form']['input'][] = $this->generateInputText('install_website_id', 'Website ID', array(
+			$form['form']['input'][] = $this->generateInputText('install_website_id', $this->module->l('Website ID'), array(
 				'class' => 'fixed-width-lg',
 				'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access'),
 				'required' => true,
 			));
-			$form['form']['input'][] = $this->generateInputText('install_ws_login', 'WS Login', array(
+			$form['form']['input'][] = $this->generateInputText('install_ws_login', $this->module->l('WS Login'), array(
 				'class' => 'fixed-width-xxl',
 				'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access'),
 				'required' => true,
 			));
-			$form['form']['input'][] = $this->generateInputText('install_ws_password', 'WS Password', array(
+			$form['form']['input'][] = $this->generateInputText('install_ws_password', $this->module->l('WS Password'), array(
 				'class' => 'fixed-width-xxl',
 				'hint' => $this->module->l('You can find it on your HiPay account, section "Creating a button" under the URL of your website'),
 				'required' => true,
 			));
 
-			$form['form']['buttons'][] = $this->generateSubmitButton('Reset', array(
+			$form['form']['buttons'][] = $this->generateSubmitButton($this->module->l('Reset'), array(
 				'class' => 'pull-left',
 				'name' => 'submitReset',
 				'icon' => 'process-icon-eraser',
 			));
-			$form['form']['buttons'][] = $this->generateSubmitButton('Log in', array(
+			$form['form']['buttons'][] = $this->generateSubmitButton($this->module->l('Log in'), array(
 				'name' => 'submitLogin',
 				'icon' => 'process-icon-next',
 			));
@@ -167,7 +167,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		{
 			$form['form']['input'][] = $this->generateInputFree('install_user_info', false, array('col' => 12, 'offset' => 0));
 
-			$form['form']['buttons'][] = $this->generateSubmitButton('Log in / Subscribe', array(
+			$form['form']['buttons'][] = $this->generateSubmitButton($this->module->l('Log in / Subscribe'), array(
 				'name' => 'submitLogin',
 				'icon' => 'process-icon-next',
 			));
@@ -188,11 +188,11 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateInputFree('info_sandbox_mode', false, array('col' => 12, 'offset' => 0)),
 
 				$this->generateInputFree('main_account_details', false, array('col' => 12, 'offset' => 0)),
-				$this->generateInputFree('main_account_email', 'Email'),
-				$this->generateInputFree('main_account_shop_name', 'Shop name'),
-				$this->generateInputFree('main_account_id', 'Account ID'),
-				$this->generateInputFree('main_account_balance', 'Balance', array(
-					'hint' => 'Your account balance is automatically updated after each new transaction',
+				$this->generateInputFree('main_account_email', $this->module->l('Email')),
+				$this->generateInputFree('main_account_shop_name', $this->module->l('Shop name')),
+				$this->generateInputFree('main_account_id', $this->module->l('Account ID')),
+				$this->generateInputFree('main_account_balance', $this->module->l('Balance'), array(
+					'hint' => $this->module->l('Your account balance is automatically updated after each new transaction'),
 				)),
 
 				$this->generateInputFree('sub_accounts_details', false, array('col' => 12, 'offset' => 0)),
@@ -200,7 +200,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateInputFree('sub_accounts_values', false, array('col' => 12, 'offset' => 0)),
 			),
 			'buttons' => array(
-				$this->generateSubmitButton('Disconnect', array(
+				$this->generateSubmitButton($this->module->l('Disconnect'), array(
 					'name' => 'submitReset',
 					'icon' => 'process-icon-power',
 					'js' => 'return confirm(\''.$this->module->l('Are you sure you want to log out?').'\');',
@@ -220,14 +220,14 @@ class PSPHipayForm extends PSPHipayFormInputs {
 
 		$form = array('form' => array(
 			'input' => array(
-				$this->generateSwitchButton('sandbox_account_mode', 'Test mode'),
-				$this->generateInputText('sandbox_website_id', 'Website ID', array('class' => 'fixed-width-lg')),
-				$this->generateInputText('sandbox_ws_login', 'WS Login', array('class' => 'fixed-width-xxl')),
-				$this->generateInputText('sandbox_ws_password', 'WS Password', array('class' => 'fixed-width-xxl')),
+				$this->generateSwitchButton('sandbox_account_mode', $this->module->l('Test mode')),
+				$this->generateInputText('sandbox_website_id', $this->module->l('Website ID'), array('class' => 'fixed-width-lg')),
+				$this->generateInputText('sandbox_ws_login', $this->module->l('WS Login'), array('class' => 'fixed-width-xxl')),
+				$this->generateInputText('sandbox_ws_password', $this->module->l('WS Password'), array('class' => 'fixed-width-xxl')),
 				$this->generateInputFree('sandbox_mode_info', false, array('col' => 12, 'offset' => 0)),
 			),
 			'buttons' => array(
-				$this->generateSubmitButton('Save', array(
+				$this->generateSubmitButton($this->module->l('Save'), array(
 					'name' => 'submitSandboxMode',
 					'icon' => 'process-icon-save',
 				)),
@@ -248,13 +248,13 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'input' => array(
 				$this->generateInputFree('info_sandbox_mode', false, array('col' => 12, 'offset' => 0)),
 
-				$this->generateInputFree('transactions_account_id', 'Account ID'),
-				$this->generateInputFree('transactions_current_date', 'Date'),
-				$this->generateInputFree('transactions_dates_range', 'Range'),
-				$this->generateInputFree('transactions_details', 'Transactions', array('col' => 9, 'offset' => 0)),
+				$this->generateInputFree('transactions_account_id', $this->module->l('Account ID')),
+				$this->generateInputFree('transactions_current_date', $this->module->l('Date')),
+				$this->generateInputFree('transactions_dates_range', $this->module->l('Range')),
+				$this->generateInputFree('transactions_details', $this->module->l('Transactions'), array('col' => 9, 'offset' => 0)),
 			),
 			'buttons' => array(
-				$this->generateSubmitButton('Refresh', array(
+				$this->generateSubmitButton($this->module->l('Refresh'), array(
 					'name' => 'submitDateRange',
 					'icon' => 'process-icon-refresh',
 					'value' => 'refresh',

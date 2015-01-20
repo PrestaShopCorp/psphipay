@@ -172,7 +172,7 @@ class PSPHipay extends PaymentModule
 		foreach (Language::getLanguages(false) as $language)
 		{
 			if (Tools::strtolower($language['iso_code']) == 'fr')
-				$order_state->name[(int)$language['id_lang']] = "En attente d'autorisation";
+				$order_state->name[(int)$language['id_lang']] = 'En attente d\'autorisation';
 			else
 				$order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
 		}
