@@ -73,7 +73,7 @@ class HipayPayment extends HipayWS
 			'currency' => $this->context->currency->iso_code,
 			'customerEmail' => $this->context->customer->email,
 			'customerIpAddress' => Tools::getRemoteAddr(),
-			'description' => Configuration::get('PS_SHOP_NAME'),
+			'description' => $this->getCartDetails(),
 			'emailCallback' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
 			'executionDate' => date('Y-m-d\TH:i:s'),
 			'locale' => $locale->getLocale(),
@@ -98,6 +98,18 @@ class HipayPayment extends HipayWS
 			return Tools::redirect($results->generateResult->redirectUrl);
 
 		return false;
+	}
+	
+	protected function getCartDetails()
+	{
+		$output = null;
+		
+		foreach ($this->context->cart->getProducts() as $product)
+		{
+			$output .= $product['cart_quantity'].' x '.$product['name'].'<br />';
+		}
+		
+		return $output;
 	}
 
 	protected function getFreeData()

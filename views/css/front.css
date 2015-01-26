@@ -25,6 +25,7 @@
 
 #psp_hipay_payment_button a {
 	padding: 10px;
+	height: 84px;
 	background-color: #FBFBFB;
 }
 
@@ -46,6 +47,13 @@
 	color: #777777;
 }
 
+#psp_hipay_payment_button span {
+	color: black;
+	margin-top: 18px;
+	margin-left: 10px;
+	display: inline-block;
+}
+
 #psp_hipay_payment_button em {
 	color: #666;
 	font-style: italic;
@@ -53,10 +61,4 @@
 
 #psp_hipay_payment_button .small {
 	font-size: .85em;
-}
-
-#psp_hipay_payment_button span {
-	color: black;
-	padding: 8px;
-	display: inline-block;
 }
