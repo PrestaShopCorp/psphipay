@@ -44,7 +44,7 @@ $_MODULE['<{psphipay}prestashop>psphipayform_805494b853d50e5caaf39ac08b73c455'] 
 $_MODULE['<{psphipay}prestashop>psphipayform_351a2eb8764e19b9e565e8a355469e70'] = 'Compte n°';
 $_MODULE['<{psphipay}prestashop>psphipayform_99a808d8d16122d70e44bd7f709d30fb'] = 'Solde';
 $_MODULE['<{psphipay}prestashop>psphipayform_77ac65eaac2c9861d75e2910128362f8'] = 'Le solde de votre compte est mis à jour automatiquement après chaque nouvelle transaction';
-$_MODULE['<{psphipay}prestashop>psphipayform_42ae25231906c83927831e0ef7c317ac'] = 'Déconnexion';
+$_MODULE['<{psphipay}prestashop>psphipayform_4394c8d8e63c470de62ced3ae85de5ae'] = 'Déconnexion';
 $_MODULE['<{psphipay}prestashop>psphipayform_fb6188d42c1833f4d67731c85b1b7d74'] = 'Etes-vous sûr de vouloir vous déconnecter ?';
 $_MODULE['<{psphipay}prestashop>psphipayform_4245499695408b974322be6f01b0d17a'] = 'Mode Test';
 $_MODULE['<{psphipay}prestashop>psphipayform_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
@@ -74,7 +74,7 @@ $_MODULE['<{psphipay}prestashop>psphipayform_daf42636937e063d0e5be307caf403f4'] 
 $_MODULE['<{psphipay}prestashop>psphipayform_5f2b9345f9bbd74079b99d6fcf461408'] = 'Créée le';
 $_MODULE['<{psphipay}prestashop>psphipayform_b2f40690858b404ed10e62bdf422c704'] = 'Montant';
 $_MODULE['<{psphipay}prestashop>psphipayform_006300efaf063e1705dd614ea0ae9e8b'] = 'Frais';
-$_MODULE['<{psphipay}prestashop>psphipayform_b8786828a1c422c20e2ce788075a732a'] = 'Capturée';
+$_MODULE['<{psphipay}prestashop>psphipayform_ec53a8c4f07baed5d8825072c89799be'] = 'État';
 $_MODULE['<{psphipay}prestashop>psphipayforminputs_7328fddefd53de471baeb6e2b764f78a'] = 'email@domain.com';
 $_MODULE['<{psphipay}prestashop>psphipayforminputs_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Actif';
 $_MODULE['<{psphipay}prestashop>psphipayforminputs_b9f5c797ebbf55adccdd8539a65a0241'] = 'Inactif';
@@ -176,8 +176,6 @@ $_MODULE['<{psphipay}prestashop>confirmation_ca7e41a658753c87973936d7ce2429a8'] 
 $_MODULE['<{psphipay}prestashop>confirmation_cd430c2eb4b87fb3b49320bd21af074e'] = 'service client';
 $_MODULE['<{psphipay}prestashop>confirmation_7569ab9b5973795ce8c9fc870d38d8e1'] = 'Votre commande sur %s n\'a pas été enregistrée.';
 $_MODULE['<{psphipay}prestashop>confirmation_caa4088f1d295cf8ce8e358eb975ab32'] = 'Veuillez réessayer de passer commande.';
-$_MODULE['<{psphipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Payez avec HiPay';
 $_MODULE['<{psphipay}prestashop>payment_213db1d782ed9e436a04d1dcf781aa55'] = 'Le montant minimum requis pour payer avec PrestaShop Payments%1$s by HiPay%2$s:';
-$_MODULE['<{psphipay}prestashop>payment_a54cc6b1d71951926f46b045ad3f8f8a'] = 'Payez par carte de crédit avec PrestaShop Payments%1$s';
-$_MODULE['<{psphipay}prestashop>payment_0ecea95b6a950725074f82503d0de0b9'] = 'by HiPay%1$s';
+$_MODULE['<{psphipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Payez avec HiPay';
 $_MODULE['<{psphipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(sandbox / mode test)';
