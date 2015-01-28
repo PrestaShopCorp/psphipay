@@ -163,6 +163,7 @@ $_MODULE['<{psphipay}prestashop>faq_583c0cea90cdb2cc6674695dd3543f6d'] = 'Un com
 $_MODULE['<{psphipay}prestashop>faq_57acf44502f624c49e582cfc481863ee'] = 'Toute transaction risquant de faire dépasser cette limite de solde sera refusée par le système.';
 $_MODULE['<{psphipay}prestashop>faq_74ee0af03d6a057c57f4d885166caa6c'] = 'Pour qu\'un compte soit enregistré comme « Identifié » par le service de contrôle d\'HiPay, vous devez faire parvenir à HiPay les documents légaux et administratifs attestant de votre identité (des informations indiquées lors de votre inscription).';
 $_MODULE['<{psphipay}prestashop>faq_7f83d9cfb931b276a431b9eddee66e96'] = 'Conformément  aux CGU, si vos informations personnelles viennent à changer, n\'oubliez pas d\'en informer HiPay et de transmettre les documents nécessaires.';
+$_MODULE['<{psphipay}prestashop>faq_1f84dce5f5023475235690fcee5bebf9'] = 'Pour plus d\'informations, cliquez ici.';
 $_MODULE['<{psphipay}prestashop>transactions_5da618e8e4b89c66fe86e32cdafde142'] = 'Du';
 $_MODULE['<{psphipay}prestashop>transactions_e12167aa0a7698e6ebc92b4ce3909b53'] = 'Au';
 $_MODULE['<{psphipay}prestashop>transactions_e221ab332a5e3a5e1626d6aea065206d'] = 'Vous pouvez visualiser les transactions des 3 derniers mois. Pour en voir davantage, veuillez vous connecter à votre compte HiPay.';
@@ -176,6 +177,7 @@ $_MODULE['<{psphipay}prestashop>confirmation_ca7e41a658753c87973936d7ce2429a8'] 
 $_MODULE['<{psphipay}prestashop>confirmation_cd430c2eb4b87fb3b49320bd21af074e'] = 'service client';
 $_MODULE['<{psphipay}prestashop>confirmation_7569ab9b5973795ce8c9fc870d38d8e1'] = 'Votre commande sur %s n\'a pas été enregistrée.';
 $_MODULE['<{psphipay}prestashop>confirmation_caa4088f1d295cf8ce8e358eb975ab32'] = 'Veuillez réessayer de passer commande.';
+$_MODULE['<{psphipay}prestashop>payment_25065e3ef9274f9b0e3088340f6d79e6'] = 'Payez par carte bancaire';
 $_MODULE['<{psphipay}prestashop>payment_213db1d782ed9e436a04d1dcf781aa55'] = 'Le montant minimum requis pour payer avec PrestaShop Payments%1$s by HiPay%2$s:';
 $_MODULE['<{psphipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Payez avec HiPay';
 $_MODULE['<{psphipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(sandbox / mode test)';
