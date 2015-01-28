@@ -109,7 +109,7 @@
 			
 			<br />
 			
-			{l s='And then, proceed with a test order of a small amount. Your should check whether:' mod='psphipay'}<br />
+			{l s='And then, proceed with a test order of a small amount. You should check whether:' mod='psphipay'}<br />
 			<ol>
 				<li>{l s='the order is complete (you have received a confirmation email),' mod='psphipay'}</li>
 				<li>{l s='it shows in your back-office' mod='psphipay'}</li>
