@@ -459,7 +459,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				}
 
 				$details .= '<tr>
-					<td>'.$transaction->createdAt.'</td>
+					<td>'.date('Y-m-d H:i', strtotime($transaction->createdAt)).'</td>
 					<td>'.number_format($transaction->amount, 2).' '.(string)$transaction->currency.'</td>
 					<td>'.number_format($transaction->fees, 2).' '.(string)$transaction->currencyFees.'</td>
 					<td class="text-center"><i class="icon icon-'.$icon.'"></i></td>
