@@ -34,7 +34,7 @@ abstract class HipayWS
 	protected $client_url = false;
 	protected $module = false;
 
-	protected $prestashop_api = 'http://payments.prestashop.com/psphipay';
+	protected $prestashop_api = 'https://payments.prestashop.com/psphipay';
 
 	protected $ws_url = 'https://ws.hipay.com';
 	protected $ws_test_url = 'https://test-ws.hipay.com';
