@@ -132,7 +132,7 @@
 			
 			<br />
 
-			{l s='Please click here for more info'}
+			{l s='Please click here for more info' mod='psphipay'}
 		</p>
 	</dd>
 </dl>

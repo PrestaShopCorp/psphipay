@@ -200,7 +200,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 				$this->generateInputFree('sub_accounts_values', false, array('col' => 12, 'offset' => 0)),
 			),
 			'buttons' => array(
-				$this->generateSubmitButton($this->module->l('Disconnect'), array(
+				$this->generateSubmitButton($this->module->l('Log out'), array(
 					'name' => 'submitReset',
 					'icon' => 'process-icon-power',
 					'js' => 'return confirm(\''.$this->module->l('Are you sure you want to log out?').'\');',
@@ -475,7 +475,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 						<th><strong>'.$this->module->l('Created at').'</strong></th>
 						<th><strong>'.$this->module->l('Amount').'</strong></th>
 						<th><strong>'.$this->module->l('Fees').'</strong></th>
-						<th><strong>'.$this->module->l('Captured').'</strong></th>
+						<th><strong>'.$this->module->l('Status').'</strong></th>
 					</tr>
 				</thead>
 				<tbody>'.$details.'</tbody>
