@@ -107,7 +107,7 @@ abstract class HipayWS
 
 			if ($this->client == false)
 			{
-				$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service');
+				$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service', 'HipayWS');
 				return false;
 			}
 
@@ -136,7 +136,7 @@ abstract class HipayWS
 		}
 		catch (Exception $exception)
 		{
-			$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service');
+			$this->module->_errors[] = $this->module->l('An error occurred while trying to contact the web service', 'HipayWS');
 			return false;
 		}
 	}

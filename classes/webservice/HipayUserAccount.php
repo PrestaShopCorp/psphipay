@@ -44,10 +44,10 @@ class HipayUserAccount extends HipayWS
 		parent::__construct($module_instance);
 
 		$this->accounts_currencies = array(
-			'CHF' => $this->module->l('Swiss Franc'),
-			'EUR' => $this->module->l('Euro'),
-			'GBP' => $this->module->l('British Pound'),
-			'SEK' => $this->module->l('Swedish Krona'),
+			'CHF' => $this->module->l('Swiss Franc', 'HipayUserAccount'),
+			'EUR' => $this->module->l('Euro', 'HipayUserAccount'),
+			'GBP' => $this->module->l('British Pound', 'HipayUserAccount'),
+			'SEK' => $this->module->l('Swedish Krona', 'HipayUserAccount'),
 		);
 	}
 
