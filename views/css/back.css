@@ -114,17 +114,20 @@ table.form-control-static thead th:last-child {
 	border-right: 1px solid #EAEDEF !important;
 }
 
+#sandbox_info dt,
 #faq_q_a dt {
 	font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
 	font-size: 15px;
 	margin-bottom: 5px;
 }
 
+#sandbox_info dt:hover,
 #faq_q_a dt:hover {
 	cursor: pointer;
 	text-decoration: underline;
 }
 
+#sandbox_info dd + dt,
 #faq_q_a dd + dt {
 	margin-top: 20px;
 }

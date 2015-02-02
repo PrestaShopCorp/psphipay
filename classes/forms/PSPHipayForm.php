@@ -218,23 +218,46 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	{
 		$this->helper->tpl_vars['fields_value'] = $this->getSandboxFormValues();
 
-		$form = array('form' => array(
-			'input' => array(
-				$this->generateSwitchButton('sandbox_account_mode', $this->module->l('Test mode')),
-				$this->generateInputText('sandbox_website_id', $this->module->l('Website ID'), array('class' => 'fixed-width-lg')),
-				$this->generateInputText('sandbox_ws_login', $this->module->l('WS Login'), array('class' => 'fixed-width-xxl')),
-				$this->generateInputText('sandbox_ws_password', $this->module->l('WS Password'), array('class' => 'fixed-width-xxl')),
-				$this->generateInputFree('sandbox_mode_info', false, array('col' => 12, 'offset' => 0)),
+		$form = array(
+			array(
+				'form' => array(
+					'input' => array(
+						$this->generateSwitchButton('sandbox_account_mode', $this->module->l('Test mode')),
+						$this->generateInputText('sandbox_website_id', $this->module->l('Website ID'), array('
+							class' => 'fixed-width-lg',
+							'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access'),
+							'required' => true,
+						)),
+						$this->generateInputText('sandbox_ws_login', $this->module->l('WS Login'), array(
+							'class' => 'fixed-width-xxl',
+							'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access'),
+							'required' => true,
+						)),
+						$this->generateInputText('sandbox_ws_password', $this->module->l('WS Password'), array(
+							'class' => 'fixed-width-xxl',
+							'hint' => $this->module->l('You can find it on your HiPay account, section "Creating a button" under the URL of your website'),
+							'required' => true,
+						)),
+						$this->generateInputFree('sandbox_mode_description', false, array('col' => 12, 'offset' => 0)),
+					),
+					'buttons' => array(
+						$this->generateSubmitButton($this->module->l('Save'), array(
+							'name' => 'submitSandboxMode',
+							'icon' => 'process-icon-save',
+						)),
+					),
+				),
 			),
-			'buttons' => array(
-				$this->generateSubmitButton($this->module->l('Save'), array(
-					'name' => 'submitSandboxMode',
-					'icon' => 'process-icon-save',
-				)),
+			array(
+				'form' => array(
+					'input' => array(
+						$this->generateInputFree('sandbox_mode_info', false, array('col' => 12, 'offset' => 0)),
+					),
+				),
 			),
-		));
+		);
 
-		return $this->helper->generateForm(array($form));
+		return $this->helper->generateForm($form);
 	}
 
 	/**
@@ -331,6 +354,10 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
 			'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
 			'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
+			'sandbox_mode_description' => '<p class="form-control-static">'.
+				$this->module->l('The test mode allows you to check if payments are well processed by the system, without spending a dime.').'<br />'.
+				$this->module->l('It works with a dedicated test account: you have received an email to finalize it.').
+			'</p>',
 			'sandbox_mode_info' => $this->context->smarty->fetch($template_path),
 		);
 	}

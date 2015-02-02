@@ -35,7 +35,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse2" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse2" aria-expanded="true" aria-controls="collapse2"><i class="icon icon-question-circle"></i> {l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse2" class="panel-collapse collapse">
 		<p>
 			{l s='PrestaShop Payments by HiPay works with the following currencies:' mod='psphipay'}<br />
@@ -43,7 +43,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse3" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='I want to have PrestaShop Payments by HiPay currencies available in my shop, how can I do?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse3" aria-expanded="true" aria-controls="collapse3"><i class="icon icon-question-circle"></i> {l s='I want to have PrestaShop Payments by HiPay currencies available in my shop, how can I do?' mod='psphipay'}</dt>
 	<dd id="collapse3" class="panel-collapse collapse">
 		{l s='If you want to offer new currencies on your shop, please follow these steps:' mod='psphipay'}<br />
 		<ol>
@@ -52,7 +52,7 @@
 		</ol>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse4" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='Which payment solutions are available with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse4" aria-expanded="true" aria-controls="collapse4"><i class="icon icon-question-circle"></i> {l s='Which payment solutions are available with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="collapse4" class="panel-collapse collapse">
 		<p>
 			{l s='The payment solutions available on your shop with PrestaShop Payments by HiPay depend on your customer’s delivery address: each country has a different set of payment solutions' mod='psphipay'}<br />
@@ -61,7 +61,7 @@
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse5" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='How can I transfer my account balance to my own bank account?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse5" aria-expanded="true" aria-controls="collapse5"><i class="icon icon-question-circle"></i> {l s='How can I transfer my account balance to my own bank account?' mod='psphipay'}</dt>
 	<dd id="collapse5" class="panel-collapse collapse">
 		<p>
 			{l s='You can transfer your account balance from your main account only. If you wish to withdraw your sub-accounts balances too (if any), you should transfer these balances to your main account first. You can only withdraw money from your main account.' mod='psphipay'}<br />
@@ -70,7 +70,7 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse6" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='How much does it cost?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse6" aria-expanded="true" aria-controls="collapse6"><i class="icon icon-question-circle"></i> {l s='How much does it cost?' mod='psphipay'}</dt>
 	<dd id="collapse6" class="panel-collapse collapse">
 		<p>
 			{l s='Click here to view the full rates.' mod='psphipay'}<br />
@@ -78,14 +78,14 @@
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse7" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='I want more info, where should I look?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse7" aria-expanded="true" aria-controls="collapse7"><i class="icon icon-question-circle"></i> {l s='I want more info, where should I look?' mod='psphipay'}</dt>
 	<dd id="collapse7" class="panel-collapse collapse">
 		<p>
 			{l s='Don’t hesitate to log in to your HiPay account to have more detailed information on your account and your transactions.' mod='psphipay'}
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse8" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-question-circle"></i> {l s='Why do I have some sub-accounts?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#collapse8" aria-expanded="true" aria-controls="collapse8"><i class="icon icon-question-circle"></i> {l s='Why do I have some sub-accounts?' mod='psphipay'}</dt>
 	<dd id="collapse8" class="panel-collapse collapse">
 		<p>
 			{l s='Your account is created based on your shop’s main currency. To handle other available currencies, some sub-accounts have been created. Each sub-account handles a different currency.' mod='psphipay'}<br />
