@@ -24,8 +24,8 @@
 *}
 
 <dl id="sandbox_info">
-	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#collapse1" aria-expanded="true" aria-controls="collapse1"><i class="icon icon-angle-right"></i> {l s='How does it work?' mod='psphipay'}</dt>
-	<dd id="collapse1" class="panel-collapse">
+	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#sanbox1" aria-expanded="true" aria-controls="sanbox1"><i class="icon icon-angle-right"></i> {l s='How does it work?' mod='psphipay'}</dt>
+	<dd id="sanbox1" class="panel-collapse">
 		<p>
 			{l s='To conduct these tests, you need a payment method, which can be either:' mod='psphipay'}<br />
 			<ul>
@@ -40,8 +40,8 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#collapse2" aria-expanded="false" aria-controls="collapse2"><i class="icon icon-angle-right"></i> {l s='What should I do?' mod='psphipay'}</dt>
-	<dd id="collapse2" class="panel-collapse collapse">
+	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#sanbox2" aria-expanded="false" aria-controls="sanbox2"><i class="icon icon-angle-right"></i> {l s='What should I do?' mod='psphipay'}</dt>
+	<dd id="sanbox2" class="panel-collapse collapse">
 		<p>
 			{l s='Follow these few steps to test your payments:' mod='psphipay'}<br />
 			<ol>
@@ -58,15 +58,15 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#collapse3" aria-expanded="false" aria-controls="collapse3"><i class="icon icon-angle-right"></i> {l s='It’s all good, what’s next?' mod='psphipay'}</dt>
-	<dd id="collapse3" class="panel-collapse collapse">
+	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#sanbox3" aria-expanded="false" aria-controls="sanbox3"><i class="icon icon-angle-right"></i> {l s='It’s all good, what’s next?' mod='psphipay'}</dt>
+	<dd id="sanbox3" class="panel-collapse collapse">
 		<p>
 			{l s='You should by all means [1]disable the test mode[/1], otherwise your customers won’t be able to pay on your shop (they wouldn’t be debited!).' tags=['<strong>'] mod='psphipay'}
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#collapse4" aria-expanded="false" aria-controls="collapse4"><i class="icon icon-angle-right"></i> {l s='It doesn’t seem to be working, what to do?' mod='psphipay'}</dt>
-	<dd id="collapse4" class="panel-collapse collapse">
+	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#sanbox4" aria-expanded="false" aria-controls="sanbox4"><i class="icon icon-angle-right"></i> {l s='It doesn’t seem to be working, what to do?' mod='psphipay'}</dt>
+	<dd id="sanbox4" class="panel-collapse collapse">
 		<p>
 			{l s='You can conduct another test to see how it goes. If it is still not working, you should contact HiPay support team at prestashop@hipay.com.' mod='psphipay'}<br />
 		</p>
