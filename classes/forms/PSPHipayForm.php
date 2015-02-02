@@ -324,17 +324,14 @@ class PSPHipayForm extends PSPHipayFormInputs {
 	*/
 	public function getSandboxFormValues()
 	{
+		$template_path = _PS_MODULE_DIR_.$this->module->name.'/views/templates/admin/sandbox.tpl';
+
 		return array(
 			'sandbox_account_mode' => Tools::getValue('sandbox_account_mode', Configuration::get('PSP_HIPAY_SANDBOX_MODE')),
 			'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
 			'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
 			'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
-			'sandbox_mode_info' => '<p class="form-control-static">'.
-			$this->module->l('You have received two set of credentials when your account has been created: one for the main account, one for your test account.').'<br />'.
-			$this->module->l('Use your test credentials to connect to HiPay and retrieve the needed info (Website ID, WS login and password). Enter it above, and then save.').'<br /> '.
-			$this->module->l('You can now make some tests!').'<br /><br />'.
-			sprintf($this->module->l('For more info on how to conduct your tests, please %1$sclick here to read the FAQ%2$s.'), '<a href="#">', '</a>').
-			'</p>',
+			'sandbox_mode_info' => $this->context->smarty->fetch($template_path),
 		);
 	}
 
