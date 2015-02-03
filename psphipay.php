@@ -282,7 +282,12 @@ class PSPHipay extends PaymentModule
 
 	protected function postProcess($user_account)
 	{
-		if (Tools::isSubmit('submitReset'))
+		if (Tools::isSubmit('submitSandboxMode'))
+		{
+			$this->context->smarty->assign('active_tab', 'sandbox');
+			return $this->switchSandboxMode();
+		}
+		elseif (Tools::isSubmit('submitReset'))
 			return $this->clearAccountData();
 		elseif (Tools::isSubmit('submitLogin'))
 			return $this->login($user_account);
@@ -290,11 +295,6 @@ class PSPHipay extends PaymentModule
 		{
 			$this->context->smarty->assign('active_tab', 'transactions');
 			return $this->saveTransactionsDateRange();
-		}
-		elseif (Tools::isSubmit('submitSandboxMode'))
-		{
-			$this->context->smarty->assign('active_tab', 'sandbox');
-			return $this->switchSandboxMode();
 		}
 	}
 
