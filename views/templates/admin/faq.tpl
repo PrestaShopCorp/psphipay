@@ -35,25 +35,8 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq2" aria-expanded="true" aria-controls="faq2"><i class="icon icon-question-circle"></i> {l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq2" aria-expanded="true" aria-controls="faq2"><i class="icon icon-question-circle"></i> {l s='Which payment solutions are available with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="faq2" class="panel-collapse collapse">
-		<p>
-			{l s='PrestaShop Payments by HiPay works with the following currencies:' mod='psphipay'}<br />
-			{l s='Australian Dollar, Canadian Dollar, Swiss Franc, Euro, British Pound, Swedish Krona, US Dollar, Polish Sloty.' mod='psphipay'}
-		</p>
-	</dd>
-
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq3" aria-expanded="true" aria-controls="faq3"><i class="icon icon-question-circle"></i> {l s='I want to have PrestaShop Payments by HiPay currencies available in my shop, how can I do?' mod='psphipay'}</dt>
-	<dd id="faq3" class="panel-collapse collapse">
-		{l s='If you want to offer new currencies on your shop, please follow these steps:' mod='psphipay'}<br />
-		<ol>
-			<li>{l s='In Localization > Currencies, add the new currency you want to activate' mod='psphipay'}</li>
-			<li>{l s='In Modules > Payment, activate the new currency for PrestaShop Payments by HiPay. If you don’t want to accept this currency through other payment solutions, please make sure it is activated only for PrestaShop Payments by HiPay.' mod='psphipay'}</li>
-		</ol>
-	</dd>
-
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq4" aria-expanded="true" aria-controls="faq4"><i class="icon icon-question-circle"></i> {l s='Which payment solutions are available with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
-	<dd id="faq4" class="panel-collapse collapse">
 		<p>
 			{l s='The payment solutions available on your shop with PrestaShop Payments by HiPay depend on your customer’s delivery address: each country has a different set of payment solutions' mod='psphipay'}<br />
 			{l s='To see which payment solutions are available in each country, please click here.' mod='psphipay'}
@@ -61,8 +44,42 @@
 		</p>
 	</dd>
 	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq5" aria-expanded="true" aria-controls="faq5"><i class="icon icon-question-circle"></i> {l s='How can I transfer my account balance to my own bank account?' mod='psphipay'}</dt>
+
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq3" aria-expanded="true" aria-controls="faq3"><i class="icon icon-question-circle"></i> {l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
+	<dd id="faq3" class="panel-collapse collapse">
+		<p>
+			{l s='PrestaShop Payments by HiPay works with the following currencies:' mod='psphipay'}<br />
+			{l s='Australian Dollar, Canadian Dollar, Swiss Franc, Euro, British Pound, Swedish Krona, US Dollar, Polish Sloty.' mod='psphipay'}
+		</p>
+	</dd>
+
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq4" aria-expanded="true" aria-controls="faq4"><i class="icon icon-question-circle"></i> {l s='I want to have PrestaShop Payments by HiPay currencies available in my shop, how can I do?' mod='psphipay'}</dt>
+	<dd id="faq4" class="panel-collapse collapse">
+		{l s='If you want to offer new currencies on your shop, please follow these steps:' mod='psphipay'}<br />
+		<ol>
+			<li>{l s='In Localization > Currencies, add the new currency you want to activate' mod='psphipay'}</li>
+			<li>{l s='In Modules > Payment, activate the new currency for PrestaShop Payments by HiPay. If you don’t want to accept this currency through other payment solutions, please make sure it is activated only for PrestaShop Payments by HiPay.' mod='psphipay'}</li>
+		</ol>
+	</dd>
+
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq5" aria-expanded="true" aria-controls="faq5"><i class="icon icon-question-circle"></i> {l s='How much does it cost?' mod='psphipay'}</dt>
 	<dd id="faq5" class="panel-collapse collapse">
+		<p>
+			{l s='Click here to view the full rates.' mod='psphipay'}<br />
+			{l s='Some fees might apply on some operations (withdrawal, transfer, etc), please click here for more info.' mod='psphipay'}
+		</p>
+	</dd>
+
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq6" aria-expanded="true" aria-controls="faq6"><i class="icon icon-question-circle"></i> {l s='Why do I have some sub-accounts?' mod='psphipay'}</dt>
+	<dd id="faq6" class="panel-collapse collapse">
+		<p>
+			{l s='Your account is created based on your shop’s main currency. To handle other available currencies, some sub-accounts have been created. Each sub-account handles a different currency.' mod='psphipay'}<br />
+			{l s='To withdraw money from your sub-account, you should transfer their respective balances to your main account first' mod='psphipay'}
+		</p>
+	</dd>
+
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq7" aria-expanded="true" aria-controls="faq7"><i class="icon icon-question-circle"></i> {l s='How can I transfer my account balance to my own bank account?' mod='psphipay'}</dt>
+	<dd id="faq7" class="panel-collapse collapse">
 		<p>
 			{l s='You can transfer your account balance from your main account only. If you wish to withdraw your sub-accounts balances too (if any), you should transfer these balances to your main account first. You can only withdraw money from your main account.' mod='psphipay'}<br />
 			{l s='Before requesting a transfer, please make sure you have sent your bank details to HiPay. HiPay won’t be able to transfer the money unless your bank details have been validated.' mod='psphipay'}<br />
@@ -70,57 +87,8 @@
 		</p>
 	</dd>
 
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq6" aria-expanded="true" aria-controls="faq6"><i class="icon icon-question-circle"></i> {l s='How much does it cost?' mod='psphipay'}</dt>
-	<dd id="faq6" class="panel-collapse collapse">
-		<p>
-			{l s='Click here to view the full rates.' mod='psphipay'}<br />
-			{l s='Some fees might apply on some operations (withdrawal, transfer, etc), please click here for more info.' mod='psphipay'}
-		</p>
-	</dd>
-	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq7" aria-expanded="true" aria-controls="faq7"><i class="icon icon-question-circle"></i> {l s='I want more info, where should I look?' mod='psphipay'}</dt>
-	<dd id="faq7" class="panel-collapse collapse">
-		<p>
-			{l s='Don’t hesitate to log in to your HiPay account to have more detailed information on your account and your transactions.' mod='psphipay'}
-		</p>
-	</dd>
-	
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq8" aria-expanded="true" aria-controls="faq8"><i class="icon icon-question-circle"></i> {l s='Why do I have some sub-accounts?' mod='psphipay'}</dt>
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq8" aria-expanded="true" aria-controls="faq8"><i class="icon icon-question-circle"></i> {l s='What is “identification” and why my account should be “identified”?' mod='psphipay'}</dt>
 	<dd id="faq8" class="panel-collapse collapse">
-		<p>
-			{l s='Your account is created based on your shop’s main currency. To handle other available currencies, some sub-accounts have been created. Each sub-account handles a different currency.' mod='psphipay'}<br />
-			{l s='To withdraw money from your sub-account, you should transfer their respective balances to your main account first' mod='psphipay'}
-		</p>
-	</dd>
-
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq9" aria-expanded="true" aria-controls="faq9"><i class="icon icon-question-circle"></i> {l s='I want to make a test payment, how should I do?' mod='psphipay'}</dt>
-	<dd id="faq9" class="panel-collapse collapse">
-		<p>
-			{l s='You have received two set of credentials when your account has been created: one for the main account, one for your test account.' mod='psphipay'}<br />
-			{l s='Go to the “Test mode” section above, then enter your test account credentials. Save it, and turn the test mode by switching to Yes.' mod='psphipay'}<br />
-
-			<br />
-
-			{l s='To run some test, you can either:' mod='psphipay'}<br />
-			<ol>
-				<li>{l s='use your own credit card (but it will make a pre-authorization on it, so make sure you run some test with small amounts)' mod='psphipay'}</li>
-				<li>{l s='or request a test card number to HiPay. For this, contact them at prestashop@hipay.com and give them your test account number.' mod='psphipay'}</li>
-			</ol>
-			
-			<br />
-			
-			{l s='And then, proceed with a test order of a small amount. You should check whether:' mod='psphipay'}<br />
-			<ol>
-				<li>{l s='the order is complete (you have received a confirmation email),' mod='psphipay'}</li>
-				<li>{l s='it shows in your back-office' mod='psphipay'}</li>
-				<li>{l s='your test balance and transactions have been updated with the good amount' mod='psphipay'}</li>
-			</ol>
-			<strong>{l s='Do not forget to switch back to the normal mode once you have finished your tests!' mod='psphipay'}</strong>
-		</p>
-	</dd>
-
-	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq10" aria-expanded="true" aria-controls="faq1"><i class="icon icon-question-circle"></i> {l s='What is “identification” and why my account should be “identified”?' mod='psphipay'}</dt>
-	<dd id="faq10" class="panel-collapse collapse">
 		<p>
 			{l s='An unidentified account is an account which we have not checked yet, nor confirmed its identification details upon signing up. The balance of an unidentified account cannot exceed €2500.' mod='psphipay'}<br />
 		
@@ -133,6 +101,13 @@
 			<br />
 
 			{l s='Please click here for more info' mod='psphipay'}
+		</p>
+	</dd>
+
+	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq9" aria-expanded="true" aria-controls="faq9"><i class="icon icon-question-circle"></i> {l s='I want more info, where should I look?' mod='psphipay'}</dt>
+	<dd id="faq9" class="panel-collapse collapse">
+		<p>
+			{l s='Don’t hesitate to log in to your HiPay account to have more detailed information on your account and your transactions.' mod='psphipay'}
 		</p>
 	</dd>
 </dl>
