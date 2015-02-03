@@ -139,14 +139,18 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 			{
 				$payment_method = $order['result']['paymentMethod'];
 				$transaction_id = $order['result']['transid'];
-				$message = Tools::safeOutput("Payment method: $payment_method<br />");
-				$message .= Tools::safeOutput("Transaction ID: $transaction_id");
+				$message = Tools::jsonEncode(array(
+					"Payment method" => Tools::safeOutput($payment_method),
+					"Transaction ID" => Tools::safeOutput($transaction_id),
+				));
 			}
 			else
 			{
 				$error_code = $order['result']['returnCode'];
 				$error_desc = $order['result']['returnDescriptionShort'];
-				$message = Tools::safeOutput("Error: [$error_code] $error_desc");
+				$message = Tools::jsonEncode(array(
+					"Error" => Tools::safeOutput("[$error_code] $error_desc"),
+				));
 			}
 
 			return $this->module->validateOrder($cart_id, $id_order_state, $amount, $this->module->displayName, $message, array(), (int)$currency->id, false, $secure_key);
