@@ -81,7 +81,7 @@ class HipayUserAccount extends HipayWS
 
 		$result = $this->prestaShopWebservice('/account/create', $data);
 
-		if ($result->code === 0)
+		if (isset($result->code) && ($result->code === 0))
 		{
 			Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
 
