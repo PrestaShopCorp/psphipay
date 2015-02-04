@@ -28,12 +28,14 @@
 		<p class="payment_module" id="psp_hipay_payment_button">
 			{if $cart->getOrderTotal() < 2}
 				<a href="#">
-					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" />
-					{l s='Minimum amount required in order to pay with PrestaShop Payments%1$s by Hipay-Wallet%2$s:' mod='psphipay' sprintf=['™', '™']} {convertPrice price=2}
+					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="150px" height="64px" />
+					<span>
+						{l s='Minimum amount required in order to pay with PrestaShop Payments%1$s by Hipay-Wallet%2$s:' mod='psphipay' sprintf=['™', '™']} {convertPrice price=2}
+					</span>
 				</a>
 			{else}
-				<a href="{$link->getModuleLink('psphipay', 'redirect', array(), true)|escape:'htmlall':'UTF-8'}" title="{l s='Pay with Hipay' mod='psphipay'}">
-					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay with Hipay' mod='psphipay'}" class="pull-left" width="150px" height="64px" />
+				<a href="{$link->getModuleLink('psphipay', 'redirect', array(), true)|escape:'htmlall':'UTF-8'}" title="{l s='Pay by credit card' mod='psphipay'}">
+					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="150px" height="64px" />
 					<span>
 						{l s='Pay by credit card' mod='psphipay'}
 	
