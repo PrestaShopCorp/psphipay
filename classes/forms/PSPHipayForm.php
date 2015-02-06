@@ -412,7 +412,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'sub_accounts_description' => '<p class="form-control-static">'.
 				$this->module->l('Thanks to the below sub-accounts, you can accept payments in several currencies on your store.', 'PSPHipayForm').'<br />'.
 				$this->module->l('To withdraw money from your sub-accounts, you should transfer their respective balances to your main account first.', 'PSPHipayForm').' '.
-				sprintf($this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.', 'PSPHipayForm'), '<a href="#">', '</a>').
+				sprintf($this->module->l('Some fees might apply, please %1$sclick here for more info%2$s.', 'PSPHipayForm'), '<a href="http://www.prestashop.com/download/pdf/pspayments/PrestaShop_Payments-detalles_de_precios.pdf" target="_blank">', '</a>').
 			'</p>',
 			'sub_accounts_values' => '<table class="form-control-static table table-bordered table-hover table-striped">
 			<thead>

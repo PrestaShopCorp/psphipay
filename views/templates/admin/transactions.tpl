@@ -29,7 +29,7 @@
 	{l s='To' mod='psphipay'} <strong class="text-info">{$date_to|escape:'htmlall':'UTF-8'}</strong>
 	<i class="icon-caret-down"></i>
 </button>
-<p class="form-control-static"><em>({l s='You can view transactions over the past 3 months only. To see more, please log into your HiPay account.' mod='psphipay'})</em></p>
+<p class="form-control-static"><em>({l s='You can view transactions over the past 3 months only. To see more, please log into your [1]HiPay account[/1].' tags=['<a href="https://www.hipaydirect.com/prestashop-payments/" target="_blank">'] mod='psphipay'})</em></p>
 <div class="modal fade" id="transactions_dates_range" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">

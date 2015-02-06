@@ -31,7 +31,7 @@
 		<p>
 			{l s='PrestaShop Payments by HiPay is available to all your customers, wherever they are.' mod='psphipay'}<br />
 			{l s='Depending on a customer\'s country, some local and leading payment solutions will be available as well.' mod='psphipay'}<br />
-			{l s='To see which payment methods are available per country, please click here.' mod='psphipay'}
+			{l s='To see which payment methods are available per country, please [1]click here[/1].' tags=['<a href="https://www.prestashop.com/download/pdf/pspayments/PrestaShop_Payments-metodos-paises.pdf" target="_blank">'] mod='psphipay'}
 		</p>
 	</dd>
 
@@ -39,8 +39,8 @@
 	<dd id="faq2" class="panel-collapse collapse">
 		<p>
 			{l s='The payment solutions available on your shop with PrestaShop Payments by HiPay depend on your customer’s delivery address: each country has a different set of payment solutions' mod='psphipay'}<br />
-			{l s='To see which payment solutions are available in each country, please click here.' mod='psphipay'}
-			{l s='If you wish to remove some payment solutions from your offer, please contact prestashop@hipay.com' mod='psphipay'}
+			{l s='To see which payment solutions are available in each country, please [1]click here[/1].' tags=['<a href="https://www.prestashop.com/download/pdf/pspayments/PrestaShop_Payments-metodos-paises.pdf" target="_blank">'] mod='psphipay'}
+			{l s='If you wish to remove some payment solutions from your offer, please contact [1]prestashop@hipay.com[/1]' tags=['<a href="mailto:prestashop@hipay.com">'] mod='psphipay'}
 		</p>
 	</dd>
 	
@@ -65,8 +65,8 @@
 	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq5" aria-expanded="true" aria-controls="faq5"><i class="icon icon-question-circle"></i> {l s='How much does it cost?' mod='psphipay'}</dt>
 	<dd id="faq5" class="panel-collapse collapse">
 		<p>
-			{l s='Click here to view the full rates.' mod='psphipay'}<br />
-			{l s='Some fees might apply on some operations (withdrawal, transfer, etc), please click here for more info.' mod='psphipay'}
+			{l s='[1]Click here[/1] to view the full rates.' tags=['<a href="http://www.prestashop.com/download/pdf/pspayments/PrestaShop_Payments-detalles_de_precios.pdf" target="_blank">'] mod='psphipay'}<br />
+			{l s='Some fees might apply on some operations (withdrawal, transfer, etc), please [1]click here for more info[/1].' tags=['<a href="#" target="_blank">'] mod='psphipay'}
 		</p>
 	</dd>
 
@@ -83,7 +83,7 @@
 		<p>
 			{l s='You can transfer your account balance from your main account only. If you wish to withdraw your sub-accounts balances too (if any), you should transfer these balances to your main account first. You can only withdraw money from your main account.' mod='psphipay'}<br />
 			{l s='Before requesting a transfer, please make sure you have sent your bank details to HiPay. HiPay won’t be able to transfer the money unless your bank details have been validated.' mod='psphipay'}<br />
-			{l s='To do so, please go to your HiPay account, “Withdrawal > Enter your bank details” section.' mod='psphipay'}
+			{l s='To do so, please go to your [1]HiPay account[/1], “Withdrawal > Enter your bank details” section.' tags=['<a href="https://www.hipaydirect.com/prestashop-payments/" target="_blank">'] mod='psphipay'}
 		</p>
 	</dd>
 
@@ -107,7 +107,7 @@
 	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq9" aria-expanded="true" aria-controls="faq9"><i class="icon icon-question-circle"></i> {l s='I want more info, where should I look?' mod='psphipay'}</dt>
 	<dd id="faq9" class="panel-collapse collapse">
 		<p>
-			{l s='Don’t hesitate to log in to your HiPay account to have more detailed information on your account and your transactions.' mod='psphipay'}
+			{l s='Don’t hesitate to [1]log in to your HiPay account[/1] to have more detailed information on your account and your transactions.' tags=['<a href="https://www.hipaydirect.com/prestashop-payments/" target="_blank">'] mod='psphipay'}
 		</p>
 	</dd>
 </dl>
