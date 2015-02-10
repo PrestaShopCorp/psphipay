@@ -79,17 +79,17 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			'input' => array(
 				$this->generateInputFree('info_sandbox_mode', false, array('col' => 12, 'offset' => 0)),
 
-				$this->generateInputFree('customers_service_contact_details', false, array('col' => 12, 'offset' => 0)),
-				$this->generateInputFree('customers_service_contact_form', $this->module->l('By email', 'PSPHipayForm')),
-				$this->generateInputFree('customers_service_address', $this->module->l('Address', 'PSPHipayForm')),
-				$this->generateInputFree('customers_service_address_2', $this->module->l('or', 'PSPHipayForm')),
-
 				$this->generateInputFree('customers_service_contact_info', false, array('col' => 12, 'offset' => 0)),
 				$this->generateInputFree('customers_service_email', $this->module->l('Email', 'PSPHipayForm')),
 				$this->generateInputFree('customers_service_shop_name', $this->module->l('Shop name', 'PSPHipayForm')),
 				$this->generateInputFree('customers_service_account_id', $this->module->l('Account number', 'PSPHipayForm')),
 
 				$this->generateInputFree('customers_service_q_a', false, array('col' => 12, 'offset' => 0)),
+
+				$this->generateInputFree('customers_service_contact_details', false, array('col' => 12, 'offset' => 0)),
+				$this->generateInputFree('customers_service_contact_form', $this->module->l('By email', 'PSPHipayForm')),
+				$this->generateInputFree('customers_service_address', $this->module->l('Address', 'PSPHipayForm')),
+				$this->generateInputFree('customers_service_address_2', $this->module->l('or', 'PSPHipayForm')),
 			),
 		));
 
@@ -302,17 +302,17 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		return array(
 			'info_sandbox_mode' => $sandbox_mode ? '<div class="alert alert-warning">'.$this->module->l('The module is running in test mode.', 'PSPHipayForm').'</div>' : null,
 
-			'customers_service_contact_details' =>  '<h4 class="form-control-static"><i class="icon icon-question-circle"></i> '.$this->module->l('I need some help, who should I contact?', 'PSPHipayForm').'</h4>',
-			'customers_service_contact_form' => '<p class="form-control-static"><a href="mailto:prestashop@hipay.com" target="_blank">'.$this->module->l('prestashop@hipay.com', 'PSPHipayForm').'</a></strong></p>',
-			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay / Société HPME%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium', 'PSPHipayForm'), '<br />').'</strong></p>',
-			'customers_service_address_2' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay%1$s6 place du Colonel Bourgoin%1$s75012 Paris - France', 'PSPHipayForm'), '<br />').'</strong></p>',
-
 			'customers_service_contact_info' =>  '<h4 class="form-control-static">'.$this->module->l('Please remind them your account details', 'PSPHipayForm').'</h4>',
 			'customers_service_email' => '<p class="form-control-static"><strong>'.Configuration::get('PSP_HIPAY_USER_EMAIL').'</strong></p>',
 			'customers_service_shop_name' => '<p class="form-control-static"><strong>'.Configuration::get('PS_SHOP_NAME').'</strong></p>',
 			'customers_service_account_id' => '<p class="form-control-static"><strong>'.$user_account_id.'</strong></p>',
 
 			'customers_service_q_a' => $this->context->smarty->fetch($template_path),
+
+			'customers_service_contact_details' =>  '<h4 class="form-control-static"><i class="icon icon-question-circle"></i> '.$this->module->l('I need some help, who should I contact?', 'PSPHipayForm').'</h4>',
+			'customers_service_contact_form' => '<p class="form-control-static"><a href="mailto:prestashop@hipay.com" target="_blank">'.$this->module->l('prestashop@hipay.com', 'PSPHipayForm').'</a></strong></p>',
+			'customers_service_address' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay / Société HPME%1$s19 Avenue des Volontaires%1$s1160 Bruxelles - Belgium', 'PSPHipayForm'), '<br />').'</strong></p>',
+			'customers_service_address_2' => '<p class="form-control-static">'.sprintf($this->module->l('HiPay%1$s6 place du Colonel Bourgoin%1$s75012 Paris - France', 'PSPHipayForm'), '<br />').'</strong></p>',
 		);
 	}
 

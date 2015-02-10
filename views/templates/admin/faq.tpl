@@ -43,7 +43,6 @@
 			{l s='If you wish to remove some payment solutions from your offer, please contact [1]prestashop@hipay.com[/1]' tags=['<a href="mailto:prestashop@hipay.com">'] mod='psphipay'}
 		</p>
 	</dd>
-	
 
 	<dt data-toggle="collapse" data-parent="#faq_q_a" href="#faq3" aria-expanded="true" aria-controls="faq3"><i class="icon icon-question-circle"></i> {l s='Which currencies can I accept with PrestaShop Payments by HiPay?' mod='psphipay'}</dt>
 	<dd id="faq3" class="panel-collapse collapse">
@@ -91,15 +90,11 @@
 	<dd id="faq8" class="panel-collapse collapse">
 		<p>
 			{l s='An unidentified account is an account which we have not checked yet, nor confirmed its identification details upon signing up. The balance of an unidentified account cannot exceed €2500.' mod='psphipay'}<br />
-		
 			<br />
-
 			{l s='Any transaction which, if completed, would exceed this maximum balance, will be refused by our system.' mod='psphipay'}<br />
-			{l s='For an account to the registered as «Identified» by HiPay’s Verification Department, you must send HiPay the legal and administrative documents we need to positively establish your identity (i.e. the information you entered when you first signed up).' mod='psphipay'}<br />
+			{l s='For an account to the registered as «Identified» by HiPay’s Verification Department, you must send HiPay the legal and administrative documents we need to positively establish your identity (i.e. the information you entered when you first signed up).' mod='psphipay'}				<br />
 			{l s='In keeping with our General Conditions of Use, you must inform HiPay of any changes to your personal data, and submit suitable items of written proof.' mod='psphipay'}<br />
-			
 			<br />
-
 			{l s='Please click here for more info' mod='psphipay'}
 		</p>
 	</dd>
@@ -111,3 +106,5 @@
 		</p>
 	</dd>
 </dl>
+
+<hr />
