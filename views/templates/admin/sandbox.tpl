@@ -68,7 +68,7 @@
 	<dt data-toggle="collapse" data-parent="#sandbox_info" href="#sanbox4" aria-expanded="false" aria-controls="sanbox4"><i class="icon icon-angle-right"></i> {l s='It doesn’t seem to be working, what to do?' mod='psphipay'}</dt>
 	<dd id="sanbox4" class="panel-collapse collapse">
 		<p>
-			{l s='You can conduct another test to see how it goes. If it is still not working, you should contact HiPay support team at prestashop@hipay.com.' mod='psphipay'}<br />
+			{l s='You can conduct another test to see how it goes. If it is still not working, you should [1]contact HiPay support team[/1].' tags=['<a href="mailto:prestashop@hipay.com">'] mod='psphipay'}<br />
 		</p>
 	</dd>
 </dl>
