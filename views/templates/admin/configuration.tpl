@@ -102,7 +102,9 @@
 									<li>{l s='25% less expensive than leading solutions in the market*' mod='psphipay'}</li>
 								</ul>
 								<br />
-								<a href="#">{l s='See the complete list of rates for PrestaShop Payments by HiPay' mod='psphipay'}</a>
+								<a href="http://www.prestashop.com/download/pdf/pspayments/PrestaShop_Payments-detalles_de_precios.pdf">
+									{l s='See the complete list of rates for PrestaShop Payments by HiPay' mod='psphipay'}
+								</a>
 								<br />
 								<em class="text-muted small">
 									* {l s='Source' mod='psphipay'}
@@ -175,3 +177,7 @@
 		</div>
 	</div>
 {/if}
+
+<p class="text-center">
+	<a href="#" target="_blank">{l s='Legal notice' mod='psphipay'}</a>
+</p>
