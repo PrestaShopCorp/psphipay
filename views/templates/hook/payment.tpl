@@ -30,7 +30,11 @@
 				<a href="#">
 					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="150px" height="64px" />
 					<span>
-						{l s='Minimum amount required in order to pay with PrestaShop Payments%1$s by Hipay-Wallet%2$s:' mod='psphipay' sprintf=['™', '™']} {convertPrice price=2}
+						{l s='Minimum amount required in order to pay by credit card:' mod='psphipay' } {convertPrice price=2}
+
+						{if isset($psphipay_prod) && (!$psphipay_prod)}
+							<em>{l s='(sandbox / test mode)' mod='psphipay'}</em>
+						{/if}
 					</span>
 				</a>
 			{else}

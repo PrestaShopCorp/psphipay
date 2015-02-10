@@ -282,6 +282,8 @@ class PSPHipay extends PaymentModule
 
 	protected function postProcess($user_account)
 	{
+		$this->context->smarty->assign('sandbox', Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
+
 		if (Tools::isSubmit('submitSandboxMode'))
 		{
 			$this->context->smarty->assign('active_tab', 'sandbox');
@@ -445,6 +447,8 @@ class PSPHipay extends PaymentModule
 
 		$sandbox_mode = (bool)Tools::getValue('sandbox_account_mode');
 		Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', $sandbox_mode);
+
+		$this->context->smarty->assign('sandbox', $sandbox_mode);
 
 		if ($sandbox_mode && $is_valid_website_id && $is_valid_login && $is_valid_password)
 			return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);

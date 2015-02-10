@@ -162,6 +162,9 @@
 			<li role="presentation"><a href="#psp_services_form" aria-controls="psp_services_form" role="tab" data-toggle="tab">
 				<span class="icon icon-users"></span> {l s='FAQ' mod='psphipay'}</a>
 			</li>
+			<li class="pull-right"><a href="https://{if $sandbox == true}test-{/if}www.hipaydirect.com/prestashop-payments/" role="tab" target="_blank">
+				<span class="icon icon-arrow-right"></span> {l s='Go to HiPay' mod='psphipay'}</a>
+			</li>
 		</ul>
 
 		<div class="tab-content">
