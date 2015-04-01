@@ -108,7 +108,6 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		$email_description = $is_email ? null : $this->module->l('Please, enter your email address in the field above', 'PSPHipayForm');
 
 		$form = array('form' => array(
-			'legend' => $this->generateLegend($this->module->l('Login', 'PSPHipayForm'), 'icon-user'),
 			'input' => array(
 				$this->generateInputEmail('install_user_email', $this->module->l('Email', 'PSPHipayForm'), $email_description),
 			),

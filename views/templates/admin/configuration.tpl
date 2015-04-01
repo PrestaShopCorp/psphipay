@@ -147,36 +147,45 @@
 
 {$alerts}
 
-{if ($is_logged == false)}
-	{$login_form}
-{else}
 	<div role="tabpanel">
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation"{if ((isset($active_tab) == false) || ($active_tab == 'settings'))} class="active"{/if}><a href="#psp_settings_form" aria-controls="psp_settings_form" role="tab" data-toggle="tab">
-				<span class="icon icon-cogs"></span> {l s='Settings' mod='psphipay'}</a>
-			</li>
-			<li role="presentation"{if ((isset($active_tab) == true) && ($active_tab == 'transactions'))} class="active"{/if}><a href="#psp_transactions_form" aria-controls="psp_transactions_form" role="tab" data-toggle="tab">
-				<span class="icon icon-money"></span> {l s='Transactions' mod='psphipay'}</a>
-			</li>
-			<li role="presentation"{if ((isset($active_tab) == true) && ($active_tab == 'sandbox'))} class="active"{/if}><a href="#psp_sandbox_form" aria-controls="psp_sandbox_form" role="tab" data-toggle="tab">
-				<span class="icon icon-check-square-o"></span> {l s='Test mode' mod='psphipay'}</a>
-			</li>
-			<li role="presentation"><a href="#psp_services_form" aria-controls="psp_services_form" role="tab" data-toggle="tab">
-				<span class="icon icon-users"></span> {l s='FAQ' mod='psphipay'}</a>
-			</li>
-			<li class="pull-right"><a href="https://{if $sandbox == true}test-{/if}www.hipaydirect.com/prestashop-payments/" role="tab" target="_blank">
-				<span class="icon icon-arrow-right"></span> {l s='Go to HiPay' mod='psphipay'}</a>
-			</li>
+			{if ($is_logged == false)}
+				<li role="presentation" class="active"><a href="#psp_login_form" aria-controls="psp_login_form" role="tab" data-toggle="tab">
+					<span class="icon icon-user"></span> {l s='Login' mod='psphipay'}</a>
+				</li>
+				<li class="pull-right"><a href="https://{if $sandbox == true}test-{/if}www.hipaydirect.com/prestashop-payments/" role="tab" target="_blank" id="login_hipay_link">
+					<span class="icon icon-arrow-right"></span> {l s='Go to HiPay' mod='psphipay'}</a>
+				</li>
+			{else}
+				<li role="presentation"{if ((isset($active_tab) == false) || ($active_tab == 'settings'))} class="active"{/if}><a href="#psp_settings_form" aria-controls="psp_settings_form" role="tab" data-toggle="tab">
+					<span class="icon icon-cogs"></span> {l s='Settings' mod='psphipay'}</a>
+				</li>
+				<li role="presentation"{if ((isset($active_tab) == true) && ($active_tab == 'transactions'))} class="active"{/if}><a href="#psp_transactions_form" aria-controls="psp_transactions_form" role="tab" data-toggle="tab">
+					<span class="icon icon-money"></span> {l s='Transactions' mod='psphipay'}</a>
+				</li>
+				<li role="presentation"{if ((isset($active_tab) == true) && ($active_tab == 'sandbox'))} class="active"{/if}><a href="#psp_sandbox_form" aria-controls="psp_sandbox_form" role="tab" data-toggle="tab">
+					<span class="icon icon-check-square-o"></span> {l s='Test mode' mod='psphipay'}</a>
+				</li>
+				<li role="presentation"><a href="#psp_services_form" aria-controls="psp_services_form" role="tab" data-toggle="tab">
+					<span class="icon icon-users"></span> {l s='FAQ' mod='psphipay'}</a>
+				</li>
+				<li class="pull-right"><a href="https://{if $sandbox == true}test-{/if}www.hipaydirect.com/prestashop-payments/" role="tab" target="_blank">
+					<span class="icon icon-arrow-right"></span> {l s='Go to HiPay' mod='psphipay'}</a>
+				</li>
+			{/if}
 		</ul>
 
 		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == false) || ($active_tab == 'settings'))} active{/if}" id="psp_settings_form">{$settings_form}</div>
-			<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == true) && ($active_tab == 'transactions'))} active{/if}" id="psp_transactions_form">{$transactions_form}</div>
-			<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == true) && ($active_tab == 'sandbox'))} active{/if}" id="psp_sandbox_form">{$sandbox_form}</div>
-			<div role="tabpanel" class="tab-pane" id="psp_services_form">{$services_form}</div>
+			{if ($is_logged == false)}
+				<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == false) || ($active_tab == 'login'))} active{/if}" id="psp_login_form">{$login_form}</div>
+			{else}
+				<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == false) || ($active_tab == 'settings'))} active{/if}" id="psp_settings_form">{$settings_form}</div>
+				<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == true) && ($active_tab == 'transactions'))} active{/if}" id="psp_transactions_form">{$transactions_form}</div>
+				<div role="tabpanel" class="tab-pane{if ((isset($active_tab) == true) && ($active_tab == 'sandbox'))} active{/if}" id="psp_sandbox_form">{$sandbox_form}</div>
+				<div role="tabpanel" class="tab-pane" id="psp_services_form">{$services_form}</div>
+			{/if}
 		</div>
 	</div>
-{/if}
 
 <p class="text-center">
 	<a href="https://www.prestashop.com/download/pdf/pspayments/CGU_PrestaShop_Payments.pdf" target="_blank">{l s='Terms of Use' mod='psphipay'}</a>

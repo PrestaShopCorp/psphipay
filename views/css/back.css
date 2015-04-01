@@ -82,6 +82,10 @@
 	margin-bottom: 5px;
 }
 
+#login_hipay_link {
+	color: #555;
+}
+
 #email_error_message {
 	color: #a94442;
 	padding: 5px 10px;
