@@ -45,7 +45,7 @@ class PSPHipayConfirmationModuleFrontController extends ModuleFrontController
 				return Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$order_id.'&key='.$customer->secure_key);
 		}
 
-		$this->errors[] = $this->module->l('An error occurred. Please contact the merchant to have more informations');
+		$this->errors[] = $this->module->l('An error occurred. Please contact the merchant for more details.');
 		return $this->setTemplate('error.tpl');
 	}
 }
