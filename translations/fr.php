@@ -29,7 +29,6 @@ $_MODULE['<{psphipay}prestashop>psphipayform_ce8ae9da5b7cd6c3df2929543a9af92d'] 
 $_MODULE['<{psphipay}prestashop>psphipayform_e93c33bd1341ab74195430daeb63db13'] = 'Boutique';
 $_MODULE['<{psphipay}prestashop>psphipayform_0f26e4f64d58beb4d924627c707e43ad'] = 'N° de compte';
 $_MODULE['<{psphipay}prestashop>psphipayform_c2799a6b94e5b6637bfdde6993c78297'] = 'Veuillez renseigner votre adresse e-mail ci-dessus';
-$_MODULE['<{psphipay}prestashop>psphipayform_99dea78007133396a7b8ed70578ac6ae'] = 'Identifiant';
 $_MODULE['<{psphipay}prestashop>psphipayform_20db0bfeecd8fe60533206a2b5e9891a'] = 'Prénom';
 $_MODULE['<{psphipay}prestashop>psphipayform_8d3f5eff9c40ee315d452392bed5309b'] = 'Nom';
 $_MODULE['<{psphipay}prestashop>psphipayform_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
@@ -83,7 +82,7 @@ $_MODULE['<{psphipay}prestashop>hipayuseraccount_3e823fac7473e42888932c7761c224f
 $_MODULE['<{psphipay}prestashop>hipayuseraccount_df632db5b26b2cfb258d8b03f77c6cb5'] = 'Livre sterling';
 $_MODULE['<{psphipay}prestashop>hipayuseraccount_33ee712c3451768da98c4e7114dc19d3'] = 'Couronne suédoise';
 $_MODULE['<{psphipay}prestashop>hipayws_c458c01a024c4d3cd2178284a5bab95f'] = 'Une erreur est survenue lors de la connexion avec le webservice';
-$_MODULE['<{psphipay}prestashop>confirmation_21d810ca7af371f4289d59ab683a2c68'] = 'Une erreur est survenue. Veuillez contacter le marchand pour plus d\'informations.';
+$_MODULE['<{psphipay}prestashop>confirmation_0fb697b26007a04a49df2f87397bdef7'] = 'Une erreur est survenue. Veuillez contacter le marchand pour plus d\'informations.';
 $_MODULE['<{psphipay}prestashop>redirect_a240fa27925a635b08dc28c9e4f9216d'] = 'Commande';
 $_MODULE['<{psphipay}prestashop>redirect_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Erreur';
 $_MODULE['<{psphipay}prestashop>validation_a240fa27925a635b08dc28c9e4f9216d'] = 'Commande';
@@ -116,11 +115,12 @@ $_MODULE['<{psphipay}prestashop>configuration_44897dba0cff0485a2c2db6e75d43e27']
 $_MODULE['<{psphipay}prestashop>configuration_005f32a9f0f9fc1ff7b37d80639ee193'] = 'Votre compte est pré-approuvé quand vous créez votre boutique PrestaShop, pour que vous puissiez accepter des paiements en ligne immédiatement.';
 $_MODULE['<{psphipay}prestashop>configuration_0af8b4157359c4eff2c2fc05ae5d443b'] = 'Finalisez votre inscription PrestaShop Payments by HiPay avant que le solde de votre compte n\'atteigne 2.500€.';
 $_MODULE['<{psphipay}prestashop>configuration_6fc595e01bf03c49c9bb6c3f5fadcb0e'] = 'Collectez et transférez votre argent directement depuis votre compte PrestaShop Payments by HiPay vers votre propre compte en banque.';
+$_MODULE['<{psphipay}prestashop>configuration_99dea78007133396a7b8ed70578ac6ae'] = 'Connexion';
+$_MODULE['<{psphipay}prestashop>configuration_a9ecb7ca3ecce37db6cee06d3b8e68fd'] = 'Accéder à HiPay';
 $_MODULE['<{psphipay}prestashop>configuration_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{psphipay}prestashop>configuration_31112aca11d0e9e6eb7db96f317dda49'] = 'Transactions';
 $_MODULE['<{psphipay}prestashop>configuration_4245499695408b974322be6f01b0d17a'] = 'Mode Test';
 $_MODULE['<{psphipay}prestashop>configuration_1fe917b01f9a3f87fa2d7d3b7643fac1'] = 'FAQ';
-$_MODULE['<{psphipay}prestashop>configuration_a9ecb7ca3ecce37db6cee06d3b8e68fd'] = 'Accéder à HiPay';
 $_MODULE['<{psphipay}prestashop>configuration_985a4b720f9b50ee8ed90a41488d2bb7'] = 'Conditions d\'utilisation';
 $_MODULE['<{psphipay}prestashop>faq_817d684c70da120b07e451498acaa204'] = 'Dans quels pays puis-je utiliser PrestaShop Payments by HiPay?';
 $_MODULE['<{psphipay}prestashop>faq_1eefc4bcf36ffadc15aec645f5634684'] = 'PrestaShop Payments by HiPay est disponible pour tous vos clients, où qu\'ils soient.';
