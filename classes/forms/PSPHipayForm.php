@@ -138,17 +138,17 @@ class PSPHipayForm extends PSPHipayFormInputs {
 		{
 			$form['form']['input'][] = $this->generateInputText('install_website_id', $this->module->l('Website ID', 'PSPHipayForm'), array(
 				'class' => 'fixed-width-lg',
-				'hint' => $this->module->l('You can find it on your HiPay account, section "Creating a button" under the URL of your website', 'PSPHipayForm'),
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Creating a payment button" under the URL of your website', 'PSPHipayForm'),
 				'required' => true,
 			));
 			$form['form']['input'][] = $this->generateInputText('install_ws_login', $this->module->l('WS Login', 'PSPHipayForm'), array(
 				'class' => 'fixed-width-xxl',
-				'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access', 'PSPHipayForm'),
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
 				'required' => true,
 			));
 			$form['form']['input'][] = $this->generateInputText('install_ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
 				'class' => 'fixed-width-xxl',
-				'hint' => $this->module->l('You can find it on your HiPay account, section "Merchant Tool Kit > API", under "Webservice access', 'PSPHipayForm'),
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
 				'required' => true,
 			));
 
@@ -224,17 +224,17 @@ class PSPHipayForm extends PSPHipayFormInputs {
 						$this->generateSwitchButton('sandbox_account_mode', $this->module->l('Test mode', 'PSPHipayForm')),
 						$this->generateInputText('sandbox_website_id', $this->module->l('Website ID', 'PSPHipayForm'), array('
 							class' => 'fixed-width-lg',
-							'hint' => $this->module->l('You can find it on your HiPay test account, section "Creating a button" under the URL of your website', 'PSPHipayForm'),
+							'hint' => $this->module->l('You can find it on your HiPay test account, section "Creating a payment button" under the URL of your website', 'PSPHipayForm'),
 							'required' => true,
 						)),
 						$this->generateInputText('sandbox_ws_login', $this->module->l('WS Login', 'PSPHipayForm'), array(
 							'class' => 'fixed-width-xxl',
-							'hint' => $this->module->l('You can find it on your HiPay test account, section "Merchant Tool Kit > API", under "Webservice access', 'PSPHipayForm'),
+							'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
 							'required' => true,
 						)),
 						$this->generateInputText('sandbox_ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
 							'class' => 'fixed-width-xxl',
-							'hint' => $this->module->l('You can find it on your HiPay test account, section "Merchant Tool Kit > API", under "Webservice access', 'PSPHipayForm'),
+							'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
 							'required' => true,
 						)),
 						$this->generateInputFree('sandbox_mode_description', false, array('col' => 12, 'offset' => 0)),

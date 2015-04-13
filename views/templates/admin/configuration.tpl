@@ -42,7 +42,7 @@
 					<p>
 						<span id="welcome-message">{l s='Welcome to PrestaShop Payments by HiPay!' mod='psphipay'}</span>
 						<br />
-						{l s='Your store can now accept payments in 7 currencies.' mod='psphipay'}<br />
+						{l s='Your store can now accept payments in 8 currencies.' mod='psphipay'}<br />
 						{l s='You should have received by email your credentials to connect to your HiPay account. You also have received some test credentials to run payment tests before going live.' mod='psphipay'}<br />
 						{l s='If you have any question, please contact us at prestashop@hipay.com.' mod='psphipay'}<br />
 						<br />
@@ -61,7 +61,7 @@
 							</div>
 							<div class="modal-body">
 								<p>
-									{l s='Your account balance is getting close to %1$s. Please make sure your account has been identified to be able to trasnfer money from your HiPay account to your own bank account.' mod='psphipay' sprintf=[$amount_limit]}
+									{l s='Your account balance is getting close to %1$s. Please make sure your account has been identified to be able to transfer money from your HiPay account to your own bank account.' mod='psphipay' sprintf=[$amount_limit]}
 								</p>
 								<br />
 								<a href="#">{l s='Click here for more information.' mod='psphipay'}</a>

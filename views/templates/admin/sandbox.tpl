@@ -49,7 +49,7 @@
 				<li>{l s='Make a test order on your shop' mod='psphipay'}</li>
 				<li>{l s='Select PrestaShop Payments by HiPay as a method of payment' mod='psphipay'}</li>
 				<li>{l s='Enter the test card number (or your own card number if you chose this option), and confirm the order' mod='psphipay'}</li>
-				<li>{l s='Check if the order is showing in the back-office of your shop. You should receive a confirmation email as well.' mod='psphipay'}</li>
+				<li>{l s='Check if the order is showing in the back office of your shop. You should receive a confirmation email as well.' mod='psphipay'}</li>
 				<li>{l s='Check the balance of your test account: it should have increased by the amount of your test order' mod='psphipay'}</li>
 			</ol>
 		</p>
