@@ -148,7 +148,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			));
 			$form['form']['input'][] = $this->generateInputText('install_ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
 				'class' => 'fixed-width-xxl',
-				'hint' => $this->module->l('You can find it on your HiPay account, section "integration > API", under "Webservice access', 'PSPHipayForm'),
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
 				'required' => true,
 			));
 
