@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{psphipay}prestashop>psphipay_c288ce317df8640fae7a3f4e753f3dbf'] = 'PrestaShop Payments by HiPay';
-$_MODULE['<{psphipay}prestashop>psphipay_580e1be1b7d4c85f1cdc39ddd5e26135'] = 'La soluzione ufficiale per i pagamenti di PrestaShop che offre le tariffe pi� competitive in Europa.';
+$_MODULE['<{psphipay}prestashop>psphipay_580e1be1b7d4c85f1cdc39ddd5e26135'] = 'La soluzione ufficiale per i pagamenti di PrestaShop che offre le tariffe più competitive in Europa.';
 $_MODULE['<{psphipay}prestashop>psphipay_f306cf9973b9e7522caef12f9e4291e1'] = 'Dollaro australiano';
 $_MODULE['<{psphipay}prestashop>psphipay_34553e70d0f619c5c359d67350a80216'] = 'Dollaro canadese';
 $_MODULE['<{psphipay}prestashop>psphipay_c0461926e49792dabc964a331f075e5b'] = 'Franco svizzero';
@@ -65,7 +65,7 @@ $_MODULE['<{psphipay}prestashop>psphipayform_cf1ae7163424fe7b850043eaf1643482'] 
 $_MODULE['<{psphipay}prestashop>psphipayform_41c095ca5efea6808e510753189be614'] = 'Il tuo conto principale';
 $_MODULE['<{psphipay}prestashop>psphipayform_54c1505d960427edca6e33e713711685'] = 'Non hai alcun conto secondario';
 $_MODULE['<{psphipay}prestashop>psphipayform_4372923c01ed5401d8d613327fa08ad6'] = 'Conti secondari';
-$_MODULE['<{psphipay}prestashop>psphipayform_9b3d250e9dcf1bcd828badef26c2ab0c'] = 'Grazie ai conti secondari riportati di seguito, puoi accettare pagamenti in pi� valute nel tuo negozio.';
+$_MODULE['<{psphipay}prestashop>psphipayform_9b3d250e9dcf1bcd828badef26c2ab0c'] = 'Grazie ai conti secondari riportati di seguito, puoi accettare pagamenti in più valute nel tuo negozio.';
 $_MODULE['<{psphipay}prestashop>psphipayform_d4d8bd4addec6697d40d0328af5b63c3'] = 'Per prelevare denaro dai conti secondari, devi innanzitutto trasferire i relativi saldi sul conto principale.';
 $_MODULE['<{psphipay}prestashop>psphipayform_be9ed0783f2105ca26a2f9ad91584036'] = 'Potrebbero essere applicate delle commissioni; %1$sclicca qui per ulteriori informazioni%2$s.';
 $_MODULE['<{psphipay}prestashop>psphipayform_386c339d37e737a436499d423a77df0c'] = 'Valuta';
@@ -113,7 +113,7 @@ $_MODULE['<{psphipay}prestashop>configuration_f31bbdd1b3e85bccd652680e16935819']
 $_MODULE['<{psphipay}prestashop>configuration_01fce9417fdfa33e48bb6d756aa13db6'] = 'Accetta pagamenti da tutta Europa in pochi clic';
 $_MODULE['<{psphipay}prestashop>configuration_44897dba0cff0485a2c2db6e75d43e27'] = '3 semplici fasi:';
 $_MODULE['<{psphipay}prestashop>configuration_005f32a9f0f9fc1ff7b37d80639ee193'] = 'Il tuo conto viene pre-approvato quando crei un negozio PrestaShop, in modo da poter accettare immediatamente pagamenti on-line.';
-$_MODULE['<{psphipay}prestashop>configuration_0af8b4157359c4eff2c2fc05ae5d443b'] = 'Completa la registrazione a PrestaShop Payments by HiPay prima che il saldo del tuo conto raggiunga 2.500 �.';
+$_MODULE['<{psphipay}prestashop>configuration_0af8b4157359c4eff2c2fc05ae5d443b'] = 'Completa la registrazione a PrestaShop Payments by HiPay prima che il saldo del tuo conto raggiunga 2.500 €.';
 $_MODULE['<{psphipay}prestashop>configuration_6fc595e01bf03c49c9bb6c3f5fadcb0e'] = 'Ricevi e trasferisci il denaro dal conto PrestaShop Payments by HiPay al tuo conto corrente.';
 $_MODULE['<{psphipay}prestashop>configuration_99dea78007133396a7b8ed70578ac6ae'] = 'Accesso';
 $_MODULE['<{psphipay}prestashop>configuration_a9ecb7ca3ecce37db6cee06d3b8e68fd'] = 'Vai a HiPay';
@@ -141,7 +141,7 @@ $_MODULE['<{psphipay}prestashop>faq_cad8eaf7ff3c5bfa717db5f7ffcbe228'] = 'Quali 
 $_MODULE['<{psphipay}prestashop>faq_2c8f82b955076713e8b699e033e5b726'] = '[1]Clicca qui[/1] per visualizzare le tariffe complete.';
 $_MODULE['<{psphipay}prestashop>faq_a54c4552aa6e8a97836a9b14e22c2c16'] = 'Per alcune operazioni (prelievo, bonifico, ecc.) potrebbero essere applicate delle commissioni; [1]clicca qui per ulteriori informazioni[/1].';
 $_MODULE['<{psphipay}prestashop>faq_9566d813003ba6fb82dbb0171617d182'] = 'Perché dispongo di conti secondari?';
-$_MODULE['<{psphipay}prestashop>faq_3e16d5dee1a4eb8d068aec2bcbf33971'] = 'Il tuo conto viene creato in base alla valuta principale del negozio. Per accettare le altre valute disponibili, sono stati creati dei conti secondari. Ogni conto secondario � associato a una diversa valuta.';
+$_MODULE['<{psphipay}prestashop>faq_3e16d5dee1a4eb8d068aec2bcbf33971'] = 'Il tuo conto viene creato in base alla valuta principale del negozio. Per accettare le altre valute disponibili, sono stati creati dei conti secondari. Ogni conto secondario è associato a una diversa valuta.';
 $_MODULE['<{psphipay}prestashop>faq_60b9a3fc58b06b2f95196e1f8030404a'] = 'Per prelevare denaro dal conto secondario, devi innanzitutto trasferire i relativi saldi sul conto principale';
 $_MODULE['<{psphipay}prestashop>faq_5d060176a4fa2aca4edc1fccb8d77ef5'] = 'Come posso trasferire il saldo del conto sul mio conto corrente?';
 $_MODULE['<{psphipay}prestashop>faq_b6416cad298a074741c5486e6a938cc2'] = 'Puoi trasferire il saldo soltanto dal tuo conto principale. Se desideri prelevare anche i saldi dei conti secondari (se disponibili), devi innanzitutto trasferire quei saldi sul conto principale. Puoi prelevare denaro soltanto dal conto principale.';
@@ -176,7 +176,7 @@ $_MODULE['<{psphipay}prestashop>sandbox_f292c8629ff07f9814e94b0399d5028b'] = 'No
 $_MODULE['<{psphipay}prestashop>sandbox_74c3064892a586b4c3a815c8ac6dc334'] = 'Puoi effettuare un\'altra prova e verificare se funziona. Se anche la seconda prova ha esito negativo, devi [1]contattare il team di assistenza di HiPay[/1].';
 $_MODULE['<{psphipay}prestashop>transactions_5da618e8e4b89c66fe86e32cdafde142'] = 'Da';
 $_MODULE['<{psphipay}prestashop>transactions_e12167aa0a7698e6ebc92b4ce3909b53'] = 'A';
-$_MODULE['<{psphipay}prestashop>transactions_f82e3df08a823014b0a844c01d8fc172'] = 'Puoi visualizzare soltanto le transazioni effettuate negli ultimi tre mesi. Per visualizzarne di pi�, accedi al tuo [1]conto HiPay[/1].';
+$_MODULE['<{psphipay}prestashop>transactions_f82e3df08a823014b0a844c01d8fc172'] = 'Puoi visualizzare soltanto le transazioni effettuate negli ultimi tre mesi. Per visualizzarne di più, accedi al tuo [1]conto HiPay[/1].';
 $_MODULE['<{psphipay}prestashop>transactions_ffe8203b112390ddd0371445f9afbfec'] = 'Scegli un periodo';
 $_MODULE['<{psphipay}prestashop>error_a25c753ee3e4be15ec0daa5a40deb7b8'] = 'Si è verificato un errore';
 $_MODULE['<{psphipay}prestashop>confirmation_88526efe38fd18179a127024aba8c1d7'] = 'Il tuo ordine su %s è completo.';
