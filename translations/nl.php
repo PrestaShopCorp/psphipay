@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{psphipay}prestashop>psphipay_c288ce317df8640fae7a3f4e753f3dbf'] = 'PrestaShop Payments door HiPay';
+$_MODULE['<{psphipay}prestashop>psphipay_c288ce317df8640fae7a3f4e753f3dbf'] = 'PrestaShop Payments by HiPay';
 $_MODULE['<{psphipay}prestashop>psphipay_580e1be1b7d4c85f1cdc39ddd5e26135'] = 'PrestaShop\'s officiële betaalmiddel biedt de scherpste tarieven in Europa.';
 $_MODULE['<{psphipay}prestashop>psphipay_f306cf9973b9e7522caef12f9e4291e1'] = 'Australische dollar';
 $_MODULE['<{psphipay}prestashop>psphipay_34553e70d0f619c5c359d67350a80216'] = 'Canadese dollar';
