@@ -45,7 +45,7 @@ class PSPHipay extends PaymentModule
 	public $limited_countries = array();
 	public $limited_currencies = array();
 
-	const PAYMENT_FEED_BASE_LINK = '';
+	const PAYMENT_FEED_BASE_LINK = 'https://www.prestashop.com/download/pdf/pspayments/Fees_PSpayments_';
 
 	public static $available_rates_links = array(
 		'EN', 'FR', 'ES', 'DE',
