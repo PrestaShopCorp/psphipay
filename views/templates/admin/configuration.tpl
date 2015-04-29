@@ -102,7 +102,7 @@
 									<li>{l s='25% less expensive than leading solutions in the market*' mod='psphipay'}</li>
 								</ul>
 								<br />
-								<a href="http://www.prestashop.com/download/pdf/pspayments/PrestaShop_Payments-detalles_de_precios.pdf">
+								<a href="{$localized_rates_pdf_link}" target="_blank">
 									{l s='See the complete list of rates for PrestaShop Payments by HiPay' mod='psphipay'}
 								</a>
 								<br />

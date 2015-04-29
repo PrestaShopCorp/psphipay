@@ -45,6 +45,11 @@ class PSPHipay extends PaymentModule
 	public $limited_countries = array();
 	public $limited_currencies = array();
 
+	public static $available_rates_links = array(
+		'EN', 'FR', 'ES', 'DE',
+		'IT', 'NL', 'PL', 'PT'
+	);
+
 	public function __construct()
 	{
 		$this->name = 'psphipay';
@@ -259,9 +264,25 @@ class PSPHipay extends PaymentModule
 		$this->context->smarty->assign(array(
 			'alerts' => $this->context->smarty->fetch($alerts),
 			'module_dir' => $this->_path,
+			'localized_rates_pdf_link' => $this->getLocalizedRatesPDFLink()
 		));
 
 		return $this->context->smarty->fetch($configuration);
+	}
+
+	protected function getLocalizedRatesPDFLink()
+	{
+		$shop_iso_country_id = Configuration::get('PS_COUNTRY_DEFAULT');
+		$shop_iso_country = Country::getIsoById((int)$shop_iso_country_id);
+		$shop_iso_country = Tools::strtoupper($shop_iso_country);
+
+		if (!$shop_iso_country || !in_array($shop_iso_country, PSPHipay::$available_rates_links))
+			$shop_iso_country = 'EN';
+
+		$base_link = 'https://www.prestashop.com/download/pdf/pspayments/Fees_PSpayments_';
+		$localized_link = $base_link.$shop_iso_country.'.pdf';
+
+		return $localized_link;
 	}
 
 	protected function shouldDisplayCompleteLoginForm($user_account)
