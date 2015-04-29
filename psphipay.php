@@ -45,6 +45,8 @@ class PSPHipay extends PaymentModule
 	public $limited_countries = array();
 	public $limited_currencies = array();
 
+	const PAYMENT_FEED_BASE_LINK = '';
+
 	public static $available_rates_links = array(
 		'EN', 'FR', 'ES', 'DE',
 		'IT', 'NL', 'PL', 'PT'
@@ -279,8 +281,7 @@ class PSPHipay extends PaymentModule
 		if (!$shop_iso_country || !in_array($shop_iso_country, PSPHipay::$available_rates_links))
 			$shop_iso_country = 'EN';
 
-		$base_link = 'https://www.prestashop.com/download/pdf/pspayments/Fees_PSpayments_';
-		$localized_link = $base_link.$shop_iso_country.'.pdf';
+		$localized_link = PSPHipay::PAYMENT_FEED_BASE_LINK.$shop_iso_country.'.pdf';
 
 		return $localized_link;
 	}
