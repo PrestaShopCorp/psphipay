@@ -498,6 +498,8 @@ class PSPHipay extends PaymentModule
 
 		$this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
 
+		$this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
+
 		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 	}
 
