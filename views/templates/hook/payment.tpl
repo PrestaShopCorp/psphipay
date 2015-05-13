@@ -28,7 +28,7 @@
 		<p class="payment_module" id="psp_hipay_payment_button">
 			{if $cart->getOrderTotal() < 2}
 				<a href="#">
-					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="150px" height="64px" />
+					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="234px" height="57px" />
 					<span>
 						{l s='Minimum amount required in order to pay by credit card:' mod='psphipay' } {convertPrice price=2}
 
@@ -39,10 +39,10 @@
 				</a>
 			{else}
 				<a href="{$link->getModuleLink('psphipay', 'redirect', array(), true)|escape:'htmlall':'UTF-8'}" title="{l s='Pay by credit card' mod='psphipay'}">
-					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="150px" height="64px" />
+					<img src="{$domain|cat:$payment_button|escape:'html':'UTF-8'}" alt="{l s='Pay by credit card' mod='psphipay'}" class="pull-left" width="234px" height="57px" />
 					<span>
 						{l s='Pay by credit card' mod='psphipay'}
-	
+
 						{if isset($psphipay_prod) && (!$psphipay_prod)}
 							<em>{l s='(sandbox / test mode)' mod='psphipay'}</em>
 						{/if}

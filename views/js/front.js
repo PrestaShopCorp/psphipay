@@ -24,15 +24,8 @@
 */
 
 $(document).ready(function() {
-	$(document).on('click', '#transactions_dates_range_button', function() {
-		$('#datepicker').removeClass('hide');
-		return false;
-	});
 
-	if ($('#psphipay_warning_modal').length > 0) {
-		$('#psphipay_warning_modal').modal('show');
-	}
-
-	$('#datepicker').removeClass('hide');
-	$('#datepicker-cancel').hide();
+	$payment_button = $('#psp_hipay_payment_button').closest('.row').clone();
+	$('#psp_hipay_payment_button').closest('.row').remove();
+	$('#HOOK_PAYMENT').prepend($payment_button);
 });
