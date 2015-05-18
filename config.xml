@@ -2,7 +2,7 @@
 <module>
 	<name>psphipay</name>
 	<displayName><![CDATA[PrestaShop Payments by HiPay]]></displayName>
-	<version><![CDATA[1.0.3]]></version>
+	<version><![CDATA[1.0.4]]></version>
 	<description><![CDATA[PrestaShop&rsquo;s Official Payment Solution, offering the most competitive rates in Europe.]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
