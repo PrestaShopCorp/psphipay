@@ -76,7 +76,7 @@ class HipayPayment extends HipayWS
 			'description' => $this->getCartDetails(),
 			'emailCallback' => Configuration::get('PSP_HIPAY_USER_EMAIL'),
 			'executionDate' => date('Y-m-d\TH:i:s'),
-			'locale' => $locale->getLocale(),
+			'locale' => $locale->getCurrentLocaleCode(),
 			'manualCapture' => (int)false,
 			'rating' => 'ALL',
 			'wsSubAccountId' => $wesbite_account_id,
@@ -99,16 +99,16 @@ class HipayPayment extends HipayWS
 
 		return false;
 	}
-	
+
 	protected function getCartDetails()
 	{
 		$output = null;
-		
+
 		foreach ($this->context->cart->getProducts() as $product)
 		{
 			$output .= $product['cart_quantity'].' x '.$product['name'].'<br />';
 		}
-		
+
 		return $output;
 	}
 
