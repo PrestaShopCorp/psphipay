@@ -56,7 +56,7 @@ class PSPHipay extends PaymentModule
 	{
 		$this->name = 'psphipay';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.5';
+		$this->version = '1.0.6';
 		$this->module_key = '';
 
 		$this->currencies = true;
@@ -122,6 +122,7 @@ class PSPHipay extends PaymentModule
 		$this->registerHook('header') &&
 		$this->registerHook('payment') &&
 		$this->registerHook('paymentReturn') &&
+		$this->registerHook('paymentTop') &&
 		$this->registerHook('backOfficeHeader');
 	}
 
@@ -500,12 +501,15 @@ class PSPHipay extends PaymentModule
 
 			$this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
 
-			$this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
-
 			return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 		}
 
 		return false;
+	}
+
+	public function hookPaymentTop()
+	{
+		$this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
 	}
 
 	/**

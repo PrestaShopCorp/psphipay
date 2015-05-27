@@ -1,3 +1,4 @@
+<?php
 /**
 * 2007-2015 PrestaShop
 *
@@ -23,20 +24,9 @@
 * International Registered Trademark & Property of PrestaShop SA
 */
 
-$(document).ready(function() {
-	movePSPHiPayButtonPosition();
+function upgrade_module_1_0_6($module)
+{
+	$module->registerHook('paymentTop');
 
-	$(document).on('DOMSubtreeModified', '#HOOK_PAYMENT', function() {
-		if ($('#HOOK_PAYMENT > .row:first-child #psp_hipay_payment_button').length == 0) {
-			movePSPHiPayButtonPosition();
-		}
-	});
-});
-
-function movePSPHiPayButtonPosition() {
-	if ($('#psp_hipay_payment_button').length) {
-		$payment_button = $('#psp_hipay_payment_button').closest('.row').clone();
-		$('#psp_hipay_payment_button').closest('.row').remove();
-		$('#HOOK_PAYMENT').prepend($payment_button);
-	}
+	return true;
 }
