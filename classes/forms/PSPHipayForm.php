@@ -143,12 +143,12 @@ class PSPHipayForm extends PSPHipayFormInputs {
 			));
 			$form['form']['input'][] = $this->generateInputText('install_ws_login', $this->module->l('WS Login', 'PSPHipayForm'), array(
 				'class' => 'fixed-width-xxl',
-				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
 				'required' => true,
 			));
 			$form['form']['input'][] = $this->generateInputText('install_ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
 				'class' => 'fixed-width-xxl',
-				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
+				'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
 				'required' => true,
 			));
 
@@ -229,12 +229,12 @@ class PSPHipayForm extends PSPHipayFormInputs {
 						)),
 						$this->generateInputText('sandbox_ws_login', $this->module->l('WS Login', 'PSPHipayForm'), array(
 							'class' => 'fixed-width-xxl',
-							'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
+							'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
 							'required' => true,
 						)),
 						$this->generateInputText('sandbox_ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
 							'class' => 'fixed-width-xxl',
-							'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access', 'PSPHipayForm'),
+							'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
 							'required' => true,
 						)),
 						$this->generateInputFree('sandbox_mode_description', false, array('col' => 12, 'offset' => 0)),

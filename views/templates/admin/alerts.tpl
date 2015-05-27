@@ -28,7 +28,7 @@
 		<h4>{l s='Error!' mod='psphipay'}</h4>
 		<ul class="list-unstyled">
 		{foreach from=$form_errors item='message'}
-			<li>{$message|escape:'htmlall':'UTF-8'}</li>
+			<li>{$message|escape:'html':'UTF-8'}</li>
 		{/foreach}
 		</ul>
 	</div>
@@ -39,7 +39,7 @@
 		<h4>{l s='Notice!' mod='psphipay'}</h4>
 		<ul class="list-unstyled">
 		{foreach from=$form_infos item='message'}
-			<li>{$message|escape:'htmlall':'UTF-8'}</li>
+			<li>{$message|escape:'html':'UTF-8'}</li>
 		{/foreach}
 		</ul>
 	</div>
@@ -50,7 +50,7 @@
 		<h4>{l s='Success!' mod='psphipay'}</h4>
 		<ul class="list-unstyled">
 		{foreach from=$form_successes item='message'}
-			<li>{$message|escape:'htmlall':'UTF-8'}</li>
+			<li>{$message|escape:'html':'UTF-8'}</li>
 		{/foreach}
 		</ul>
 	</div>
