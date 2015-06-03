@@ -146,10 +146,10 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 			}
 			else
 			{
-				$error_code = $order['result']['returnCode'];
-				$error_desc = $order['result']['returnDescriptionShort'];
+				$error_details = Tools::safeOutput(print_r($order['result'], true));
+				
 				$message = Tools::jsonEncode(array(
-					"Error" => Tools::safeOutput("[$error_code] $error_desc"),
+					"Error" => $error_details,
 				));
 			}
 

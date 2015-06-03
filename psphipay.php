@@ -56,7 +56,7 @@ class PSPHipay extends PaymentModule
 	{
 		$this->name = 'psphipay';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.5';
+		$this->version = '1.0.7';
 		$this->module_key = '';
 
 		$this->currencies = true;
@@ -122,6 +122,7 @@ class PSPHipay extends PaymentModule
 		$this->registerHook('header') &&
 		$this->registerHook('payment') &&
 		$this->registerHook('paymentReturn') &&
+		$this->registerHook('paymentTop') &&
 		$this->registerHook('backOfficeHeader');
 	}
 
@@ -484,23 +485,31 @@ class PSPHipay extends PaymentModule
 	 */
 	public function hookPayment($params)
 	{
-		$currency_id = $params['cart']->id_currency;
-		$currency = new Currency((int)$currency_id);
+		if (Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID'))
+		{
+			$currency_id = $params['cart']->id_currency;
+			$currency = new Currency((int)$currency_id);
 
-		if (in_array($currency->iso_code, $this->limited_currencies) == false)
-			return false;
+			if (in_array($currency->iso_code, $this->limited_currencies) == false)
+				return false;
 
-		$this->smarty->assign(array(
-			'domain' => Tools::getShopDomainSSL(true),
-			'module_dir' => $this->_path,
-			'payment_button' => $this->getPaymentButton(),
-		));
+			$this->smarty->assign(array(
+				'domain' => Tools::getShopDomainSSL(true),
+				'module_dir' => $this->_path,
+				'payment_button' => $this->getPaymentButton(),
+			));
 
-		$this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
+			$this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
 
+			return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
+		}
+
+		return false;
+	}
+
+	public function hookPaymentTop()
+	{
 		$this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
-
-		return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
 	}
 
 	/**
