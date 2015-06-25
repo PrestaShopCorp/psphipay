@@ -69,7 +69,7 @@ class PSPHipay extends PaymentModule
 		parent::__construct();
 
 		$this->displayName = $this->l('PrestaShop Payments by HiPay');
-		$this->description = $this->l('PrestaShop’s Official Payment Solution, offering the most competitive rates in Europe.');
+		$this->description = $this->l('Accept payments by credit card and other local methods with PrestaShop\'s official payment solution. Very competitive rates, no configuration required!');
 
 		// Compliancy
 		$this->limited_countries = array(
