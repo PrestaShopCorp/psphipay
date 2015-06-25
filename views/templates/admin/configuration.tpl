@@ -86,11 +86,10 @@
 								<hr />
 							{/if}
 							<div class="col-md-6">
-								<h4>{l s='A complete solution at the best price' mod='psphipay'}</h4>
+								<h4>{l s='A complete and easy to use solution' mod='psphipay'}</h4>
 								<ul class="ul-spaced">
 									<li>{l s='Start now, no contract required' mod='psphipay'}</li>
-									<li>{l s='Accept several currencies with 10+ local payment solutions in Europe' mod='psphipay'}</li>
-									<li>{l s='No registration or installation fee' mod='psphipay'}</li>
+									<li>{l s='Accept 8 currencies with 15+ local payment solutions in Europe' mod='psphipay'}</li>
 									<li>{l s='Anti-fraud system and full-time monitoring of high-risk behavior' mod='psphipay'}</li>
 								</ul>
 							</div>
@@ -99,16 +98,13 @@
 								<h4>{l s='From 1% + €0.25 per transaction!' mod='psphipay'}</h4>
 								<ul class="ul-spaced">
 									<li>{l s='A rate that adapts to your volume of activity' mod='psphipay'}</li>
-									<li>{l s='25% less expensive than leading solutions in the market*' mod='psphipay'}</li>
+									<li>{l s='15% less expensive than leading solutions in the market*' mod='psphipay'}</li>
+									<li>{l s='No registration, installation or monthly fee' mod='psphipay'}</li>
 								</ul>
 								<br />
 								<a href="{$localized_rates_pdf_link}" class="_blank">
-									{l s='See the complete list of rates for PrestaShop Payments by HiPay' mod='psphipay'}
+									{l s='*See the complete list of rates for PrestaShop Payments by HiPay' mod='psphipay'}
 								</a>
-								<br />
-								<em class="text-muted small">
-									* {l s='Source' mod='psphipay'}
-								</em>
 							</div>
 						</div>
 
@@ -116,7 +112,7 @@
 
 						<div class="row">
 							<div class="col-md-12 col-xs-12">
-								<h4>{l s='Accept payments from all over Europe in just a few clicks' mod='psphipay'}</h4>
+								<h4>{l s='Accept payments from all over the world in just a few clicks' mod='psphipay'}</h4>
 							</div>
 						</div>
 
