@@ -39,8 +39,6 @@ class PSPHipay extends PaymentModule
 	protected $_successes = array();
 	protected $_warnings = array();
 
-	public $default_currency = 'EUR';
-
 	public $currencies_titles = array();
 	public $limited_countries = array();
 	public $limited_currencies = array();
@@ -56,7 +54,7 @@ class PSPHipay extends PaymentModule
 	{
 		$this->name = 'psphipay';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.8';
+		$this->version = '1.1.0';
 		$this->module_key = '';
 
 		$this->currencies = true;
@@ -74,10 +72,10 @@ class PSPHipay extends PaymentModule
 		// Compliancy
 		$this->limited_countries = array(
 			'AT', 'BE', 'CH', 'CY', 'CZ', 'DE', 'DK',
-			'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'IE',
-			'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MT',
-			'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'SE',
-			'SI', 'SK', 'TR',
+			'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HK',
+			'IE', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC',
+			'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU',
+			'SE', 'SI', 'SK', 'TR',
 		);
 
 		$this->currencies_titles = array(
@@ -91,7 +89,7 @@ class PSPHipay extends PaymentModule
 			'USD' => $this->l('United States dollar'),
 		);
 
-		$this->limited_currencies = array('AUD ', 'CAD', 'CHF', 'EUR', 'GBP', 'PLN', 'SEK', 'USD');
+		$this->limited_currencies = array_keys($this->currencies_titles);
 
 		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
@@ -157,7 +155,7 @@ class PSPHipay extends PaymentModule
 			$sql = 'INSERT IGNORE INTO `'._DB_PREFIX_.'module_currency` (`id_module`, `id_shop`, `id_currency`)
 					SELECT '.(int)$this->id.', "'.(int)$shop.'", `id_currency`
 					FROM `'._DB_PREFIX_.'currency`
-					WHERE `deleted` = \'0\' AND `iso_code` IN (\'CHF\', \'EUR\', \'GBP\', \'SEK\')';
+					WHERE `deleted` = \'0\' AND `iso_code` IN (\''.implode($this->limited_currencies, '\',\'').'\')';
 
 			return (bool)Db::getInstance()->execute($sql);
 		}
