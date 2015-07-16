@@ -126,15 +126,22 @@ class PSPHipay extends PaymentModule
 
 	public function hookBackOfficeHeader()
 	{
-		if (Tools::getValue('configure') != 'psphipay')
+		if (( ! ($this->context->controller instanceof AdminModulesController)) &&
+			( ! ($this->context->controller instanceof AdminPaymentController))) {
 			return false;
+		} elseif ((Tools::getIsset('configure') == true) && (Tools::getValue('configure') == 'psphipay')) {
+			$this->context->controller->addJS($this->_path.'views/js/back.js');
+			$this->context->controller->addCSS($this->_path.'views/css/back.css');
 
-		$this->context->controller->addJS($this->_path.'views/js/back.js');
-		$this->context->controller->addCSS($this->_path.'views/css/back.css');
+			return '<script type="text/javascript">
+				var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
+			</script>';
+		} else {
+			$this->context->controller->addJS($this->_path.'views/js/poll.js');
+			return $this->context->smarty->fetch($this->local_path.'views/templates/admin/poll.tpl');
+		}
 
-		return '<script type="text/javascript">
-			var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
-		</script>';
+		return true;
 	}
 
 	public function hookHeader()
