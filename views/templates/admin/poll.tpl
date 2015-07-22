@@ -24,7 +24,7 @@
 *}
 
 <div class="bootstrap modal fade" id="psphipay-poll-modal" tabindex="-1" role="dialog" aria-labelledby="psphipay-poll-modal-label">
-	<div class="modal-dialog" role="document">
+	<form class="form-horizontal modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -32,13 +32,49 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					You're just a poor crazy guy :'(
+					Why are you disabling / uninstalling this module?
 				</p>
+
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				        <div class="radio">
+				            <label class="col-lg-12">
+				                <input type="radio" name="option"> J'utilise une autre solution de paiement
+				            </label>
+				            <label class="col-lg-12">
+				                <input type="radio" name="option"> Je ne connais pas cette solution
+				            </label>
+				            <label class="col-lg-12">
+				                <input type="radio" name="option"> Je n'ai pas compris son fonctionnement
+				            </label>
+				            <label class="col-lg-12">
+				                <input type="radio" name="option"> Cela ne correspond pas à mon besoin
+				            </label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				        <div class="radio">
+				            <label class="col-lg-12">
+				                <input type="radio" name="option"> Autre
+				            </label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="inputPassword3" class="col-sm-2 control-label">Comment</label>
+					<div class="col-sm-10">
+						<textarea></textarea>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-success">Save changes</button>
+				<button type="submit" class="btn btn-success">Submit</button>
 			</div>
 		</div>
-	</div>
+	</form>
 </div>
