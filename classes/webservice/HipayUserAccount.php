@@ -200,8 +200,14 @@ class HipayUserAccount extends HipayWS
 	{
 		$account = $this->getAccountInfos();
 
-		if ($iso_code == $account->currency)
-			return $account->websites->item->websiteId;
+		if ($iso_code == $account->currency) {
+			if (isset($account->websites->item->websiteId))
+				return $account->websites->item->websiteId;
+
+			foreach ($account->websites->item as $account)
+				if (strstr($account->websiteURL, Tools::getShopDomain()) !== false)
+					return $account->websiteId;
+		}
 
 		foreach ($account->subAccounts->item as $sub_account)
 			if ($iso_code == $sub_account->currency)
