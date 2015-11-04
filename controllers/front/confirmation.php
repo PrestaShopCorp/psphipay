@@ -26,26 +26,28 @@
 
 class PSPHipayConfirmationModuleFrontController extends ModuleFrontController
 {
-	public function postProcess()
-	{
-		if ((Tools::isSubmit('cart_id') == false) || (Tools::isSubmit('secure_key') == false))
-			return false;
+    public function postProcess()
+    {
+        if ((Tools::isSubmit('cart_id') == false) || (Tools::isSubmit('secure_key') == false)) {
+            return false;
+        }
 
-		$cart_id = Tools::getValue('cart_id');
-		$secure_key = Tools::getValue('secure_key');
+        $cart_id = Tools::getValue('cart_id');
+        $secure_key = Tools::getValue('secure_key');
 
-		$cart = new Cart((int)$cart_id);
-		
-		if ($cart->id)
-		{
-			$customer = new Customer((int)$cart->id_customer);
-			$order_id = Order::getOrderByCartId((int)$cart->id);
+        $cart = new Cart((int)$cart_id);
 
-			if (($order_id) && ($secure_key == $customer->secure_key))
-				return Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$order_id.'&key='.$customer->secure_key);
-		}
+        if ($cart->id) {
+            $customer = new Customer((int)$cart->id_customer);
+            $order_id = Order::getOrderByCartId((int)$cart->id);
 
-		$this->errors[] = $this->module->l('An error occurred. Please contact the merchant for more details.');
-		return $this->setTemplate('error.tpl');
-	}
+            if (($order_id) && ($secure_key == $customer->secure_key)) {
+                return Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$this->module->id.'&id_order='.$order_id.'&key='.$customer->secure_key);
+            }
+        }
+
+        $this->errors[] = $this->module->l('An error occurred. Please contact the merchant for more details.');
+        
+        return $this->setTemplate('error.tpl');
+    }
 }
