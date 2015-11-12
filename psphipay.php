@@ -54,7 +54,7 @@ class PSPHipay extends PaymentModule
     {
         $this->name = 'psphipay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.1.2';
+        $this->version = '1.1.3';
         $this->module_key = '';
 
         $this->currencies = true;
