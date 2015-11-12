@@ -54,7 +54,7 @@ class PSPHipay extends PaymentModule
     {
         $this->name = 'psphipay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.1.2';
+        $this->version = '1.1.3';
         $this->module_key = '';
 
         $this->currencies = true;
@@ -73,9 +73,9 @@ class PSPHipay extends PaymentModule
         $this->limited_countries = array(
             'AT', 'BE', 'CH', 'CY', 'CZ', 'DE', 'DK',
             'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HK',
-            'IE', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC',
-            'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU',
-            'SE', 'SI', 'SK', 'TR',
+            'HR', 'HU', 'IE', 'IT', 'LI', 'LT', 'LU',
+            'LV', 'MC', 'MT', 'NL', 'NO', 'PL', 'PT',
+            'RO', 'RU', 'SE', 'SI', 'SK', 'TR'
         );
 
         $this->currencies_titles = array(
@@ -545,7 +545,7 @@ class PSPHipay extends PaymentModule
                 return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
             }
         }
-        
+
         return $this->_path.'views/img/payment_buttons/default.png';
     }
 
