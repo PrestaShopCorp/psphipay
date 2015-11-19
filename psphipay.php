@@ -266,7 +266,7 @@ class PSPHipay extends PaymentModule
         return $this->context->smarty->fetch($configuration);
     }
 
-    protected function getLocalizedRatesPDFLink()
+    public function getLocalizedRatesPDFLink()
     {
         $shop_iso_country_id = Configuration::get('PS_COUNTRY_DEFAULT');
         $shop_iso_country = Country::getIsoById((int)$shop_iso_country_id);
