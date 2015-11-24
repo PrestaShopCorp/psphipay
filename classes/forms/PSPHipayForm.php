@@ -73,6 +73,7 @@ class PSPHipayForm extends PSPHipayFormInputs {
      */
     public function getCustomersServiceForm($user_account)
     {
+        $this->context->smarty->assign('localized_rates_pdf_link', '<a href="' . $this->module->getLocalizedRatesPDFLink() . '" target="_blank">');
         $this->helper->tpl_vars['fields_value'] = $this->getCustomersServiceFormValues($user_account);
 
         $form = array('form' => array(

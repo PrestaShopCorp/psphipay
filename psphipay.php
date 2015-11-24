@@ -54,7 +54,7 @@ class PSPHipay extends PaymentModule
     {
         $this->name = 'psphipay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.1.3';
+        $this->version = '1.1.4';
         $this->module_key = '';
 
         $this->currencies = true;
@@ -266,7 +266,7 @@ class PSPHipay extends PaymentModule
         return $this->context->smarty->fetch($configuration);
     }
 
-    protected function getLocalizedRatesPDFLink()
+    public function getLocalizedRatesPDFLink()
     {
         $shop_iso_country_id = Configuration::get('PS_COUNTRY_DEFAULT');
         $shop_iso_country = Country::getIsoById((int)$shop_iso_country_id);
