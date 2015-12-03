@@ -317,8 +317,13 @@ class PSPHipayForm extends PSPHipayFormInputs {
      */
     public function getLoginFormValues($complete_form = false)
     {
+        $email = Configuration::get('PSP_HIPAY_USER_EMAIL');
+        if (! $email) {
+          $email = Configuration::get('PS_SHOP_EMAIL');
+        }
+
         $values = array(
-            'install_user_email' => Tools::getValue('install_user_email', Configuration::get('PSP_HIPAY_USER_EMAIL')),
+            'install_user_email' => Tools::getValue('install_user_email', $email),
             'install_user_info' => $this->module->l('If you have any questions or need help creating a PrestaShop Payments by HiPay account, contact us at prestashop@hipay.com', 'PSPHipayForm'),
         );
 
