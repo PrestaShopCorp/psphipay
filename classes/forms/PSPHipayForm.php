@@ -218,22 +218,26 @@ class PSPHipayForm extends PSPHipayFormInputs {
                 'form' => array(
                     'input' => array(
                         $this->generateSwitchButton('sandbox_account_mode', $this->module->l('Test mode', 'PSPHipayForm')),
-                        $this->generateInputText('sandbox_website_id', $this->module->l('Website ID', 'PSPHipayForm'), array('
-                            class' => 'fixed-width-lg',
-                            'hint' => $this->module->l('You can find it on your HiPay test account, section "Creating a payment button" under the URL of your website', 'PSPHipayForm'),
+                        
+                        $this->generateFormSplit(),
+                        
+                        $this->generateInputText('website_id', $this->module->l('Website ID', 'PSPHipayForm'), array(
+                        	'class' => 'fixed-width-md',
+                            'hint' => $this->module->l('You can find it on your HiPay account, section "Creating a payment button" under the URL of your website', 'PSPHipayForm'),
                             'required' => true,
                         )),
-                        $this->generateInputText('sandbox_ws_login', $this->module->l('WS Login', 'PSPHipayForm'), array(
+                        $this->generateInputText('ws_login', $this->module->l('WS Login', 'PSPHipayForm'), array(
                             'class' => 'fixed-width-xxl',
-                            'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
+                            'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
                             'required' => true,
                         )),
-                        $this->generateInputText('sandbox_ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
+                        $this->generateInputText('ws_password', $this->module->l('WS Password', 'PSPHipayForm'), array(
                             'class' => 'fixed-width-xxl',
-                            'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
+                            'hint' => $this->module->l('You can find it on your HiPay account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
                             'required' => true,
                         )),
-                        $this->generateInputFree('sandbox_mode_description', false, array('col' => 12, 'offset' => 0)),
+                        
+                        $this->generateFormSplit(),
                     ),
                     'buttons' => array(
                         $this->generateSubmitButton($this->module->l('Save', 'PSPHipayForm'), array(
@@ -251,6 +255,30 @@ class PSPHipayForm extends PSPHipayFormInputs {
                 ),
             ),
         );
+        
+        if (Configuration::get('PSP_HIPAY_SANDBOX_MODE')) {
+	        $form[0]['form']['input'][] = $this->generateInputText('sandbox_website_id', $this->module->l('Website ID (Sandbox)', 'PSPHipayForm'), array(
+            	'class' => 'fixed-width-md',
+                'hint' => $this->module->l('You can find it on your HiPay test account, section "Creating a payment button" under the URL of your website', 'PSPHipayForm'),
+                'required' => true,
+            ));
+            
+	        $form[0]['form']['input'][] = $this->generateInputText('sandbox_ws_login', $this->module->l('WS Login (Sandbox)', 'PSPHipayForm'), array(
+	            'class' => 'fixed-width-xxl',
+	            'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
+	            'required' => true,
+	        ));
+	        
+	        $form[0]['form']['input'][] = $this->generateInputText('sandbox_ws_password', $this->module->l('WS Password (Sandbox)', 'PSPHipayForm'), array(
+                'class' => 'fixed-width-xxl',
+                'hint' => $this->module->l('You can find it on your HiPay test account, section "Integration > API", under "Webservice access"', 'PSPHipayForm'),
+                'required' => true,
+            ));
+                        
+            $form[0]['form']['input'][] = $this->generateFormSplit();
+        }
+                                
+        $form[0]['form']['input'][] = $this->generateInputFree('sandbox_mode_description', false, array('col' => 12, 'offset' => 0));
 
         return $this->helper->generateForm($form);
     }
@@ -347,7 +375,11 @@ class PSPHipayForm extends PSPHipayFormInputs {
         $template_path = _PS_MODULE_DIR_.$this->module->name.'/views/templates/admin/sandbox.tpl';
 
         return array(
+            'input_split' => '<br/>',
             'sandbox_account_mode' => Tools::getValue('sandbox_account_mode', Configuration::get('PSP_HIPAY_SANDBOX_MODE')),
+            'website_id' => Tools::getValue('website_id', Configuration::get('PSP_HIPAY_WEBSITE_ID')),
+            'ws_login' => Tools::getValue('ws_login', Configuration::get('PSP_HIPAY_WS_LOGIN')),
+            'ws_password' => Tools::getValue('ws_password', Configuration::get('PSP_HIPAY_WS_PASSWORD')),
             'sandbox_website_id' => Tools::getValue('sandbox_website_id', Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID')),
             'sandbox_ws_login' => Tools::getValue('sandbox_ws_login', Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN')),
             'sandbox_ws_password' => Tools::getValue('sandbox_ws_password', Configuration::get('PSP_HIPAY_SANDBOX_WS_PASSWORD')),
