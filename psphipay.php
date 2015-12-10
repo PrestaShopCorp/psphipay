@@ -54,7 +54,7 @@ class PSPHipay extends PaymentModule
     {
         $this->name = 'psphipay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.1.5';
+        $this->version = '1.2.0';
         $this->module_key = '';
 
         $this->currencies = true;
@@ -119,84 +119,8 @@ class PSPHipay extends PaymentModule
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
             $this->registerHook('paymentTop') &&
-            $this->registerHook('backOfficeHeader');
-    }
-
-    public function hookBackOfficeHeader()
-    {
-        if (Tools::getValue('configure') != 'psphipay')
-            return false;
-
-        $this->context->controller->addJS($this->_path.'views/js/back.js');
-        $this->context->controller->addCSS($this->_path.'views/css/back.css');
-
-        return '<script type="text/javascript">
-            var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
-        </script>';
-    }
-
-    public function hookHeader()
-    {
-        return $this->context->controller->addCSS($this->_path.'/views/css/front.css');
-    }
-
-    /**
-     * Store the currencies list the module should work with
-     * @return boolean
-     */
-    protected function setCurrencies()
-    {
-        $shops = Shop::getShops(true, null, true);
-
-        foreach ($shops as $shop) {
-            $sql = 'INSERT IGNORE INTO `'._DB_PREFIX_.'module_currency` (`id_module`, `id_shop`, `id_currency`)
-                    SELECT '.(int)$this->id.', "'.(int)$shop.'", `id_currency`
-                    FROM `'._DB_PREFIX_.'currency`
-                    WHERE `deleted` = \'0\' AND `iso_code` IN (\''.implode($this->limited_currencies, '\',\'').'\')';
-
-            return (bool)Db::getInstance()->execute($sql);
-        }
-
-        return true;
-    }
-
-    /**
-     * Add waiting order state in database
-     * If it does not already exists
-     * @return boolean
-     */
-    protected function addWaitingOrderState()
-    {
-        if ((bool)Configuration::get('PSP_HIPAY_OS_WAITING') == true) {
-            return true;
-        }
-
-        $order_state = new OrderState();
-        $order_state->name = array();
-
-        foreach (Language::getLanguages(false) as $language) {
-            if (Tools::strtolower($language['iso_code']) == 'fr') {
-                $order_state->name[(int)$language['id_lang']] = 'En attente d\'autorisation';
-            } else {
-                $order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
-            }
-        }
-
-        $order_state->color = '#4169E1';
-        $order_state->hidden = false;
-        $order_state->send_email = false;
-        $order_state->delivery = false;
-        $order_state->logable = false;
-        $order_state->invoice = false;
-
-        if ($order_state->add() == true) {
-            Configuration::updateValue('PSP_HIPAY_OS_WAITING', $order_state->id);
-            @copy($this->local_path.'/logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
-
-            return true;
-        }
-
-        return false;
+            $this->registerHook('backOfficeHeader') &&
+            $this->registerHook('displayAdminOrderLeft');
     }
 
     /**
@@ -281,20 +205,97 @@ class PSPHipay extends PaymentModule
         return $localized_link;
     }
 
-    protected function shouldDisplayCompleteLoginForm($user_account)
+    public function hookBackOfficeHeader()
     {
-        // If merchant tries to login / subscribe
-        if (Tools::isSubmit('submitLogin') == true) {
-            $email = Tools::getValue('install_user_email');
+        if (Tools::getValue('configure') != 'psphipay')
+            return false;
 
-            if (Validate::isEmail($email)) {
-                return $user_account->isEmailAvailable($email) ? 'new_account' : 'existing_account';
+        $this->context->controller->addJS($this->_path.'views/js/back.js');
+        $this->context->controller->addCSS($this->_path.'views/css/back.css');
+
+        return '<script type="text/javascript">
+            var email_error_message = "'.$this->l('Please, enter a valid email address').'.";
+        </script>';
+    }
+
+    public function hookDisplayAdminOrderLeft()
+    {
+        return '<div>Bla bla bla bla</div>';
+    }
+
+    public function hookHeader()
+    {
+        return $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+    }
+
+    /**
+     * Display a payment button
+     * @param array $params
+     * @return string
+     */
+    public function hookPayment($params)
+    {
+        if (Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID')) {
+            $currency_id = $params['cart']->id_currency;
+            $currency = new Currency((int)$currency_id);
+
+            if (in_array($currency->iso_code, $this->limited_currencies) == false) {
+                return false;
             }
 
-            $this->module->_errors[] = $this->l('Invalid email address');
+            $this->smarty->assign(array(
+                'domain' => Tools::getShopDomainSSL(true),
+                'module_dir' => $this->_path,
+                'payment_button' => $this->getPaymentButton(),
+            ));
+
+            $this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
+
+            return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
         }
 
         return false;
+    }
+
+    /**
+     * Display the payment confirmation page
+     * @param array $params
+     */
+    public function hookPaymentReturn($params)
+    {
+        if ($this->active == false) {
+            return;
+        }
+
+        $order = $params['objOrder'];
+
+        if ($order->getCurrentOrderState()->id != Configuration::get('PS_OS_ERROR')) {
+            $this->smarty->assign('status', 'ok');
+        }
+
+        $this->smarty->assign(array(
+            'id_order' => $order->id,
+            'reference' => $order->reference,
+            'params' => $params,
+            'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
+        ));
+
+        return $this->display(__FILE__, 'views/templates/hook/confirmation.tpl');
+    }
+
+    public function hookPaymentTop()
+    {
+        $this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
+    }
+
+    /**
+     * Check if the given currency is supported by the provider
+     * @param string $iso_code currency iso code
+     * @return boolean
+     */
+    public function isSupportedCurrency($iso_code)
+    {
+        return in_array(Tools::strtoupper($iso_code), $this->limited_currencies);
     }
 
     protected function postProcess($user_account)
@@ -312,6 +313,45 @@ class PSPHipay extends PaymentModule
             $this->context->smarty->assign('active_tab', 'transactions');
             return $this->saveTransactionsDateRange();
         }
+    }
+
+    /**
+     * Add waiting order state in database
+     * If it does not already exists
+     * @return boolean
+     */
+    protected function addWaitingOrderState()
+    {
+        if ((bool)Configuration::get('PSP_HIPAY_OS_WAITING') == true) {
+            return true;
+        }
+
+        $order_state = new OrderState();
+        $order_state->name = array();
+
+        foreach (Language::getLanguages(false) as $language) {
+            if (Tools::strtolower($language['iso_code']) == 'fr') {
+                $order_state->name[(int)$language['id_lang']] = 'En attente d\'autorisation';
+            } else {
+                $order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
+            }
+        }
+
+        $order_state->color = '#4169E1';
+        $order_state->hidden = false;
+        $order_state->send_email = false;
+        $order_state->delivery = false;
+        $order_state->logable = false;
+        $order_state->invoice = false;
+
+        if ($order_state->add() == true) {
+            Configuration::updateValue('PSP_HIPAY_OS_WAITING', $order_state->id);
+            @copy($this->local_path.'/logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -356,6 +396,27 @@ class PSPHipay extends PaymentModule
                 $user_account->createAccount($email, $first_name, $last_name, true);
             }
         }
+    }
+
+    /**
+     * Get the appropriate payment button's image
+     * @return string
+     */
+    protected function getPaymentButton()
+    {
+        $id_address = $this->context->cart->id_address_invoice;
+
+        if ($id_address) {
+            $address = new Address((int)$id_address);
+            $country = new Country((int)$address->id_country);
+            $iso_code = Tools::strtolower($country->iso_code);
+
+            if (file_exists(dirname(__FILE__).'/views/img/payment_buttons/'.$iso_code.'.png')) {
+                return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
+            }
+        }
+
+        return $this->_path.'views/img/payment_buttons/default.png';
     }
 
     protected function login($user_account)
