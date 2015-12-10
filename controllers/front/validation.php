@@ -136,22 +136,22 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
                 $payment_method = $order['result']['paymentMethod'];
                 $transaction_id = $order['result']['transid'];
 
+                $extra_vars = ['transaction_id' => Tools::safeOutput($transaction_id)];
                 $sandbox_mode = (bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE');
 
-                $message = Tools::jsonEncode(array(
+                $message = Tools::jsonEncode([
                     "Environment"       => $sandbox_mode ? 'SANDBOX' : 'PRODUCTION',
                     "Payment method"    => Tools::safeOutput($payment_method),
                     "Transaction ID"    => Tools::safeOutput($transaction_id),
-                ));
-            } else {
-                $error_details = Tools::safeOutput(print_r($order['result'], true));
+                ]);
 
-                $message = Tools::jsonEncode(array(
-                    "Error" => $error_details,
-                ));
+            } else {
+                $extra_vars     = [];
+                $error_details  = Tools::safeOutput(print_r($order['result'], true));
+                $message        = Tools::jsonEncode(["Error" => $error_details]);
             }
 
-            return $this->module->validateOrder($cart_id, $id_order_state, $amount, $this->module->displayName, $message, array(), (int)$currency->id, false, $secure_key);
+            return $this->module->validateOrder($cart_id, $id_order_state, $amount, $this->module->displayName, $message, $extra_vars, (int)$currency->id, false, $secure_key);
         }
     }
 }
