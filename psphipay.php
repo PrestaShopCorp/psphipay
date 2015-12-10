@@ -464,29 +464,24 @@ class PSPHipay extends PaymentModule
         return true;
     }
 
-    protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password)
+    protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password, $sandbox = false)
     {
-        Configuration::updateValue('PSP_HIPAY_USER_EMAIL', $email);
+        $prefix = $sandbox ? 'PSP_HIPAY_SANDBOX' : 'PSP_HIPAY';
 
-        if (Configuration::get('PSP_HIPAY_SANDBOX_MODE')) {
-            Configuration::updateValue('PSP_HIPAY_SANDBOX_WEBSITE_ID', $website_id);
-            Configuration::updateValue('PSP_HIPAY_SANDBOX_WS_LOGIN', $ws_login);
-            Configuration::updateValue('PSP_HIPAY_SANDBOX_WS_PASSWORD', $ws_password);
-        } else {
-            Configuration::updateValue('PSP_HIPAY_WEBSITE_ID', $website_id);
-            Configuration::updateValue('PSP_HIPAY_WS_LOGIN', $ws_login);
-            Configuration::updateValue('PSP_HIPAY_WS_PASSWORD', $ws_password);
-        }
+        $details = [
+            'PSP_HIPAY_USER_EMAIL' => $email,
+            $prefix.'_WEBSITE_ID' => $website_id,
+            $prefix.'_WS_LOGIN' => $ws_login,
+            $prefix.'_WS_PASSWORD' => $ws_password,
+        ];
+
+        $this->saveConfigurationDetails($details);
 
         $user_account = new HipayUserAccount($this);
         $account = $user_account->getAccountInfos();
 
         if (isset($account->code) && ($account->code == 0)) {
-            if (Configuration::get('PSP_HIPAY_SANDBOX_MODE')) {
-                Configuration::updateValue('PSP_HIPAY_SANDBOX_USER_ACCOUNT_ID', $account->userAccountId);
-            } else {
-                Configuration::updateValue('PSP_HIPAY_USER_ACCOUNT_ID', $account->userAccountId);
-            }
+            Configuration::updateValue($prefix.'_USER_ACCOUNT_ID', $account->userAccountId);
         } else {
             $this->_errors[] = $this->l('Authentication failed!');
             $this->clearAccountData();
@@ -497,6 +492,13 @@ class PSPHipay extends PaymentModule
         return true;
     }
 
+    protected function saveConfigurationDetails($details)
+    {
+        foreach ($details as $name => $value) {
+            Configuration::updateValue($name, $value);
+        }
+    }
+
     protected function saveTransactionsDateRange()
     {
         if (Tools::isSubmit('date_from') && Tools::isSubmit('date_to')) {
@@ -505,118 +507,76 @@ class PSPHipay extends PaymentModule
         }
     }
 
+    /**
+     * Store the currencies list the module should work with
+     * @return boolean
+     */
+    protected function setCurrencies()
+    {
+        $shops = Shop::getShops(true, null, true);
+
+        foreach ($shops as $shop) {
+            $sql = 'INSERT IGNORE INTO `'._DB_PREFIX_.'module_currency` (`id_module`, `id_shop`, `id_currency`)
+                    SELECT '.(int)$this->id.', "'.(int)$shop.'", `id_currency`
+                    FROM `'._DB_PREFIX_.'currency`
+                    WHERE `deleted` = \'0\' AND `iso_code` IN (\''.implode($this->limited_currencies, '\',\'').'\')';
+
+            return (bool)Db::getInstance()->execute($sql);
+        }
+
+        return true;
+    }
+
+    protected function shouldDisplayCompleteLoginForm($user_account)
+    {
+        // If merchant tries to login / subscribe
+        if (Tools::isSubmit('submitLogin') == true) {
+            $email = Tools::getValue('install_user_email');
+
+            if (Validate::isEmail($email)) {
+                return $user_account->isEmailAvailable($email) ? 'new_account' : 'existing_account';
+            }
+
+            $this->module->_errors[] = $this->l('Invalid email address');
+        }
+
+        return false;
+    }
+
     protected function switchSandboxMode()
     {
         $email = Configuration::get('PSP_HIPAY_USER_EMAIL');
 
-        $website_id = Tools::getValue('sandbox_website_id');
-        $ws_login = Tools::getValue('sandbox_ws_login');
-        $ws_password = Tools::getValue('sandbox_ws_password');
+        $sandbox_mode = (bool)Tools::getValue('sandbox_account_mode');
+        Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', $sandbox_mode);
+        $this->context->smarty->assign('sandbox', $sandbox_mode);
+
+        if ($sandbox_mode) {
+            $sandbox_website_id = Tools::getValue('sandbox_website_id');
+            $sandbox_ws_login = Tools::getValue('sandbox_ws_login');
+            $sandbox_ws_password = Tools::getValue('sandbox_ws_password');
+
+            $is_valid_sandbox_website_id = (bool)Validate::isInt($sandbox_website_id);
+            $is_valid_sandbox_login = (bool)Validate::isMd5($sandbox_ws_login);
+            $is_valid_sandbox_password = (bool)Validate::isMd5($sandbox_ws_password);
+
+            if ($sandbox_mode && $is_valid_sandbox_website_id && $is_valid_sandbox_login && $is_valid_sandbox_password) {
+                $this->registerExistingAccount($email, $sandbox_website_id, $sandbox_ws_login, $sandbox_ws_password, $sandbox_mode);
+            }
+        }
+
+        $website_id = Tools::getValue('website_id');
+        $ws_login = Tools::getValue('ws_login');
+        $ws_password = Tools::getValue('ws_password');
 
         $is_valid_website_id = (bool)Validate::isInt($website_id);
         $is_valid_login = (bool)Validate::isMd5($ws_login);
         $is_valid_password = (bool)Validate::isMd5($ws_password);
 
-        $sandbox_mode = (bool)Tools::getValue('sandbox_account_mode');
-        Configuration::updateValue('PSP_HIPAY_SANDBOX_MODE', $sandbox_mode);
-
-        $this->context->smarty->assign('sandbox', $sandbox_mode);
-
-        if ($sandbox_mode && $is_valid_website_id && $is_valid_login && $is_valid_password) {
-            return $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
+        if ($is_valid_website_id && $is_valid_login && $is_valid_password) {
+            $this->registerExistingAccount($email, $website_id, $ws_login, $ws_password);
         }
 
-        return false;
-    }
-
-    /**
-     * Display a payment button
-     * @param array $params
-     * @return string
-     */
-    public function hookPayment($params)
-    {
-        if (Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID')) {
-            $currency_id = $params['cart']->id_currency;
-            $currency = new Currency((int)$currency_id);
-
-            if (in_array($currency->iso_code, $this->limited_currencies) == false) {
-                return false;
-            }
-
-            $this->smarty->assign(array(
-                'domain' => Tools::getShopDomainSSL(true),
-                'module_dir' => $this->_path,
-                'payment_button' => $this->getPaymentButton(),
-            ));
-
-            $this->smarty->assign('psphipay_prod', !(bool)Configuration::get('PSP_HIPAY_SANDBOX_MODE'));
-
-            return $this->display(__FILE__, 'views/templates/hook/payment.tpl');
-        }
-
-        return false;
-    }
-
-    public function hookPaymentTop()
-    {
-        $this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
-    }
-
-    /**
-     * Display the payment confirmation page
-     * @param array $params
-     */
-    public function hookPaymentReturn($params)
-    {
-        if ($this->active == false) {
-            return;
-        }
-
-        $order = $params['objOrder'];
-
-        if ($order->getCurrentOrderState()->id != Configuration::get('PS_OS_ERROR')) {
-            $this->smarty->assign('status', 'ok');
-        }
-
-        $this->smarty->assign(array(
-            'id_order' => $order->id,
-            'reference' => $order->reference,
-            'params' => $params,
-            'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
-        ));
-
-        return $this->display(__FILE__, 'views/templates/hook/confirmation.tpl');
-    }
-
-    /**
-     * Get the appropriate payment button's image
-     * @return string
-     */
-    protected function getPaymentButton()
-    {
-        $id_address = $this->context->cart->id_address_invoice;
-
-        if ($id_address) {
-            $address = new Address((int)$id_address);
-            $country = new Country((int)$address->id_country);
-            $iso_code = Tools::strtolower($country->iso_code);
-
-            if (file_exists(dirname(__FILE__).'/views/img/payment_buttons/'.$iso_code.'.png')) {
-                return $this->_path.'views/img/payment_buttons/'.$iso_code.'.png';
-            }
-        }
-
-        return $this->_path.'views/img/payment_buttons/default.png';
-    }
-
-    /**
-     * Check if the given currency is supported by the provider
-     * @param string $iso_code currency iso code
-     * @return boolean
-     */
-    public function isSupportedCurrency($iso_code)
-    {
-        return in_array(Tools::strtoupper($iso_code), $this->limited_currencies);
+        return true;
     }
 }
