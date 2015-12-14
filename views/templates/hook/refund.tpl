@@ -30,8 +30,12 @@
 
     <input type="hidden" name="refund_link" id="refund-link" value="{$refund_link|urlencode}">
     <input type="hidden" name="refund_amount_max" id="refund-amount-max" value="{$order->total_paid_tax_incl|string_format:'%.2f'}">
-    <input type="hidden" name="refund_amount_max_alert_msg" id="refund-amount-max-alert-msg" value="{l s='The refund amount cannot be greater than the total amount of the order.' mod='psphipay'}">
-    <input type="hidden" name="refund_amount_max_alert_msg" id="refund-amount-empty-msg" value="{l s='The amount cannot be empty or equal to "0".' mod='psphipay'}">
+    
+    <input type="hidden" id="partial-refund-confirmation-msg" value="{l s='You are about to refund this order partially. Are you sure?' mod='psphipay'}">
+    <input type="hidden" id="total-refund-confirmation-msg" value="{l s='You are about to refund this order totally. Are you sure?' mod='psphipay'}">
+    
+    <input type="hidden" id="refund-amount-max-alert-msg" value="{l s='The refund amount cannot be greater than the total amount of the order.' mod='psphipay'}">
+    <input type="hidden" id="refund-amount-empty-msg" value="{l s='The amount cannot be empty or equal to "0".' mod='psphipay'}">
 
     {if ($details)}
         <div class="panel-body well well-sm">
