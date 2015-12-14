@@ -35,20 +35,22 @@ class PSPHipay extends PaymentModule
 {
     protected $config_form = false;
 
-    protected $_errors = array();
-    protected $_successes = array();
-    protected $_warnings = array();
+    protected $_errors = [];
+    protected $_successes = [];
+    protected $_warnings = [];
 
-    public $currencies_titles = array();
-    public $limited_countries = array();
-    public $limited_currencies = array();
+    public $currencies_titles = [];
+    public $limited_countries = [];
+    public $limited_currencies = [];
 
     const PAYMENT_FEED_BASE_LINK = 'https://www.prestashop.com/download/pdf/pspayments/Fees_PSpayments_';
 
-    public static $available_rates_links = array(
+    public static $available_rates_links = [
         'EN', 'FR', 'ES', 'DE',
         'IT', 'NL', 'PL', 'PT'
-    );
+    ];
+
+    public static $refund_available = ['CB', 'VISA', 'MASTERCARD'];
 
     public function __construct()
     {
@@ -70,15 +72,15 @@ class PSPHipay extends PaymentModule
         $this->description = $this->l('Accept payments by credit card and other local methods with PrestaShop\'s official payment solution. Very competitive rates, no configuration required!');
 
         // Compliancy
-        $this->limited_countries = array(
+        $this->limited_countries = [
             'AT', 'BE', 'CH', 'CY', 'CZ', 'DE', 'DK',
             'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HK',
             'HR', 'HU', 'IE', 'IT', 'LI', 'LT', 'LU',
             'LV', 'MC', 'MT', 'NL', 'NO', 'PL', 'PT',
             'RO', 'RU', 'SE', 'SI', 'SK', 'TR'
-        );
+        ];
 
-        $this->currencies_titles = array(
+        $this->currencies_titles = [
             'AUD' => $this->l('Australian dollar'),
             'CAD' => $this->l('Canadian dollar'),
             'CHF' => $this->l('Swiss franc'),
@@ -87,11 +89,11 @@ class PSPHipay extends PaymentModule
             'PLN' => $this->l('Polish złoty'),
             'SEK' => $this->l('Swedish krona'),
             'USD' => $this->l('United States dollar'),
-        );
+        ];
 
         $this->limited_currencies = array_keys($this->currencies_titles);
 
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
 
         if (!Configuration::get('PSP_HIPAY_USER_ACCOUNT_ID') || !Configuration::get('PSP_HIPAY_WEBSITE_ID') ||
             !Configuration::get('PSP_HIPAY_WS_LOGIN') || !Configuration::get('PSP_HIPAY_WS_PASSWORD'))
@@ -114,13 +116,98 @@ class PSPHipay extends PaymentModule
 
         return parent::install() &&
             $this->setCurrencies() &&
-            $this->addWaitingOrderState() &&
+            $this->installAdminTab() &&
+            $this->addPSPHiPayOrderStates() &&
             $this->registerHook('header') &&
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
             $this->registerHook('paymentTop') &&
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('displayAdminOrderLeft');
+    }
+
+    public function uninstall()
+    {
+        return $this->uninstallAdminTab() &&
+            parent::uninstall();
+
+    }
+
+    public function installAdminTab()
+    {
+        $class_name = 'AdminPSPHiPayRefund';
+
+        $tab = new Tab();
+
+        $tab->active = 1;
+        $tab->module = $this->name;
+        $tab->class_name = $class_name;
+        $tab->id_parent = (int)Tab::getIdFromClassName('AdminAdmin');
+
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = $this->name;
+        }
+
+        return $tab->add();
+    }
+
+    public function uninstallAdminTab()
+    {
+        $class_name = 'AdminPSPHiPayRefund';
+
+        $id_tab = (int)Tab::getIdFromClassName($class_name);
+
+        if ($id_tab) {
+            $tab = new Tab($id_tab);
+            return $tab->delete();
+        }
+
+        return false;
+    }
+
+    public function addPSPHiPayOrderStates()
+    {
+        $waiting_state_config   = 'PSP_HIPAY_OS_WAITING';
+        $waiting_state_color    = '#4169E1';
+        $waiting_state_names    = [];
+
+        foreach (Language::getLanguages(false) as $language) {
+            if (Tools::strtolower($language['iso_code']) == 'fr') {
+                $waiting_state_names[(int)$language['id_lang']] = 'En attente d\'autorisation';
+            } else {
+                $waiting_state_names[(int)$language['id_lang']] = 'Waiting for authorization';
+            }
+        }
+
+        $this->addOrderState($waiting_state_config, $waiting_state_color, $waiting_state_names);
+
+        $partial_state_config   = 'PSP_HIPAY_OS_PARTIALLY_REFUNDED';
+        $partial_state_color    = '#EC2E15';
+        $partial_state_names    = [];
+
+        foreach (Language::getLanguages(false) as $language) {
+            if (Tools::strtolower($language['iso_code']) == 'fr') {
+                $partial_state_names[(int)$language['id_lang']] = 'Partiellement remboursé';
+            } else {
+                $partial_state_names[(int)$language['id_lang']] = 'Partially refunded';
+            }
+        }
+
+        $this->addOrderState($partial_state_config, $partial_state_color, $partial_state_names);
+
+        $total_state_config   = 'PSP_HIPAY_OS_TOTALLY_REFUNDED';
+        $total_state_color    = '#EC2E15';
+        $total_state_names    = [];
+
+        foreach (Language::getLanguages(false) as $language) {
+            if (Tools::strtolower($language['iso_code']) == 'fr') {
+                $total_state_names[(int)$language['id_lang']] = 'Totalement remboursé';
+            } else {
+                $total_state_names[(int)$language['id_lang']] = 'Totally refunded';
+            }
+        }
+
+        $this->addOrderState($total_state_config, $total_state_color, $total_state_names);
     }
 
     /**
@@ -190,21 +277,6 @@ class PSPHipay extends PaymentModule
         return $this->context->smarty->fetch($configuration);
     }
 
-    public function getLocalizedRatesPDFLink()
-    {
-        $shop_iso_country_id = Configuration::get('PS_COUNTRY_DEFAULT');
-        $shop_iso_country = Country::getIsoById((int)$shop_iso_country_id);
-        $shop_iso_country = Tools::strtoupper($shop_iso_country);
-
-        if (!$shop_iso_country || !in_array($shop_iso_country, PSPHipay::$available_rates_links)) {
-            $shop_iso_country = 'EN';
-        }
-
-        $localized_link = PSPHipay::PAYMENT_FEED_BASE_LINK.$shop_iso_country.'.pdf';
-
-        return $localized_link;
-    }
-
     public function hookBackOfficeHeader()
     {
         if (Tools::getValue('configure') != 'psphipay')
@@ -218,9 +290,32 @@ class PSPHipay extends PaymentModule
         </script>';
     }
 
-    public function hookDisplayAdminOrderLeft()
+    public function hookDisplayAdminOrderLeft($params)
     {
-        return '<div>Bla bla bla bla</div>';
+        $order = new Order((int)$params['id_order']);
+
+        if ((! $order->id) || ($order->module != $this->name)) {
+            return false;
+        }
+
+        $details = $this->getAdminOrderRefundBlockDetails($order);
+
+        if (! $this->isRefundAvailable($details)) {
+            return $this->display(__FILE__, 'views/templates/hook/cannot_be_refunded.tpl');
+        }
+
+        $min_date = date('Y-m-d H:i:s', strtotime($order->date_add . ' +1 day'));
+
+        if ($min_date > date('Y-m-d H:i:s')) {
+            return $this->display(__FILE__, 'views/templates/hook/cannot_refund_yet.tpl');
+        }
+
+        $this->context->controller->addJS($this->_path.'views/js/order.js');
+        $this->context->controller->addCSS($this->_path.'views/css/refund.css');
+
+        return $this->display(__FILE__, 'views/templates/hook/refund.tpl');
+
+        return ;
     }
 
     public function hookHeader()
@@ -285,7 +380,7 @@ class PSPHipay extends PaymentModule
 
     public function hookPaymentTop()
     {
-        $this->context->controller->addJS(_PS_MODULE_DIR_.$this->name.'/views/js/front.js');
+        $this->context->controller->addJS($this->_path.'views/js/front.js');
     }
 
     /**
@@ -315,38 +410,71 @@ class PSPHipay extends PaymentModule
         }
     }
 
+    public function getLocalizedRatesPDFLink()
+    {
+        $shop_iso_country_id = Configuration::get('PS_COUNTRY_DEFAULT');
+        $shop_iso_country = Country::getIsoById((int)$shop_iso_country_id);
+        $shop_iso_country = Tools::strtoupper($shop_iso_country);
+
+        if (!$shop_iso_country || !in_array($shop_iso_country, PSPHipay::$available_rates_links)) {
+            $shop_iso_country = 'EN';
+        }
+
+        $localized_link = PSPHipay::PAYMENT_FEED_BASE_LINK.$shop_iso_country.'.pdf';
+
+        return $localized_link;
+    }
+
+    public function getAdminOrderRefundBlockDetails($order)
+    {
+        $currency       = new Currency($order->id_currency);
+        $messages       = Message::getMessagesByOrderId($order->id, true);
+        $message        = array_pop($messages);
+        $details        = json_decode($message['message']);
+        $id_transaction = $this->getTransactionId($details);
+
+        $form = new PSPHipayForm($this);
+
+        $params = http_build_query([
+            'id_order'          => $order->id,
+            'id_transaction'    => $id_transaction,
+        ]);
+
+        $this->smarty->assign([
+            'currency'          => $currency,
+            'details'           => $details,
+            'order'             => $order,
+            'transaction_id'    => $id_transaction,
+            'refund_link'       => $this->context->link->getAdminLink('AdminPSPHiPayRefund&' . $params, true),
+        ]);
+
+        return $details;
+    }
+
     /**
      * Add waiting order state in database
      * If it does not already exists
      * @return boolean
      */
-    protected function addWaitingOrderState()
+    protected function addOrderState($config, $color, $names)
     {
-        if ((bool)Configuration::get('PSP_HIPAY_OS_WAITING') == true) {
+        if ((bool)Configuration::get($config) == true) {
             return true;
         }
 
         $order_state = new OrderState();
-        $order_state->name = array();
+        $order_state->name = $names;
 
-        foreach (Language::getLanguages(false) as $language) {
-            if (Tools::strtolower($language['iso_code']) == 'fr') {
-                $order_state->name[(int)$language['id_lang']] = 'En attente d\'autorisation';
-            } else {
-                $order_state->name[(int)$language['id_lang']] = 'Waiting for authorization';
-            }
-        }
-
-        $order_state->color = '#4169E1';
-        $order_state->hidden = false;
-        $order_state->send_email = false;
-        $order_state->delivery = false;
-        $order_state->logable = false;
-        $order_state->invoice = false;
+        $order_state->color         = $color;
+        $order_state->hidden        = false;
+        $order_state->send_email    = false;
+        $order_state->delivery      = false;
+        $order_state->logable       = false;
+        $order_state->invoice       = false;
 
         if ($order_state->add() == true) {
-            Configuration::updateValue('PSP_HIPAY_OS_WAITING', $order_state->id);
-            @copy($this->local_path.'/logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
+            Configuration::updateValue($config, $order_state->id);
+            @copy($this->local_path.'logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
 
             return true;
         }
@@ -380,10 +508,10 @@ class PSPHipay extends PaymentModule
 
     protected function createMerchantAccount($email, $first_name, $last_name)
     {
-        $is_first_name = (bool)Validate::isName($first_name);
-        $is_last_name = (bool)Validate::isName($last_name);
+        $is_valid_name  = (bool)Validate::isName($first_name);
+        $is_valid_name  &= (bool)Validate::isName($last_name);
 
-        if ($is_first_name && $is_last_name) {
+        if ($is_valid_name) {
             $user_account = new HipayUserAccount($this);
 
             // Live mode
@@ -417,6 +545,28 @@ class PSPHipay extends PaymentModule
         }
 
         return $this->_path.'views/img/payment_buttons/default.png';
+    }
+
+    protected function getTransactionId($details)
+    {
+        foreach ($details as $key => $value) {
+            $tmp_key = strtolower(str_replace(' ', false, $key));
+
+            if (in_array($tmp_key, ['transactionid', 'idtransaction'])) {
+                return $value;
+            }
+        }
+
+        return false;
+    }
+
+    protected function isRefundAvailable($details)
+    {
+        $refund_available   = array_uintersect((array)$details, static::$refund_available, function ($a, $b) {
+            return (int)(Tools::strtolower($a) !== Tools::strtolower($b));
+        });
+
+        return ! empty($refund_available);
     }
 
     protected function login($user_account)

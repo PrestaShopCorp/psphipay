@@ -1,4 +1,3 @@
-<?php
 /**
 * 2007-2015 PrestaShop
 *
@@ -24,11 +23,6 @@
 * International Registered Trademark & Property of PrestaShop SA
 */
 
-function upgrade_module_1_2_0($module)
-{
-    $module->installAdminTab();
-    $module->addPSPHiPayOrderStates();
-    $module->registerHook('displayAdminOrderLeft');
-
-    return true;
+#partial-refund-button, #total-refund-button {
+    min-width: 200px;
 }
