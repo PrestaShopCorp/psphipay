@@ -40,8 +40,12 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="alert alert-warning">
-                {l s='Automatic refund is not available. The best way to refund here is by bank transfer.' mod='psphipay'}
+            <div class="alert alert-success">
+	            {if ($state == 'PSP_HIPAY_OS_PARTIALLY_REFUNDED')}
+                	{l s='Order already partially refunded.' mod='psphipay'}
+                {else}
+                	{l s='Order already totally refunded.' mod='psphipay'}
+                {/if}
             </div>
         </div>
     </div>

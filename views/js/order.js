@@ -33,17 +33,17 @@ $(document).ready(function() {
         var amount = $('#partial-refund-amount').val();
         var amount_max = $('#refund-amount-max').val();
 
-        if (parseFloat(amount) > parseFloat(amount_max)) {
-            return alert($('#refund-amount-max-alert-msg').val());
+        if (isNaN(parseFloat(amount).toFixed(2)) || (parseFloat(amount).toFixed(2) == 0.00)) {
+            return alert($('#refund-amount-empty-msg').val());
         }
 
-        $.get(getRefundControllerLink(), {
+        if (parseFloat(amount).toFixed(2) > parseFloat(amount_max).toFixed(2)) {
+            return alert($('#refund-amount-max-alert-msg').val());
+        }
+        
+        processRefund({
             type: 'partial',
             amount: amount
-        }, function (result) {
-            console.log(result);
-        }, function (error) {
-            alert(error);
         });
     });
 
@@ -53,12 +53,8 @@ $(document).ready(function() {
 
     // Total refunds
     $(this).on('click', '#total-refund-button', function () {
-        $.get(getRefundControllerLink(), {
+	    processRefund({
             type: 'total'
-        }, function (result) {
-            console.log(result);
-        }, function (error) {
-            alert(error);
         });
     });
 });
@@ -67,4 +63,15 @@ function getRefundControllerLink() {
     var link = $('#refund-link').val();
 
     return decodeURIComponent(link);
+}
+
+function processRefund(data) {
+    $.ajax({
+    	url: getRefundControllerLink(),
+    	data: data
+   	}).success(function (result) {
+        location.reload();
+    }).fail(function (error) {
+        alert(error.responseText);
+	});
 }

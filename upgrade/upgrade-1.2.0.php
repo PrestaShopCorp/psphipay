@@ -27,7 +27,7 @@
 function upgrade_module_1_2_0($module)
 {
     $module->installAdminTab();
-    $module->addPSPHiPayOrderStates();
+    $module->updatePSPHiPayOrderStates();
     $module->registerHook('displayAdminOrderLeft');
 
     return true;

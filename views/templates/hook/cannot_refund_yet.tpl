@@ -28,10 +28,6 @@
         <i class="icon-undo"></i> {l s='Refund' mod='psphipay'}
     </div>
 
-    <input type="hidden" name="refund_link" id="refund-link" value="{$refund_link|urlencode}">
-    <input type="hidden" name="refund_amount_max" id="refund-amount-max" value="{$order->total_paid_tax_incl|string_format:'%.2f'}">
-    <input type="hidden" name="refund_amount_max_alert_msg" id="refund-amount-max-alert-msg" value="{l s='The refund amount cannot be greater than the total amount of the order' mod='psphipay'}">
-
     {if ($details)}
         <div class="panel-body well well-sm">
             <dl class="dl-horizontal">

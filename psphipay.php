@@ -117,7 +117,7 @@ class PSPHipay extends PaymentModule
         return parent::install() &&
             $this->setCurrencies() &&
             $this->installAdminTab() &&
-            $this->addPSPHiPayOrderStates() &&
+            $this->updatePSPHiPayOrderStates() &&
             $this->registerHook('header') &&
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
@@ -165,11 +165,20 @@ class PSPHipay extends PaymentModule
         return false;
     }
 
-    public function addPSPHiPayOrderStates()
+    public function updatePSPHiPayOrderStates()
     {
         $waiting_state_config   = 'PSP_HIPAY_OS_WAITING';
         $waiting_state_color    = '#4169E1';
         $waiting_state_names    = [];
+        
+        $setup = [
+	        'delivery'      => false,
+	        'hidden'        => false,
+	        'invoice'       => false,
+	        'logable'       => false,
+	        'module_name'	=> $this->name,
+	        'send_email'	=> true,
+        ];
 
         foreach (Language::getLanguages(false) as $language) {
             if (Tools::strtolower($language['iso_code']) == 'fr') {
@@ -179,7 +188,7 @@ class PSPHipay extends PaymentModule
             }
         }
 
-        $this->addOrderState($waiting_state_config, $waiting_state_color, $waiting_state_names);
+        $this->saveOrderState($waiting_state_config, $waiting_state_color, $waiting_state_names, $setup);
 
         $partial_state_config   = 'PSP_HIPAY_OS_PARTIALLY_REFUNDED';
         $partial_state_color    = '#EC2E15';
@@ -193,7 +202,7 @@ class PSPHipay extends PaymentModule
             }
         }
 
-        $this->addOrderState($partial_state_config, $partial_state_color, $partial_state_names);
+        $this->saveOrderState($partial_state_config, $partial_state_color, $partial_state_names, $setup);
 
         $total_state_config   = 'PSP_HIPAY_OS_TOTALLY_REFUNDED';
         $total_state_color    = '#EC2E15';
@@ -207,7 +216,9 @@ class PSPHipay extends PaymentModule
             }
         }
 
-        $this->addOrderState($total_state_config, $total_state_color, $total_state_names);
+        $this->saveOrderState($total_state_config, $total_state_color, $total_state_names, $setup);
+        
+        return true;
     }
 
     /**
@@ -299,23 +310,26 @@ class PSPHipay extends PaymentModule
         }
 
         $details = $this->getAdminOrderRefundBlockDetails($order);
-
-        if (! $this->isRefundAvailable($details)) {
+        
+        $this->context->controller->addCSS($this->_path.'views/css/refund.css');
+        
+        if ($this->orderAlreadyRefunded($order)) {
+            return $this->display(__FILE__, 'views/templates/hook/already_refunded.tpl');
+        } elseif (! $this->isRefundAvailable($details)) {
             return $this->display(__FILE__, 'views/templates/hook/cannot_be_refunded.tpl');
-        }
-
-        $min_date = date('Y-m-d H:i:s', strtotime($order->date_add . ' +1 day'));
-
-        if ($min_date > date('Y-m-d H:i:s')) {
-            return $this->display(__FILE__, 'views/templates/hook/cannot_refund_yet.tpl');
+/*
+        } else {
+        	$min_date = date('Y-m-d H:i:s', strtotime($order->date_add . ' +1 day'));
+        
+        	if ($min_date > date('Y-m-d H:i:s')) {
+            	return $this->display(__FILE__, 'views/templates/hook/cannot_refund_yet.tpl');
+            }
+*/
         }
 
         $this->context->controller->addJS($this->_path.'views/js/order.js');
-        $this->context->controller->addCSS($this->_path.'views/css/refund.css');
 
         return $this->display(__FILE__, 'views/templates/hook/refund.tpl');
-
-        return ;
     }
 
     public function hookHeader()
@@ -456,23 +470,27 @@ class PSPHipay extends PaymentModule
      * If it does not already exists
      * @return boolean
      */
-    protected function addOrderState($config, $color, $names)
+    protected function saveOrderState($config, $color, $names, $setup)
     {
-        if ((bool)Configuration::get($config) == true) {
-            return true;
+	    $state_id = Configuration::get($config);
+	    
+        if ((bool)$state_id == true) {
+	        $order_state = new OrderState($state_id);
+        } else {
+	        $order_state = new OrderState();
+	    }
+        
+        
+        $order_state->name	= $names;
+        $order_state->color = $color;
+        
+        foreach ($setup as $param => $value) {
+	        $order_state->{$param} = $value;
         }
-
-        $order_state = new OrderState();
-        $order_state->name = $names;
-
-        $order_state->color         = $color;
-        $order_state->hidden        = false;
-        $order_state->send_email    = false;
-        $order_state->delivery      = false;
-        $order_state->logable       = false;
-        $order_state->invoice       = false;
-
-        if ($order_state->add() == true) {
+	    
+        if ((bool)$state_id == true) {
+	        return $order_state->save();
+        } elseif ($order_state->add() == true) {
             Configuration::updateValue($config, $order_state->id);
             @copy($this->local_path.'logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
 
@@ -612,6 +630,25 @@ class PSPHipay extends PaymentModule
         }
 
         return true;
+    }
+    
+    protected function orderAlreadyRefunded($order)
+    {
+	    $history_states = $order->getHistory($this->context->language->id);
+
+	    $states = Configuration::getMultiple([
+		    'PSP_HIPAY_OS_PARTIALLY_REFUNDED',
+		    'PSP_HIPAY_OS_TOTALLY_REFUNDED',
+	    ]);
+	    
+	    foreach ($history_states as $state) {
+		    if ($key = array_search($state['id_order_state'], $states)) {
+			    $this->smarty->assign('state', $key);
+			    return $state;
+		    }
+	    }
+	    
+	    return false;
     }
 
     protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password, $sandbox = false)

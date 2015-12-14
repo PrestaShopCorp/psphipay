@@ -124,7 +124,9 @@ class PSPHipayValidationModuleFrontController extends ModuleFrontController
 
             if ((int)$order->getCurrentState() == (int)Configuration::get('PSP_HIPAY_OS_WAITING')) {
                 $order_history = new OrderHistory();
+                
                 $order_history->id_order = $order_id;
+                $order_history->id_order_state = $id_order_state;
                 $order_history->changeIdOrderState($id_order_state, $order_id);
 
                 return $order_history->addWithemail();

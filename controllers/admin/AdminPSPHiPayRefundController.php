@@ -37,25 +37,27 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
         switch ($this->type) {
             case 'partial':
                 $amount	= Tools::getValue('amount');
+                break;
 
             case 'total':
                 $amount = $order->total_paid_tax_incl;
+                break;
 
             default:
-                if ($amount == 0) {
-                    break;
-                }
-
-                $result = $this->processRefund($order, $amount);
-
-                if ($result->cardResult->code != 0) {
-                    $this->sendErrorRequest($result->cardResult->description);
-                } else {
-                    $this->saveRefundDetails($order, $amount, $results);
-                    $this->sendSuccessRequest($result);
-                }
-
                 break;
+        }
+
+        $result = $this->processRefund($order, $amount);
+        
+        if ($amount == 0) {
+            $this->sendErrorRequest('Invalid parameters.');
+        }
+
+        if ($result->cardResult->code != 0) {
+            $this->sendErrorRequest($result->cardResult->description);
+        } else {
+            $this->saveRefundDetails($order, $amount, $result);
+            $this->sendSuccessRequest($result);
         }
 
         $this->sendErrorRequest('Invalid request.');
@@ -112,37 +114,41 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
 
         switch ($this->type) {
             case 'partial':
-                $order_state_id	= (int)Configuration::get('PSP_HIPAY_OS_PARTIALLY_REFUNDED');
-                $details = $this->module->l('The order has been partially refunded');
+                $id_order_state	= (int)Configuration::get('PSP_HIPAY_OS_PARTIALLY_REFUNDED');
+                
+                $details = $this->module->l('This order has been partially refunded');
+				$details .= ': '.Tools::displayNumber($order->total_paid_tax_incl, $currency).' ('.$currency->iso_code.').';
+                break;
 
             case 'total':
-                $order_state_id	= (int)Configuration::get('PSP_HIPAY_OS_TOTALLY_REFUNDED');
-                $details = $this->module->l('The order has been totally refunded');
+                $id_order_state	= (int)Configuration::get('PSP_HIPAY_OS_TOTALLY_REFUNDED');
+                $details = $this->module->l('This order has been totally refunded');
+                break;
 
             default:
-                $details .= ": $refunded.";
-                $details .= " - ".json_encode($result);
-
-                $history = new OrderHistory();
-                $history->id_order = (int)$order->id;
-                $history->changeIdOrderState($order_state_id, $order->id);
-                $history->addWithemail();
-                $history->save();
-
-                $this->addRefundMessage($order, $details);
                 break;
         }
+        
+        $details .= ' '.json_encode($result->cardResult);
+
+        $this->addRefundMessage($order, $details);
+
+        $order_history = new OrderHistory();
+        $order_history->id_order = (int)$order->id;
+        $order_history->id_employee = (int)$this->context->employee->id;
+        $order_history->id_order_state = $id_order_state;
+        $order_history->addWithemail();
     }
 
-    public function addRefundMessage($order, $details)
+    protected function addRefundMessage($order, $details)
     {
-        $new_message = new Message();
+	    $message = new Message();
+		
+        $message->message = $details;
+        $message->id_order = (int)$order->id;
+        $message->private = 1;
 
-        $new_message->message = $details;
-        $new_message->id_order = (int)$order->id;
-        $new_message->private = 1;
-
-        return $new_message->add();
+        $status = $message->add();
     }
 
     protected function sendSuccessRequest($result)
