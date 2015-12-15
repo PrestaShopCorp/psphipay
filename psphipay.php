@@ -317,7 +317,7 @@ class PSPHipay extends PaymentModule
             return $this->display(__FILE__, 'views/templates/hook/already_refunded.tpl');
         } elseif (! $this->isRefundAvailable($details)) {
             return $this->display(__FILE__, 'views/templates/hook/cannot_be_refunded.tpl');
-        } else {
+        } elseif (! Configuration::get('PSP_HIPAY_SANDBOX_MODE')) {
             $min_date = date('Y-m-d H:i:s', strtotime($order->date_add . ' +1 day'));
 
             if ($min_date > date('Y-m-d H:i:s')) {
