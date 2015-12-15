@@ -24,31 +24,31 @@
 */
 
 $(document).ready(function() {
-	
+
     // Partial refunds
     $(this).on('click', '#partial-refund-button', function () {
-	    $('#partial-refund-details').fadeIn();
+        $('#partial-refund-details').fadeIn();
     });
 
     $(this).on('click', '#partial-refund-process', function () {
-	    
+
         var amount = $('#partial-refund-amount').val();
         var amount_max = $('#refund-amount-max').val();
 
-        if (isNaN(parseFloat(amount).toFixed(2)) || (parseFloat(amount).toFixed(2) == 0.00)) {
+        if (isNaN(parseFloat(amount)) || (parseFloat(amount) == 0.00)) {
             return alert($('#refund-amount-empty-msg').val());
         }
 
-        if (parseFloat(amount).toFixed(2) > parseFloat(amount_max).toFixed(2)) {
+        if (parseFloat(amount) > parseFloat(amount_max)) {
             return alert($('#refund-amount-max-alert-msg').val());
         }
-        
-	    var confirmation = $('#partial-refund-confirmation-msg').val();
-	    
-	    if (confirm(confirmation) == false) {
-		    return false;
-	    }
-        
+
+        var confirmation = $('#partial-refund-confirmation-msg').val();
+
+        if (confirm(confirmation) == false) {
+            return false;
+        }
+
         processRefund({
             type: 'partial',
             amount: amount
@@ -61,17 +61,17 @@ $(document).ready(function() {
 
     // Total refunds
     $(this).on('click', '#total-refund-button', function () {
-	    var confirmation = $('#total-refund-confirmation-msg').val();
-	    
-	    if (confirm(confirmation) == false) {
-		    return false;
-	    }
-	    
-	    processRefund({
+        var confirmation = $('#total-refund-confirmation-msg').val();
+
+        if (confirm(confirmation) == false) {
+            return false;
+        }
+
+        processRefund({
             type: 'total'
         });
     });
-    
+
 });
 
 function getRefundControllerLink() {
@@ -82,11 +82,11 @@ function getRefundControllerLink() {
 
 function processRefund(data) {
     $.ajax({
-    	url: getRefundControllerLink(),
-    	data: data
-   	}).success(function (result) {
+        url: getRefundControllerLink(),
+        data: data
+       }).success(function (result) {
         location.reload();
     }).fail(function (error) {
         alert(error.responseText);
-	});
+    });
 }

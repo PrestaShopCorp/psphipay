@@ -578,9 +578,8 @@ class PSPHipay extends PaymentModule
 
     protected function isRefundAvailable($details)
     {
-        $refund_available   = array_uintersect((array)$details, static::$refund_available, function ($a, $b) {
-            return (int)(Tools::strtolower($a) !== Tools::strtolower($b));
-        });
+        $stack = array_values((array)$details);
+        $refund_available   = array_intersect($stack, static::$refund_available);
 
         return ! empty($refund_available);
     }
