@@ -170,14 +170,14 @@ class PSPHipay extends PaymentModule
         $waiting_state_config   = 'PSP_HIPAY_OS_WAITING';
         $waiting_state_color    = '#4169E1';
         $waiting_state_names    = [];
-        
+
         $setup = [
-	        'delivery'      => false,
-	        'hidden'        => false,
-	        'invoice'       => false,
-	        'logable'       => false,
-	        'module_name'	=> $this->name,
-	        'send_email'	=> true,
+            'delivery'      => false,
+            'hidden'        => false,
+            'invoice'       => false,
+            'logable'       => false,
+            'module_name'	=> $this->name,
+            'send_email'	=> true,
         ];
 
         foreach (Language::getLanguages(false) as $language) {
@@ -217,7 +217,7 @@ class PSPHipay extends PaymentModule
         }
 
         $this->saveOrderState($total_state_config, $total_state_color, $total_state_names, $setup);
-        
+
         return true;
     }
 
@@ -310,21 +310,19 @@ class PSPHipay extends PaymentModule
         }
 
         $details = $this->getAdminOrderRefundBlockDetails($order);
-        
+
         $this->context->controller->addCSS($this->_path.'views/css/refund.css');
-        
+
         if ($this->orderAlreadyRefunded($order)) {
             return $this->display(__FILE__, 'views/templates/hook/already_refunded.tpl');
         } elseif (! $this->isRefundAvailable($details)) {
             return $this->display(__FILE__, 'views/templates/hook/cannot_be_refunded.tpl');
-/*
         } else {
-        	$min_date = date('Y-m-d H:i:s', strtotime($order->date_add . ' +1 day'));
-        
-        	if ($min_date > date('Y-m-d H:i:s')) {
-            	return $this->display(__FILE__, 'views/templates/hook/cannot_refund_yet.tpl');
+            $min_date = date('Y-m-d H:i:s', strtotime($order->date_add . ' +1 day'));
+
+            if ($min_date > date('Y-m-d H:i:s')) {
+                return $this->display(__FILE__, 'views/templates/hook/cannot_refund_yet.tpl');
             }
-*/
         }
 
         $this->context->controller->addJS($this->_path.'views/js/order.js');
@@ -472,24 +470,24 @@ class PSPHipay extends PaymentModule
      */
     protected function saveOrderState($config, $color, $names, $setup)
     {
-	    $state_id = Configuration::get($config);
-	    
+        $state_id = Configuration::get($config);
+
         if ((bool)$state_id == true) {
-	        $order_state = new OrderState($state_id);
+            $order_state = new OrderState($state_id);
         } else {
-	        $order_state = new OrderState();
-	    }
-        
-        
+            $order_state = new OrderState();
+        }
+
+
         $order_state->name	= $names;
         $order_state->color = $color;
-        
+
         foreach ($setup as $param => $value) {
-	        $order_state->{$param} = $value;
+            $order_state->{$param} = $value;
         }
-	    
+
         if ((bool)$state_id == true) {
-	        return $order_state->save();
+            return $order_state->save();
         } elseif ($order_state->add() == true) {
             Configuration::updateValue($config, $order_state->id);
             @copy($this->local_path.'logo.gif', _PS_ORDER_STATE_IMG_DIR_.(int)$order_state->id.'.gif');
@@ -631,24 +629,24 @@ class PSPHipay extends PaymentModule
 
         return true;
     }
-    
+
     protected function orderAlreadyRefunded($order)
     {
-	    $history_states = $order->getHistory($this->context->language->id);
+        $history_states = $order->getHistory($this->context->language->id);
 
-	    $states = Configuration::getMultiple([
-		    'PSP_HIPAY_OS_PARTIALLY_REFUNDED',
-		    'PSP_HIPAY_OS_TOTALLY_REFUNDED',
-	    ]);
-	    
-	    foreach ($history_states as $state) {
-		    if ($key = array_search($state['id_order_state'], $states)) {
-			    $this->smarty->assign('state', $key);
-			    return $state;
-		    }
-	    }
-	    
-	    return false;
+        $states = Configuration::getMultiple([
+            'PSP_HIPAY_OS_PARTIALLY_REFUNDED',
+            'PSP_HIPAY_OS_TOTALLY_REFUNDED',
+        ]);
+
+        foreach ($history_states as $state) {
+            if ($key = array_search($state['id_order_state'], $states)) {
+                $this->smarty->assign('state', $key);
+                return $state;
+            }
+        }
+
+        return false;
     }
 
     protected function registerExistingAccount($email, $website_id, $ws_login, $ws_password, $sandbox = false)
