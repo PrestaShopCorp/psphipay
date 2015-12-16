@@ -24,36 +24,40 @@
 */
 
 $(document).ready(function() {
-	iterations = 0;
-	timer = false;
-	
-	checkOrder();
-    
+    iterations = 0;
+    timer = false;
+
+    checkOrder();
+
 });
 
 function checkOrder() {
-	if (timer == false) {
-		timer = setInterval(processCheck, 1000);
-	}
+    if (timer == false) {
+        timer = setInterval(processCheck, 1000);
+    }
 }
 
 function processCheck() {
-	iterations += 1;
-	
-	if (iterations == 500) {
-		return redirectError();
-	}
-	
+    iterations += 1;
+
+    if (iterations == 10) {
+        return redirectError();
+    }
+
     return $.ajax({
-    	url: ajax_url
-   	}).success(function (result) {
-	   	if (result != undefined) {
-       		location.reload();
-	   	}
+        url: ajax_url
+       }).success(function (result) {
+           if (result != undefined) {
+               clearInterval(timer);
+
+               location.reload();
+           }
     });
 }
 
 function redirectError() {
-	var url = window.location.href;
-	window.location.href = url + '&failure=true';
+    clearInterval(timer);
+
+    var url = window.location.href;
+    window.location.href = url + '&failure=true';
 }
