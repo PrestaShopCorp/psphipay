@@ -31,27 +31,25 @@ $(document).ready(function() {
     });
 
     $(this).on('click', '#partial-refund-process', function () {
-
         var amount = $('#partial-refund-amount').val();
         var amount_max = $('#refund-amount-max').val();
 
         if (isNaN(parseFloat(amount)) || (parseFloat(amount) == 0.00)) {
-            return alert($('#refund-amount-empty-msg').val());
+            return alert($('#refund-amount-empty-msg').text());
         }
 
         if (parseFloat(amount) > parseFloat(amount_max)) {
-            return alert($('#refund-amount-max-alert-msg').val());
+            return alert($('#refund-amount-max-alert-msg').text());
         }
 
-        var confirmation = $('#partial-refund-confirmation-msg').val();
+        var confirmation = $('#partial-refund-confirmation-msg').text();
 
         if (confirm(confirmation) == false) {
             return false;
         }
 
         processRefund({
-            type: 'partial',
-            amount: amount
+            amount: amount,
         });
     });
 
@@ -61,21 +59,19 @@ $(document).ready(function() {
 
     // Total refunds
     $(this).on('click', '#total-refund-button', function () {
-        var confirmation = $('#total-refund-confirmation-msg').val();
+        var confirmation = $('#total-refund-confirmation-msg').text();
 
         if (confirm(confirmation) == false) {
             return false;
         }
 
-        processRefund({
-            type: 'total'
-        });
+        processRefund();
     });
 
 });
 
 function getRefundControllerLink() {
-    var link = $('#refund-link').val();
+    var link = $('#refund-link').text();
 
     return decodeURIComponent(link);
 }
