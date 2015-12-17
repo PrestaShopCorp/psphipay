@@ -450,7 +450,7 @@ class PSPHipay extends PaymentModule
         $params = http_build_query([
             'id_order'          => $order->id,
             'id_transaction'    => $id_transaction,
-            'sandbox'           => (isset($details['Environment']) && ($details['Environment'] != 'PRODUCTION')),
+            'sandbox'           => (isset($details->Environment) && ($details->Environment != 'PRODUCTION')),
         ]);
 
         $this->smarty->assign([

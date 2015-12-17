@@ -1,4 +1,28 @@
 <?php
+/**
+* 2007-2015 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+* @author    PrestaShop SA <contact@prestashop.com>
+* @copyright 2007-2015 PrestaShop SA
+* @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+* International Registered Trademark & Property of PrestaShop SA
+*/
 
 class AdminPSPHiPayRefundController extends ModuleAdminController
 {
@@ -16,7 +40,7 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
             $this->sendErrorRequest('Invalid request.');
         }
 
-        require_once(PS_MODULE_DIR.$this->module->name.'/classes/webservice/HipayRefund.php');
+        require_once _PS_ROOT_DIR_._MODULE_DIR_.$this->module->name.'/classes/webservice/HipayRefund.php';
     }
 
     public function init()
@@ -32,13 +56,13 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
             'transactionPublicId'   => $this->id_transaction,
         ];
 
-        $refund = new HipayRefund();
+        $refund = new HipayRefund($this->module);
         $result = $refund->process($params, $this->sandbox);
 
         if ($result->cardResult->code != 0) {
             $this->sendErrorRequest($result->cardResult->description);
         } else {
-            $this->saveRefundDetails($order, $this->amount, $result);
+            $this->saveRefundDetails($result);
             $this->sendSuccessRequest($result);
         }
 
@@ -65,45 +89,27 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
         return false;
     }
 
-    private function saveRefundDetails($order, $amount, $result)
+    private function saveRefundDetails($result)
     {
-        $currency = new Currency($order->id_currency);
-        $refunded = $amount.$currency->iso_code;
+        $details = json_encode($result->cardResult);
+        $state = Tools::getIsset('amount') ? 'PARTIALLY' : 'TOTALLY';
+        $id_order_state	= (int)Configuration::get('PSP_HIPAY_OS_'.$state.'_REFUNDED');
 
-        switch ($this->type) {
-            case 'partial':
-                $id_order_state	= (int)Configuration::get('PSP_HIPAY_OS_PARTIALLY_REFUNDED');
-
-                $details = $this->module->l('This order has been partially refunded');
-                $details .= ': '.Tools::displayNumber($order->total_paid_tax_incl, $currency).' ('.$currency->iso_code.').';
-                break;
-
-            case 'total':
-                $id_order_state	= (int)Configuration::get('PSP_HIPAY_OS_TOTALLY_REFUNDED');
-                $details = $this->module->l('This order has been totally refunded');
-                break;
-
-            default:
-                break;
-        }
-
-        $details .= ' '.json_encode($result->cardResult);
-
-        $this->addRefundMessage($order, $details);
+        $this->addRefundMessage($details);
 
         $order_history = new OrderHistory();
-        $order_history->id_order = (int)$order->id;
+        $order_history->id_order = (int)$this->id_order;
         $order_history->id_employee = (int)$this->context->employee->id;
         $order_history->id_order_state = $id_order_state;
         $order_history->addWithemail();
     }
 
-    protected function addRefundMessage($order, $details)
+    protected function addRefundMessage($details)
     {
         $message = new Message();
 
         $message->message = $details;
-        $message->id_order = (int)$order->id;
+        $message->id_order = (int)$this->id_order;
         $message->private = 1;
 
         $status = $message->add();

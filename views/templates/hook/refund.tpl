@@ -49,7 +49,7 @@
     {/if}
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <div class="alert alert-warning">
                 {l s='Please, be careful, only one refund is possible per order.' mod='psphipay'}
             </div>
@@ -57,23 +57,23 @@
     </div>
 
     <div class="row">
-        <div class="col-md-5 text-left">
+        <div class="col-xs-5 text-left">
             <a href="javascript:;" class="btn btn-primary" id="partial-refund-button">
                 <i class="icon icon-undo"></i> {l s='Partial refund' mod='psphipay'}
             </a>
         </div>
 
-        <div id="partial-refund-details" class="col-md-6 collapse">
-            <div class="col-md-8">
+        <div id="partial-refund-details" class="col-xs-6 col-xs-offset-1 collapse">
+            <div class="col-xs-8">
                 <div class="input-group">
-                    <input type="text" name="patial_refund_amount" id="partial-refund-amount" placeholder="2">
+                    <input type="text" name="patial_refund_amount" id="partial-refund-amount">
                     <span class="input-group-addon">
                         {$currency->sign} ({$currency->iso_code})
                     </span>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-xs-4">
                 <div class="input-group">
                     <a href="javascript:;" class="btn btn-default" id="partial-refund-process">
                         <i class="icon icon-check"></i> Process
@@ -88,7 +88,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-5 text-left">
+        <div class="col-xs-5 text-left">
             <a href="javascript:;" class="btn btn-primary" id="total-refund-button">
                 <i class="icon icon-exchange"></i> {l s='Total refund' mod='psphipay'}
             </a>
