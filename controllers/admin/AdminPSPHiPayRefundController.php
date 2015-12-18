@@ -79,7 +79,7 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
         $order = new Order($this->id_order);
 
         if ($order->id && $this->id_transaction) {
-            $this->amount = Tools::getValue('amount', $order->total_paid_tax_incl);
+            $this->amount = Tools::getValue('amount', $order->getTotalPaid());
 
             return true;
         }
@@ -101,7 +101,7 @@ class AdminPSPHiPayRefundController extends ModuleAdminController
         $order_history->id_order = (int)$this->id_order;
         $order_history->id_employee = (int)$this->context->employee->id;
         $order_history->id_order_state = $id_order_state;
-        $order_history->addWithemail();
+        $order_history->add();
     }
 
     protected function addRefundMessage($details)

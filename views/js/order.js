@@ -24,7 +24,6 @@
 */
 
 $(document).ready(function() {
-
     // Partial refunds
     $(this).on('click', '#partial-refund-button', function () {
         $('#partial-refund-details').fadeIn();
@@ -67,7 +66,6 @@ $(document).ready(function() {
 
         processRefund();
     });
-
 });
 
 function getRefundControllerLink() {
@@ -80,7 +78,7 @@ function processRefund(data) {
     $.ajax({
         url: getRefundControllerLink(),
         data: data
-       }).success(function (result) {
+    }).success(function (result) {
         location.reload();
     }).fail(function (error) {
         alert(error.responseText);
