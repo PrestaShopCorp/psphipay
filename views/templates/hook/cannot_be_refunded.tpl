@@ -41,7 +41,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-warning">
-                {l s='Automatic refund is not available. The best way to refund here is by bank transfer.' mod='psphipay'}
+                {l s='Automatic refund is not available for this payment method. The best way to refund here is by bank transfer.' mod='psphipay'}
             </div>
         </div>
     </div>
