@@ -142,7 +142,7 @@ class PSPHipay extends PaymentModule
         $tab->active = 1;
         $tab->module = $this->name;
         $tab->class_name = $class_name;
-        $tab->id_parent = (int)Tab::getIdFromClassName('AdminAdmin');
+        $tab->id_parent = -1;
 
         foreach (Language::getLanguages(true) as $lang) {
             $tab->name[$lang['id_lang']] = $this->name;
