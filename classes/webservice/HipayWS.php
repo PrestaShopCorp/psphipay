@@ -96,7 +96,7 @@ abstract class HipayWS
         }
     }
 
-    public function executeQuery($function, $params = array())
+    public function executeQuery($function, $params = [], $sandbox = false)
     {
         try {
             if ((isset($this->client) == false) || ($this->client === false))
@@ -107,7 +107,7 @@ abstract class HipayWS
                 return false;
             }
 
-            if (Configuration::get('PSP_HIPAY_SANDBOX_MODE')) {
+            if (Configuration::get('PSP_HIPAY_SANDBOX_MODE') || $sandbox == true) {
                 $params = $params + array(
                     'websiteId' => Configuration::get('PSP_HIPAY_SANDBOX_WEBSITE_ID'),
                     'wsLogin' => Configuration::get('PSP_HIPAY_SANDBOX_WS_LOGIN'),

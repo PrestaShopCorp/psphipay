@@ -2,7 +2,7 @@
 <module>
     <name>psphipay</name>
     <displayName><![CDATA[PrestaShop Payments by HiPay]]></displayName>
-    <version><![CDATA[1.1.5]]></version>
+    <version><![CDATA[1.2.0]]></version>
     <description><![CDATA[Accept payments by credit card and other local methods with PrestaShop&#039;s official payment solution. Very competitive rates, no configuration required!]]></description>
     <author><![CDATA[PrestaShop]]></author>
     <tab><![CDATA[payments_gateways]]></tab>

@@ -24,126 +24,126 @@
 */
 
 #content .tab-pane:first-child .panel {
-	border-top-left-radius: 0;
+    border-top-left-radius: 0;
 }
 
 #content > * {
-	margin: 0 auto;
-	max-width: 900px;
+    margin: 0 auto;
+    max-width: 900px;
 }
 
 #content > .alert {
-	margin: 20px auto;
+    margin: 20px auto;
 }
 
 #content p {
-	margin: 0 auto;
+    margin: 0 auto;
 }
 
 #psphipay-header .text-branded,
 #psphipay-content .text-branded {
-	color: #00aff0;
+    color: #00aff0;
 }
 
 #psphipay-header h4,
 #psphipay-content h4 {
-	margin: 2px 0;
-	color: #00aff0;
-	font-size: 1.8em;
+    margin: 2px 0;
+    color: #00aff0;
+    font-size: 1.8em;
 }
 
 #psphipay-header h4 {
-	margin: 15px auto;
+    margin: 15px auto;
 }
 
 #payment-logo {
-	max-height: 60px;
-	max-width: 100% !important;
+    max-height: 60px;
+    max-width: 100% !important;
 }
 
 #cards-logo {
-	max-width: 100%;
-	margin: 20px auto;
+    max-width: 100%;
+    margin: 20px auto;
 }
 
 #psphipay-content h4 {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #psphipay-header #create-account-btn {
-	margin-top: 14px;
+    margin-top: 14px;
 }
 
 #psphipay-content ul {
-	padding-left: 15px;
+    padding-left: 15px;
 }
 
 #psphipay-content .ul-spaced li {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 #login_hipay_link {
-	color: #555;
+    color: #555;
 }
 
 #email_error_message {
-	color: #a94442;
-	padding: 5px 10px;
-	background-color: #f2dede;
+    color: #a94442;
+    padding: 5px 10px;
+    background-color: #f2dede;
 }
 
 #welcome-message {
-	display: inline-block;
-	margin-bottom: 14px;
-	font-size: 1.2em;
-	color: gray;
+    display: inline-block;
+    margin-bottom: 14px;
+    font-size: 1.2em;
+    color: gray;
 }
 
 /* Form controls */
 .form-control-static {
-	padding-top: 6px !important;
+    padding-top: 6px !important;
 }
 
 table.form-control-static {
-	padding: 0 !important;
-	border: none !important;
-	border-top: 1px solid #EAEDEF !important;
+    padding: 0 !important;
+    border: none !important;
+    border-top: 1px solid #EAEDEF !important;
 }
 
 table.form-control-static thead th:first-child {
-	border-left: 1px solid #EAEDEF !important;
+    border-left: 1px solid #EAEDEF !important;
 }
 
 table.form-control-static thead th:last-child {
-	border-right: 1px solid #EAEDEF !important;
+    border-right: 1px solid #EAEDEF !important;
 }
 
 #sandbox_info dt,
 #faq_q_a dt {
-	font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
-	font-size: 15px;
-	margin-bottom: 5px;
+    font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    margin-bottom: 5px;
 }
 
 #sandbox_info dt:hover,
 #faq_q_a dt:hover {
-	cursor: pointer;
-	text-decoration: underline;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 #sandbox_info dd + dt,
 #faq_q_a dd + dt {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 .form-date-actions {
-	border: none !important;
+    border: none !important;
 }
 
 .form-group {
-	margin-bottom: 5px !important;
+    margin-bottom: 5px !important;
 }
 
 #date-compare {
-	display: none !important;
+    display: none !important;
 }
